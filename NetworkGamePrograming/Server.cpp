@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) //윈속 초기화
 		return 1;
 
-	GetDomainName(TESTNAME);
+	input();
 
 	//IN_ADDR addr;
 	//if (GetIPAddr(TESTNAME, &addr)) {
