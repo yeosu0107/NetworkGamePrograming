@@ -84,26 +84,28 @@ BOOL GetDomainName(IN_ADDR addr, char* name, int namelen)
 	return true;
 }
 
-void input()
+void input(char* name)
 {
-	char name[50]="yahoo.com";
+	printf("%s\n", name);
 	addrinfo hints;
 	addrinfo *result;
-	//printf("입력 : ");
-	//scanf("%s", &name);
 
-	memset(&hints, 0x00, sizeof(addrinfo));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM; 
-	hints.ai_flags = AI_CANONNAME;
+	memset(&hints, 0x00, sizeof(struct addrinfo));
+	hints.ai_flags = AI_CANONNAME | AI_PASSIVE;
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
 	
 	
 	//ipv4
 	printf("\nipv4 list\n");
-	if (getaddrinfo(name, "http", &hints, &result) == 0) //성공시 0을 리턴
+	if (getaddrinfoW(name, NULL, &hints, &result) == 0) //성공시 0을 리턴
 	{
 		GetIPAddr(result);
 	}
+	else {
+		printf("empty\n");
+	}
+
 	//ipv6
 	printf("\nipv6 list\n");
 	hints.ai_family = AF_INET6;
@@ -114,24 +116,25 @@ void input()
 	else {
 		printf("empty\n");
 	}
+	int i=0;
 	//별명
 	printf("\naliases list\n");
-	HOSTENT* host = gethostbyname(name);
-	int i;
-	for (i = 0; host->h_aliases[i] != NULL; ++i) {
-		printf("%s\n", host->h_aliases[i]);
+	for (addrinfo* curr = result; curr != NULL; curr = curr->ai_next) {
+		printf("%s\n", curr->ai_canonname);
+		++i;
 	}
 	if (i == 0)
 		printf("empty\n");
 	printf("\n");
+
 }
 
 void GetIPAddr(addrinfo* ptr)
 {
 	sockaddr_in* tmp;
 	sockaddr_in6* tmp6;
-	char buf[40];
-	char buf2[60];
+	char buf[20];
+	char buf2[40];
 
 	for (addrinfo* curr = ptr; curr != NULL; curr = curr->ai_next) {
 		switch (curr->ai_family)
@@ -149,9 +152,8 @@ void GetIPAddr(addrinfo* ptr)
 		default:
 			printf("error\n");
 		}
-
 	}
-
+	//freeaddrinfo(ptr);
 	
 	/*printf("\naliases\n");
 	for (int i = 0; ptr->h_aliases[i] != NULL; ++i) {

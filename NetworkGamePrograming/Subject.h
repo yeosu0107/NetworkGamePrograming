@@ -16,6 +16,6 @@ BOOL IsBigEndian();
 //°úÁ¦3
 BOOL GetIPAddr(char* name, IN_ADDR* addr);
 BOOL GetDomainName(IN_ADDR addr, char* name, int namelen);
-void input();
+void input(char* name);
 void GetIPAddr(addrinfo* ptr);
 //void GetIPAddr(IN_ADDR addr);
