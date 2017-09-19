@@ -12,8 +12,14 @@ int main(int argc, char* argv[])
 		return 1;
 
 	input("yahoo.com");
-
+	printf("\n-------------------\n");
+	input("www.naver.com");
+	printf("\n-------------------\n");
+	input("125.209.222.141");
+	printf("\n-------------------\n");
+	input("2001:4998:58:c02::a9");
 	
+		
 	//IN_ADDR addr;
 	//if (GetIPAddr(TESTNAME, &addr)) {
 	//	printf("IP주소(변환 후) : %s\n", inet_ntoa(addr));

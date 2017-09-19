@@ -1,5 +1,5 @@
 #include "Subject.h"
-#include <algorithm>
+
 
 void err_display(char* msg)
 {
@@ -87,31 +87,19 @@ BOOL GetDomainName(IN_ADDR addr, char* name, int namelen)
 
 void input(char* name)
 {
-	printf("%s\n", name);
+	printf("input : %s\n", name);
 	addrinfo hints;
 	addrinfo *result;
 
 	memset(&hints, 0x00, sizeof(struct addrinfo));
-	hints.ai_flags = AI_CANONNAME | AI_PASSIVE;
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_FQDN | AI_ALL; //도메인 이름을 반환, ipv4 & ipv6 주소를 모두 가져와라
+	hints.ai_family = AF_UNSPEC; //ipv4 & ipv6
+	hints.ai_socktype = SOCK_STREAM; //tcp를 사용
 	
 	std::vector<char*> namelist;
 	
-	//ipv4
-	printf("\nipv4 list\n");
-	if (getaddrinfo(name, NULL, &hints, &result) == 0) //성공시 0을 리턴
-	{
-		GetIPAddr(result, namelist);
-	}
-	else {
-		printf("empty\n");
-	}
-
-	//ipv6
-	printf("\nipv6 list\n");
-	hints.ai_family = AF_INET6;
-	if (getaddrinfo(name, "http", &hints, &result) == 0) //성공시 0을 리턴
+	printf("\nIP list\n");
+	if (getaddrinfo(name, NULL, &hints, &result) == 0) //성공시 0을 리턴 (주소, 서비스|포트번호, 소켓유형, 반환값)
 	{
 		GetIPAddr(result, namelist);
 	}
@@ -120,11 +108,7 @@ void input(char* name)
 	}
 
 
-	std::vector<char*>::iterator pos;
-	pos = unique(namelist.begin(), namelist.end(), [](char* left, char* right) {
-		return strncmp(left, right, sizeof(left)) == 0;
-	});
-	namelist.erase(pos, namelist.end());
+	
 
 	//별명
 	printf("\naliases list\n");
@@ -145,7 +129,7 @@ void GetIPAddr(addrinfo* ptr, std::vector<char*>& namelist)
 		{
 		case AF_INET:
 			tmp = (sockaddr_in*)curr->ai_addr;
-			inet_ntop(curr->ai_family, &tmp->sin_addr, buf, sizeof(buf));
+			inet_ntop(curr->ai_family, &tmp->sin_addr, buf, sizeof(buf));  // (ipv4, 주소, 저장버퍼, 버퍼사이즈)
 			printf("%s\n", buf);
 			break;
 		case AF_INET6:
