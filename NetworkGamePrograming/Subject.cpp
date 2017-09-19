@@ -1,4 +1,5 @@
 #include "Subject.h"
+#include <algorithm>
 
 void err_display(char* msg)
 {
@@ -92,15 +93,16 @@ void input(char* name)
 
 	memset(&hints, 0x00, sizeof(struct addrinfo));
 	hints.ai_flags = AI_CANONNAME | AI_PASSIVE;
-	hints.ai_family = AF_UNSPEC;
+	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	
+	std::vector<char*> namelist;
 	
 	//ipv4
 	printf("\nipv4 list\n");
-	if (getaddrinfoW(name, NULL, &hints, &result) == 0) //성공시 0을 리턴
+	if (getaddrinfo(name, NULL, &hints, &result) == 0) //성공시 0을 리턴
 	{
-		GetIPAddr(result);
+		GetIPAddr(result, namelist);
 	}
 	else {
 		printf("empty\n");
@@ -111,25 +113,27 @@ void input(char* name)
 	hints.ai_family = AF_INET6;
 	if (getaddrinfo(name, "http", &hints, &result) == 0) //성공시 0을 리턴
 	{
-		GetIPAddr(result);
+		GetIPAddr(result, namelist);
 	}
 	else {
 		printf("empty\n");
 	}
-	int i=0;
+
+
+	std::vector<char*>::iterator pos;
+	pos = unique(namelist.begin(), namelist.end(), [](char* left, char* right) {
+		return strncmp(left, right, sizeof(left)) == 0;
+	});
+	namelist.erase(pos, namelist.end());
+
 	//별명
 	printf("\naliases list\n");
-	for (addrinfo* curr = result; curr != NULL; curr = curr->ai_next) {
-		printf("%s\n", curr->ai_canonname);
-		++i;
-	}
-	if (i == 0)
-		printf("empty\n");
-	printf("\n");
+	for (int i = 0; i < namelist.size(); ++i)
+		printf("%s\n", namelist[i]);
 
 }
 
-void GetIPAddr(addrinfo* ptr)
+void GetIPAddr(addrinfo* ptr, std::vector<char*>& namelist)
 {
 	sockaddr_in* tmp;
 	sockaddr_in6* tmp6;
@@ -152,20 +156,7 @@ void GetIPAddr(addrinfo* ptr)
 		default:
 			printf("error\n");
 		}
+		if(curr->ai_canonname!=NULL)
+			namelist.emplace_back(curr->ai_canonname);
 	}
-	//freeaddrinfo(ptr);
-	
-	/*printf("\naliases\n");
-	for (int i = 0; ptr->h_aliases[i] != NULL; ++i) {
-		printf("%s\n", ptr->h_aliases[i]);
-	}
-	printf("\naddr_list\n");
-	char addr4_str[20];
-
-	for (int i = 0; ptr->h_addr_list[i] != NULL; ++i) {
-		inet_ntop(AF_INET, ptr->h_addr_list[i], addr4_str, sizeof(addr4_str));
-		printf("%s\n", addr4_str);
-	}*/
 }
-
-

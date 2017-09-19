@@ -3,10 +3,6 @@
 
 #include "Subject.h"
 
-using namespace std;
-
-
-
 
 int main(int argc, char* argv[])
 {
@@ -17,6 +13,7 @@ int main(int argc, char* argv[])
 
 	input("yahoo.com");
 
+	
 	//IN_ADDR addr;
 	//if (GetIPAddr(TESTNAME, &addr)) {
 	//	printf("IP주소(변환 후) : %s\n", inet_ntoa(addr));
