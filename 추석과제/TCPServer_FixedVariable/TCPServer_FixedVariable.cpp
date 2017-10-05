@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	SOCKET client_sock;
 	SOCKADDR_IN clientaddr;
 	int addrlen;
-	char buf[BUFSIZE+1];
+	char buf[BUFSIZE];
 	int len;
 
 	while(1){
@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
 				err_display("recv()");
 				break;
 			}
-			else if (retval == 0) {
+			/*else if (retval == 0) {
 				break;
-			}
+			}*/
 			else if (file) {
 				percent += len;
 				file->inputData(len, buf);
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 			//	ntohs(clientaddr.sin_port), buf);
 
 			printf("%.1f%%\r", percent / total * 100);
-			Sleep(100);
+			//Sleep(100);
 		}
 
 		// closesocket()

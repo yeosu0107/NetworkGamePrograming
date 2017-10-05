@@ -6,7 +6,10 @@
 int main(int argc, char *argv[])
 {
 	int retval;
-	FileOpen("Data.txt");
+	char filename[10];
+	cout << "파일 명 입력 : ";
+	cin >> filename;
+	FileOpen(filename);
 	// 윈속 초기화
 	WSADATA wsa;
 	if(WSAStartup(MAKEWORD(2,2), &wsa) != 0)

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#define BUFSIZE    60
+#define BUFSIZE    512
 
 using namespace std;
 
@@ -14,20 +14,22 @@ using namespace std;
 class Data {
 private:
 	int m_size;
-	string m_data;
+	char* m_data;
 public:
-	Data(int size, string data) : m_size(size) {
-		m_data = data;
+	Data(char* data, int size){
+		m_size = size;
+		m_data = new char[m_size];
+		memcpy(m_data, data, m_size+1);
+	}
+	Data() {
+		m_data = nullptr;
+		m_size = -1;
 	}
 	~Data() {}
 
-	void PrintData() {
-		std::cout << "[ size : "<<m_size<<" ] "<<m_data << std::endl;
-	}
-
 	int getSize() const { return m_size; }
 	void setSize(int size) { m_size = size; }
-	string getData() { return m_data; }
+	char* getData() { return m_data; }
 };
 
 void err_quit(char *msg);

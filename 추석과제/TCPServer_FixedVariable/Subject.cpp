@@ -59,11 +59,11 @@ void File::inputData(int size, char* data)
 
 void File::saveFile()
 {
-	ofstream out(m_name, ios::out);
+	ofstream out(m_name, ios::out | ios::binary);
 	vector<Data>::iterator itr = v.begin();
 	if(out)
 	while (itr != v.end()) {
-		out << itr->getData() << endl;;
+		out.write(itr->getData(), itr->getSize());
 		itr++;
 	}
 	out.close();

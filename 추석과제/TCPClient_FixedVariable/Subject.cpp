@@ -1,6 +1,8 @@
 #include "Subject.h"
 #include <vector>
 #include <fstream>
+#include <iterator>
+#include <algorithm>
 
 vector<Data> v;
 
@@ -34,27 +36,35 @@ void err_display(char *msg)
 //파일 읽기
 void FileOpen(char* name)
 {
-	ifstream in(name);
+	ifstream in(name, ios::in |  ios::binary);
 	if (!in) {
 		printf("[%s]는 존재하지 않는 파일입니다.\n", name);
 		exit(0);
 	}
 	printf("파일 읽기 성공\n");
-	
-	string tmp;
-	int size = 0;
 
-	//in.seekg(0, ios::end);
-	//size = in.tellg();
-	//in.seekg(0, ios::beg);
+	in.seekg(0, ios::end);
+	int size = in.tellg();
+	in.seekg(0, ios::beg);
 
-	v.push_back(Data(0, name));
-	while (getline(in, tmp)) {
-		//tmp += '\r\n';
-		v.push_back(Data(tmp.size(), tmp));
-		size += tmp.size();
-	}
+	char tmp[BUFSIZE];
+	memset(tmp,-1, BUFSIZE);
+
+	v.push_back(Data(name, strlen(name)));
 	v[0].setSize(size);
+	/*while (!in.eof()) {
+		memset(tmp, 0, BUFSIZE);
+		in.read(tmp, BUFSIZE-1);
+		v.push_back(Data(tmp));
+	}*/
+	while (!in.eof()) {
+		in.read(tmp, BUFSIZE);
+		v.push_back(Data(tmp, sizeof(tmp) / sizeof(char)));
+		memset(tmp, -1, BUFSIZE);
+	}
+
+	//v.push_back(Data());
+	
 	in.close();
 }
 
@@ -79,13 +89,14 @@ void DataSend(SOCKET& sock)
 		err_display("send()");
 	}
 	//데이터 이름 길이(고정길이)
-	len = itr->getData().size();
+	len =strlen(itr->getData());
 	retval = send(sock, (char *)&len, sizeof(int), 0);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 	}
 	//데이터 이름 (가변길이)
-	strncpy(buf, itr->getData().c_str(), len);
+	//strncpy(buf, itr->getData(), len);
+	memcpy(buf, itr->getData(), len + 1);
 	retval = send(sock, buf, len, 0);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
@@ -96,7 +107,7 @@ void DataSend(SOCKET& sock)
 		// 데이터 입력
 		memset(buf, 0, sizeof(buf));
 		len = itr->getSize();
-		strncpy(buf, itr->getData().c_str(), len);
+		memcpy(buf, itr->getData(), len + 1);
 
 		// 데이터 보내기(고정 길이)
 		retval = send(sock, (char *)&len, sizeof(int), 0);

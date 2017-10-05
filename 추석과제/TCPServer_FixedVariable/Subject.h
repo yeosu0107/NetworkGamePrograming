@@ -14,14 +14,17 @@ using namespace std;
 class Data {
 private:
 	int m_size;
-	string m_data;
+	char* m_data;
 public:
-	Data(int size, string data) :m_size(size) {
-		m_data = data;
+	Data(int size, char* data) :m_size(size) {
+		m_data = new char[m_size];
+		memcpy(m_data, data, size + 1);
+
 	}
 	~Data() {}
 
-	string getData() const { return m_data; }
+	char* getData() const { return m_data; }
+	int getSize() const { return m_size; }
 };
 
 class File {
