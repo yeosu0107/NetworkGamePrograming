@@ -52,18 +52,15 @@ void FileOpen(char* name)
 
 	v.push_back(Data(name, strlen(name)));
 	v[0].setSize(size);
-	/*while (!in.eof()) {
-		memset(tmp, 0, BUFSIZE);
-		in.read(tmp, BUFSIZE-1);
-		v.push_back(Data(tmp));
-	}*/
+
+	size_t length;
+
 	while (!in.eof()) {
 		in.read(tmp, BUFSIZE);
-		v.push_back(Data(tmp, sizeof(tmp) / sizeof(char)));
+		length = in.gcount();
+		v.push_back(Data(tmp, length));
 		memset(tmp, -1, BUFSIZE);
 	}
-
-	//v.push_back(Data());
 	
 	in.close();
 }
@@ -95,8 +92,7 @@ void DataSend(SOCKET& sock)
 		err_display("send()");
 	}
 	//데이터 이름 (가변길이)
-	//strncpy(buf, itr->getData(), len);
-	memcpy(buf, itr->getData(), len + 1);
+	memcpy(buf, itr->getData(), len);
 	retval = send(sock, buf, len, 0);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
@@ -107,7 +103,7 @@ void DataSend(SOCKET& sock)
 		// 데이터 입력
 		memset(buf, 0, sizeof(buf));
 		len = itr->getSize();
-		memcpy(buf, itr->getData(), len + 1);
+		memcpy(buf, itr->getData(), len);
 
 		// 데이터 보내기(고정 길이)
 		retval = send(sock, (char *)&len, sizeof(int), 0);
