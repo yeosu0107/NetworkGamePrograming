@@ -46,4 +46,8 @@ public:
 void err_quit(char *msg);
 void err_display(char *msg);
 int recvn(SOCKET s, char *buf, int len, int flags);
-void gotoXY(int x, int y);
+
+BOOL gotoXY(int x, int y);
+COORD getXY();
+
+DWORD WINAPI DataRecv(LPVOID arg);
