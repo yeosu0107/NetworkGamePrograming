@@ -1,3 +1,4 @@
 ﻿  main.cpp
+c:\users\성우\documents\visual studio 2017\projects\networkgameprograming\networkexample\networkexample\main.cpp(32): warning C4477: 'printf' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HANDLE'입니다.
   NetworkExample.vcxproj -> C:\Users\성우\Documents\Visual Studio 2017\Projects\NetworkGamePrograming\NetworkExample\Debug\NetworkExample.exe
   NetworkExample.vcxproj -> C:\Users\성우\Documents\Visual Studio 2017\Projects\NetworkGamePrograming\NetworkExample\Debug\NetworkExample.pdb (Partial PDB)

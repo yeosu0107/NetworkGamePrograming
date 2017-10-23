@@ -1,34 +1,66 @@
 #include <Windows.h>
 #include <stdio.h>
 
-struct float3
-{
-	int x, y, z;
-};
+#define BUFSIZE 10
 
-DWORD WINAPI MyThread(LPVOID arg)
+HANDLE hReadEvent;
+HANDLE hWriteEvent;
+int buf[BUFSIZE];
+
+DWORD WINAPI WriteThread(LPVOID arg)
 {
-	while (1);
+	DWORD retval;
+	for (int k = 1; k < 500; ++k) {
+		retval = WaitForSingleObject(hReadEvent, INFINITE);
+		if (retval != WAIT_OBJECT_0) break;
+
+		for (int i = 0; i < BUFSIZE; ++i)
+			buf[i] = k;
+
+		SetEvent(hWriteEvent);
+	}
+	return 0;
+}
+
+DWORD WINAPI ReadThread(LPVOID arg)
+{
+	DWORD retval;
+	while (1) {
+		retval = WaitForSingleObject(hWriteEvent, INFINITE);
+		if (retval != WAIT_OBJECT_0) break;
+
+		printf("Thread : %d : ", GetCurrentThread());
+		for (int i = 0; i < BUFSIZE; ++i) {
+			printf("%3d ", buf[i]);
+		}
+		printf("\n");
+
+		ZeroMemory(buf, sizeof(buf));
+		SetEvent(hReadEvent);
+	}
+
 	return 0;
 }
 
 int main(int argc, char* argv[])
 {
-	SYSTEM_INFO si;
-	GetSystemInfo(&si);
+	hWriteEvent = CreateEvent(NULL, false, false, NULL);
+	if (hWriteEvent == NULL)
+		return 1;
 
-	for (int i = 0; i < (int)si.dwNumberOfProcessors; ++i) {
-		HANDLE hThread = CreateThread(NULL, 0, MyThread, NULL, 0, NULL);
-		if (hThread == NULL)
-			return 1;
-		SetThreadPriority(hThread, THREAD_PRIORITY_TIME_CRITICAL);
-		CloseHandle(hThread);
-	}
+	hReadEvent = CreateEvent(NULL, false, true, NULL);
+	if (hReadEvent == NULL)
+		return 1;
 
-	Sleep(1000);
-	while (1) {
-		printf("주 스레스 실행\n");
-		break;
-	}
+	HANDLE hThread[3];
+	hThread[0] = CreateThread(NULL, 0, WriteThread, NULL, 0, NULL);
+	hThread[1] = CreateThread(NULL, 0, ReadThread, NULL, 0, NULL);
+	hThread[2] = CreateThread(NULL, 0, ReadThread, NULL, 0, NULL);
+
+	WaitForMultipleObjects(3, hThread, true, INFINITE);
+
+	CloseHandle(hWriteEvent);
+	CloseHandle(hReadEvent);
+
 	return 0;
 }
