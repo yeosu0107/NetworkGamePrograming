@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Object Class">
+      <UniqueIdentifier>{0c8b15d4-dd8d-4853-9ac6-d104fbdaa0bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Class\Header">
+      <UniqueIdentifier>{8ecf3851-478f-44b1-ade8-52b213e56ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Class\Source">
+      <UniqueIdentifier>{3aba3b08-ab0d-4c8d-b86f-604737d8e528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision Class">
+      <UniqueIdentifier>{4ed79223-2cde-4765-8c83-509151ece5f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision Class\Header">
+      <UniqueIdentifier>{226adf84-814e-4694-8159-4e06260d36e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision Class\Source">
+      <UniqueIdentifier>{90197d21-766a-4a94-9ab4-6043600f55f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{94d2ca95-ad29-4255-a726-c5069a2e4e61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{c082cf2f-c3c1-40a1-bb10-a984faa74836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Header">
+      <UniqueIdentifier>{5bc43762-b07e-4099-8c50-dd7de37590c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Source">
+      <UniqueIdentifier>{cb00d183-5c91-4a49-a43b-8bbd8a8f7b32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time Class">
+      <UniqueIdentifier>{4fcc96a8-9695-45c8-aef0-59e1db5f1a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time Class\Header">
+      <UniqueIdentifier>{551c7dab-0dbf-41a1-9db9-0a657ec73be6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time Class\Source">
+      <UniqueIdentifier>{1ebbfdd6-8fe2-455c-98fb-4e310918f051}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Utility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>Object Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Collision Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Object Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Object Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Utility\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Time Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameWork.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioExodus.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Utility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Collision Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Utility\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Time Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameWork.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
