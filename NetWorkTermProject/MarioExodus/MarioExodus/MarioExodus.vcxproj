@@ -155,8 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Collision.h" />
     <ClInclude Include="FrameWork.h" />
+    <ClInclude Include="KeyNDoor.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Renderer.h" />
@@ -170,8 +170,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="FrameWork.cpp" />
+    <ClCompile Include="KeyNDoor.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MarioExodus.cpp" />
     <ClCompile Include="Object.cpp" />

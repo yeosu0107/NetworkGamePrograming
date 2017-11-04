@@ -23,19 +23,19 @@ void SceneManager::InitSceneManager(Renderer* pRend)
 		m_pMario[i] = Mario(i, Vector2((i + 1) * 80, 30), pRend);
 
 	m_bBackGround = BackGround(m_nStage, pRend);
+	m_dDoor = Door(pRend);
 }
 
 void SceneManager::Update(float fElapsedTime, DWORD byInput)
 {
-
 	for (Mario& pMa : m_pMario)
 		pMa.Update(fElapsedTime, byInput);
-
 }
 
 void SceneManager::Render()
 {
 	m_bBackGround.Render();
+	m_dDoor.Render();
 
 	for (Mario& pMa : m_pMario)
 		pMa.Render();
@@ -56,28 +56,24 @@ void SceneManager::CheckObjectCollision()
 	 *	선택받은 마리오랑 안받은 마리오 우선 충돌 체크
 	 *	기존 : 부여된 숫자에 따라 충돌 체크 하기에 선택 안된 마리오가 충돌 검사를 받고 이동 되는 경우가 많았음 
 	 */
-	for (int i = 0; i < vecSelecMario.size(); ++i)
+	for (UINT i = 0; i < vecSelecMario.size(); ++i)
 	{
-		for (int j = 0; j < vecUnSelecMario.size(); ++j)
+		vecSelecMario[i]->CollisionScreen();
+
+		for (UINT j = 0; j < vecUnSelecMario.size(); ++j)
 		{
 			Mario::CollSide side = vecSelecMario[i]->CollisionObject(*vecUnSelecMario[j]);
 		}
 	}
 
-	for (int i = 0; i < vecSelecMario.size(); ++i)
+	/*
+	 *	선택받은 마리오끼리 충돌 체크
+	 */
+	for (UINT i = 0; i < vecSelecMario.size(); ++i)
 	{
-		for (int j = i + 1; j < vecSelecMario.size(); ++j)
+		for (UINT j = i + 1; j < vecSelecMario.size(); ++j)
 		{
 			Mario::CollSide side = vecSelecMario[i]->CollisionObject(*vecSelecMario[j]);
-		}
-	}
-	for (int i = 0; i < 6; i++) {
-		for (int j = i + 1; j < 6; j++)
-		{
-			
-			Vector2 vec2jPosition = m_pMario[j].GetPosition();
-
-			
 		}
 	}
 }

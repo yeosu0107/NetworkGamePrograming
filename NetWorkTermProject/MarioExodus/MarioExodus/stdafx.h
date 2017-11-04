@@ -29,6 +29,3 @@ const UINT MaxStage = 6;
 const DWORD DIR_LEFT = 0x01;
 const DWORD DIR_RIGHT = 0x02;
 const DWORD DIR_UP = 0x04;
-
-typedef enum TextureNumber { Mario_Sprite, Mario_None, Marios_Number, BackSky,
-							Block, Door, Key, Key_Dish, Main_Rogo, Press_C } TextureNumber;

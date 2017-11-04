@@ -36,10 +36,10 @@ void BackGround::InitBackGround(int stage, Renderer* pRend)
 
 void BackGround::Render()
 {
-	GetRenderer()->DrawSolidRect(m_pObject[SkyNGround].GetPosition(), m_pObject[SkyNGround].GetSize(), Vector2(0, 0), BackSky);
+	GetRenderer()->DrawSolidRect(m_pObject[SkyNGround].GetPosition(), m_pObject[SkyNGround].GetSize(), Vector2(0, 0), Texture::TextureNumber::BackSky);
 
 	if (m_nStage == 0) {
-		GetRenderer()->DrawSolidRect(m_pObject[Rogo].GetPosition(), m_pObject[Rogo].GetSize(), Vector2(0, 0), Main_Rogo);
-		GetRenderer()->DrawSolidRect(m_pObject[PressButton].GetPosition(), m_pObject[PressButton].GetSize(), Vector2(0, 0), Press_C);
+		GetRenderer()->DrawSolidRect(m_pObject[Rogo].GetPosition(), m_pObject[Rogo].GetSize(), Vector2(0, 0), Texture::TextureNumber::Main_Rogo);
+		GetRenderer()->DrawSolidRect(m_pObject[PressButton].GetPosition(), m_pObject[PressButton].GetSize(), Vector2(0, 0), Texture::TextureNumber::Press_C);
 	}
 }

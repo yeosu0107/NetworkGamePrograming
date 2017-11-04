@@ -15,7 +15,9 @@ Mario::Mario(int num, Vector2& vec2Pos, Renderer* pRenderer) :
 	m_sSpriteState(Sprite_None),
 	m_eJumpState(Jump_None),
 	m_iMaxJumpDist(70),
-	m_iCurJumpDist(0)
+	m_iCurJumpDist(0),
+	m_bCollScreenWall(false),
+	m_bCollScreenBott(false)
 {
 	SetPosition(vec2Pos);
 	SetSize(Vector2(52, 52));
@@ -34,11 +36,11 @@ void Mario::Render()
 {
 
 	if(m_bSelect)
-		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_sSpriteState, m_bLookDirection), Mario_Sprite);
+		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_sSpriteState, m_bLookDirection), Texture::TextureNumber::Mario_Sprite);
 	else
-		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Mario_None);
+		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Texture::TextureNumber::Mario_None);
 
-	GetRenderer()->DrawSolidRect(m_oObject.GetPosition(), m_oObject.GetSize(), Vector2(m_iMarioNum, 0), Marios_Number);
+	GetRenderer()->DrawSolidRect(m_oObject.GetPosition(), m_oObject.GetSize(), Vector2(m_iMarioNum, 0), Texture::TextureNumber::Marios_Number);
 }
 
 void Mario::SetSelect()
@@ -53,33 +55,23 @@ Mario::CollSide Mario::CollisionObject(Object & other)
 
 	int nxdist = vec2otherPos.x - vec2marioPos.x;
 	int nydist = vec2otherPos.y - vec2marioPos.y;
-	bool bWallColl = false;
-
-	if (GetPosition().x <= GetSize().x / 2) {
-		bWallColl = true;
-		SetPosition(Vector2(GetSize().x / 2, GetPosition().y));
-	}
-	else if (GetPosition().x >= Screen_Width - GetSize().x / 2) {
-		bWallColl = true;
-		SetPosition(Vector2(Screen_Width - GetSize().x / 2, GetPosition().y));
-	}
 
 	if (nxdist * nxdist + nydist * nydist <= GetSize().x * GetSize().x) {
 		if (nxdist * nxdist <= nydist * nydist){
 			if (nydist > 0) {
-				AfterCollision(other, CollUp, bWallColl);
+				AfterCollision(other, CollUp);
 				return CollUp;
 			}
 			m_iCurJumpDist = 0;
-			AfterCollision(other, CollDown, bWallColl);
+			AfterCollision(other, CollDown);
 			return CollDown;
 		}
 		if (nxdist * nxdist > nydist * nydist) {
 			if (nxdist > 0) {
-				AfterCollision(other, CollRight, bWallColl);
+				AfterCollision(other, CollRight);
 				return CollRight;
 			}
-			AfterCollision(other, CollLeft, bWallColl);
+			AfterCollision(other, CollLeft);
 			return CollLeft;
 		}
 		
@@ -88,31 +80,64 @@ Mario::CollSide Mario::CollisionObject(Object & other)
 	return CollNone;
 }
 
-void Mario::AfterCollision(Object & other, CollSide collside, bool bWallColl)
+void Mario::CollisionScreen()
+{
+	m_bCollScreenWall = false;
+	m_bCollScreenBott = false;
+
+	if (GetPosition().x <= GetSize().x / 2) {
+		m_bCollScreenWall = true;
+		SetPosition(Vector2(GetSize().x / 2, GetPosition().y));
+	}
+	else if (GetPosition().x >= Screen_Width - GetSize().x / 2) {
+		m_bCollScreenWall = true;
+		SetPosition(Vector2(Screen_Width - GetSize().x / 2, GetPosition().y));
+	}
+
+	if (GetPosition().y <= GetSize().y / 2) {
+		m_bCollScreenBott = true;
+		SetPosition(Vector2(GetPosition().x, GetSize().y / 2));
+		SetState(Mario::MarioJumpState::Jump_None);
+
+	}
+	else if (GetPosition().y >= Screen_Height - GetSize().y / 2) {
+		m_bCollScreenBott = true;
+		SetPosition(Vector2(GetPosition().x, Screen_Height - GetSize().y / 2));
+	}
+
+}
+
+void Mario::AfterCollision(Object & other, CollSide collside)
 {
 	Vector2 vec2otherPos = other.GetPosition();
 	switch (collside)
 	{
 	case Mario::CollSide::CollDown:
-		SetPosition(Vector2(GetPosition().x, vec2otherPos.y + GetSize().y));
+		if(!m_bCollScreenBott)
+			SetPosition(Vector2(GetPosition().x, vec2otherPos.y + GetSize().y));
+		else
+			other.SetPosition(Vector2(other.GetPosition().x, GetPosition().y - GetSize().y));
 		SetState(Mario::MarioJumpState::Jump_None);
 		break;
 
 	case Mario::CollSide::CollUp:
-		SetPosition(Vector2(GetPosition().x, vec2otherPos.y - GetSize().y));
+		if(!m_bCollScreenBott)
+			SetPosition(Vector2(GetPosition().x, vec2otherPos.y - GetSize().y));
+		else
+			other.SetPosition(Vector2(other.GetPosition().x, GetPosition().y + GetSize().y));
 		SetState(Mario::MarioJumpState::Jump_Down);
 		break;
 
 	case Mario::CollSide::CollLeft:
 
-		if (!bWallColl)
+		if (!m_bCollScreenWall)
 			SetPosition(Vector2(vec2otherPos.x + GetSize().x, GetPosition().y));
 		else
 			other.SetPosition(Vector2(GetPosition().x - GetSize().x, other.GetPosition().y));
 		break;
 
 	case Mario::CollSide::CollRight:
-		if (!bWallColl)
+		if (!m_bCollScreenWall)
 			SetPosition(Vector2(vec2otherPos.x - GetSize().x, GetPosition().y));
 		else
 			other.SetPosition(Vector2(GetPosition().x + GetSize().x, other.GetPosition().y));
@@ -163,7 +188,6 @@ void Mario::Jump(const float fTimeElapsed)
 	}
 
 	else if (m_eJumpState == Jump_Down) {
-		m_iCurJumpDist -= m_iValocity;
 		vec2pos -= (vec2Direction * m_iValocity);
 	}
 

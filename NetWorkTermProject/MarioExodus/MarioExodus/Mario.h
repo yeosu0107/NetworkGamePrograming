@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
 #include "Vector2.h"
-#include "Collision.h"
 #include "Object.h"
 
 
@@ -10,7 +9,7 @@ class Mario: public Object
 {
 public:
 	
-	enum MarioSprite				{ Sprite_None, Sprite_Run1 , Sprite_Run2 , Sprite_Jump };
+	static enum MarioSprite			{ Sprite_None, Sprite_Run1 , Sprite_Run2 , Sprite_Jump, Exit};
 	static enum MarioJumpState		{ Jump_None, Jump_Up, Jump_Down };
 	static enum CollSide			{ CollNone, CollLeft, CollRight, CollDown, CollUp };
 
@@ -27,6 +26,8 @@ private:
 	bool			m_bGrabKey;				// 열쇠를 잡고 있는지에 대한 여부
 	bool			m_bSelect;
 	bool			m_bLookDirection;		// 마리오 방향 true = 오른쪽, false = 왼쪽
+	bool			m_bCollScreenWall;
+	bool			m_bCollScreenBott;
 
 	MarioJumpState	m_eJumpState;			// 마리오 점프 상태
 	Object			m_oObject;				// 마리오 머리위에 있는 숫자 번호
@@ -50,8 +51,9 @@ public:
 	void SetSelect() ;
 
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
-
+	void SetSpriteState(Mario::MarioSprite eSprite) { m_sSpriteState = eSprite; }
 	CollSide CollisionObject(Object& other);
-	void AfterCollision(Object& other, CollSide collside, bool bWallColl);
+	void CollisionScreen();
+	void AfterCollision(Object& other, CollSide collside);
 };
 

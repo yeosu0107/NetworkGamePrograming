@@ -12,7 +12,7 @@ public:
 
 	bool IsInitialized();
 	void DrawSolidRect(Vector2& vecPos, int size);
-	void DrawSolidRect(Vector2& vecPos, Vector2& size, Vector2& spriteCount, TextureNumber eTextureNumber);
+	void DrawSolidRect(Vector2& vecPos, Vector2& size, Vector2& spriteCount, Texture::TextureNumber eTextureNumber);
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);

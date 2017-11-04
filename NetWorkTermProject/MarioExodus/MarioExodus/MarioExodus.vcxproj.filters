@@ -22,15 +22,6 @@
     <Filter Include="Object Class\Source">
       <UniqueIdentifier>{3aba3b08-ab0d-4c8d-b86f-604737d8e528}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Collision Class">
-      <UniqueIdentifier>{4ed79223-2cde-4765-8c83-509151ece5f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Collision Class\Header">
-      <UniqueIdentifier>{226adf84-814e-4694-8159-4e06260d36e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Collision Class\Source">
-      <UniqueIdentifier>{90197d21-766a-4a94-9ab4-6043600f55f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Texture">
       <UniqueIdentifier>{94d2ca95-ad29-4255-a726-c5069a2e4e61}</UniqueIdentifier>
     </Filter>
@@ -69,9 +60,6 @@
     <ClInclude Include="Mario.h">
       <Filter>Object Class\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Collision Class\Header</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -96,6 +84,9 @@
     <ClInclude Include="FrameWork.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="KeyNDoor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -109,9 +100,6 @@
     </ClCompile>
     <ClCompile Include="Mario.cpp">
       <Filter>Object Class\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Collision Class\Source</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>소스 파일</Filter>
@@ -135,6 +123,9 @@
       <Filter>Time Class\Source</Filter>
     </ClCompile>
     <ClCompile Include="FrameWork.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyNDoor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

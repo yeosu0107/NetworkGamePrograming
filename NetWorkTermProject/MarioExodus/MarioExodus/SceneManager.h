@@ -1,6 +1,7 @@
 #pragma once
 #include "Mario.h"
 #include "BackGround.h"
+#include "KeyNDoor.h"
 
 class SceneManager
 {
@@ -9,7 +10,7 @@ private:
 	int			m_nStage;
 
 	BackGround	m_bBackGround;
-
+	Door		m_dDoor;
 	Mario		m_pMario[6];
 
 public:

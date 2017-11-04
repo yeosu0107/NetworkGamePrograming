@@ -20,6 +20,9 @@ public:
 
 	Vector2& GetPosition() { return m_vec2Pos; }
 	Vector2& GetSize() { return m_vec2Size; }
+
+	bool Collision(Object& other);
+
 	Renderer* GetRenderer() const { return m_pRenderer; }
 };
 
