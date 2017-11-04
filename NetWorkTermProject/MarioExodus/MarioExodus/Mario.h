@@ -43,7 +43,7 @@ public:
 	void Update(float fTimeElapsed, DWORD dwInputKey);
 	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
 
-	void Move(const float fTimeElapsed, const BYTE byInput);
+	void Move(const float fTimeElapsed, const DWORD byInput);
 
 	void Jump(const float fTimeElapsed);
 	void Render();
@@ -52,7 +52,10 @@ public:
 
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
 	void SetSpriteState(Mario::MarioSprite eSprite) { m_sSpriteState = eSprite; }
-	CollSide CollisionObject(Object& other);
+
+	MarioSprite GetSpriteState() const { return m_sSpriteState; }
+
+	CollSide CollisionObject(Mario& other);
 	void CollisionScreen();
 	void AfterCollision(Object& other, CollSide collside);
 };

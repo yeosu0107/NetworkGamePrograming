@@ -40,7 +40,7 @@ void Time::Update(float fps)
 		m_dCurframeTime = ::timeGetTime();
 	}
 	
-	m_fElapsedTime = (m_dCurframeTime - m_dPreframeTime) * m_fTimeScale;
+	m_fElapsedTime = (float)(m_dCurframeTime - m_dPreframeTime) * m_fTimeScale;
 
 	m_fTotalframeRate += m_fElapsedTime;
 	m_iCountframeRate++;

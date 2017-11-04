@@ -10,7 +10,6 @@ private:
 	SceneManager	m_pScene[MaxStage];
 
 	DWORD			m_dwInputSpecialkey;
-	DWORD			m_dwInputKey;
 
 	UINT			m_nStageNum;
 	Time			m_tTime;

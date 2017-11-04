@@ -10,12 +10,12 @@ private:
 
 public:
 	Door();
-	Door(Renderer* rend);
+	Door(int iStage, Renderer* rend);
 	~Door();
 
 public:
 	void Render();
-	void CollisionMario(Mario& other);
+	bool CollisionMario(Mario& other);
 	
 	void SetOpen(bool bOpen) { m_bOpen = bOpen; }
 };
@@ -31,7 +31,7 @@ private:
 
 public:
 	Key();
-	Key(Renderer* rend);
+	Key(int iStage, Renderer* rend);
 	~Key();
 
 public:
@@ -39,4 +39,5 @@ public:
 	void CollisionMario(Mario& other);
 	void CollisionDoor(Door& other);
 	void Update(float fTimeElapsed);
+	void SetMarioPtr(Mario * pMario);
 };

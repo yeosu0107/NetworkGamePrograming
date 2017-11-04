@@ -34,6 +34,7 @@ Mario::~Mario()
 
 void Mario::Render()
 {
+	if (m_sSpriteState == Mario::MarioSprite::Exit) return;
 
 	if(m_bSelect)
 		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_sSpriteState, m_bLookDirection), Texture::TextureNumber::Mario_Sprite);
@@ -48,7 +49,7 @@ void Mario::SetSelect()
 	m_bSelect = !m_bSelect;
 }
 
-Mario::CollSide Mario::CollisionObject(Object & other)
+Mario::CollSide Mario::CollisionObject(Mario & other)
 {
 	Vector2 vec2marioPos = GetPosition();
 	Vector2 vec2otherPos = other.GetPosition();
@@ -149,7 +150,7 @@ void Mario::AfterCollision(Object & other, CollSide collside)
 	}
 }
 
-void Mario::Move(const float fTimeElapsed, const BYTE byInput)
+void Mario::Move(const float fTimeElapsed, const DWORD byInput)
 {
 	if (!m_bSelect)
 		return;
@@ -158,8 +159,8 @@ void Mario::Move(const float fTimeElapsed, const BYTE byInput)
 
 	if (byInput & DIR_LEFT)				vec2Direction += Vector2(-1, 0);
 	if (byInput & DIR_RIGHT)			vec2Direction += Vector2(+1, 0);
-	if (byInput & DIR_UP)				m_eJumpState = m_eJumpState == Jump_None ? Jump_Up : m_eJumpState;	// 마리오가 점프 중이 아닌 상태에서만 반응하게 변경
-	
+	if (byInput & KEY_C)				m_eJumpState = m_eJumpState == Jump_None ? Jump_Up : m_eJumpState;	// 마리오가 점프 중이 아닌 상태에서만 반응하게 변경
+
 	if (vec2Direction.x > 0)			m_bLookDirection = false; 
 	else if (vec2Direction.x < 0)		m_bLookDirection = true;
 
@@ -191,17 +192,20 @@ void Mario::Jump(const float fTimeElapsed)
 		vec2pos -= (vec2Direction * m_iValocity);
 	}
 
-	SetPosition(vec2pos);
 	if (m_iCurJumpDist >= m_iMaxJumpDist)
 	{
 		m_iCurJumpDist = 0;
 		m_eJumpState = Jump_Down;
 	}
 
+	SetPosition(vec2pos);
+
 }
 
 void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
+	if (m_sSpriteState == Exit) return;
+
 	Move(fTimeElapsed, dwInputKey);
 	Jump(fTimeElapsed);
 	SpriteUpdate(fTimeElapsed, dwInputKey);

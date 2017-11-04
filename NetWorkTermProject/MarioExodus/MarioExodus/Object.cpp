@@ -24,8 +24,7 @@ bool Object::Collision(Object & other)
 	int nxdist = vec2otherPos.x - vec2marioPos.x;
 	int nydist = vec2otherPos.y - vec2marioPos.y;
 
-	if (nxdist * nxdist + nydist * nydist <= GetSize().x * GetSize().x)
-		return true;
+	if (nxdist * nxdist + nydist * nydist <= GetSize().x * GetSize().x) return true;
 
 	return false;
 }
