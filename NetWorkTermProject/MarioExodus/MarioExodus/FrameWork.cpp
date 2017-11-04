@@ -19,6 +19,8 @@ void FrameWork::Run()
 	float fElapsedTime = m_tTime.Tick();
 
 	m_pScene[m_nStageNum].Update(fElapsedTime, m_dwInputSpecialkey);
+	m_pScene[m_nStageNum].CheckObjectCollision();
+
 	m_pScene[m_nStageNum].Render();
 
 	m_tTime.Tock();

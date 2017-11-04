@@ -14,7 +14,7 @@ public:
 	~Object();
 
 public:
-	void SetPosition(Vector2& pos) { m_vec2Pos = pos; }
+	void SetPosition(Vector2& pos);
 	void SetSize(Vector2& size) { m_vec2Size = size; }
 	void SetRenderer(Renderer* pRenderer) { m_pRenderer = pRenderer; }
 

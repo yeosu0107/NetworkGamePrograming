@@ -32,8 +32,7 @@ public:
 	}
 
 	Vector2 operator-(const Vector2& other) {
-		x -= other.x; y -= other.y;
-		return Vector2(x, y);;
+		return Vector2(x - other.x, y - other.y);
 	}
 
 	Vector2 operator+=(const Vector2& other) {
