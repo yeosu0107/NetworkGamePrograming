@@ -12,7 +12,7 @@ Key::Key(int iStage, Renderer* rend)
 	SetPosition(Vector2(200, 200));
 	SetSize(Vector2(30, 30));
 	m_pGrabMario = nullptr;
-	m_bOpen = false;
+	m_bUsedKey = false;
 	m_oDish = Object();
 	m_oDish.SetRenderer(rend);
 	m_oDish.SetPosition(GetPosition() - Vector2(0, GetSize().y / 2));
@@ -27,13 +27,13 @@ void Key::Render()
 {
 	m_oDish.GetRenderer()->DrawSolidRect(m_oDish.GetPosition(), m_oDish.GetSize(), Vector2(0, 0), Texture::TextureNumber::Key_Dish);
 	
-	if (m_bOpen) return;
+	if (m_bUsedKey) return;
 	GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Texture::TextureNumber::Key);
 }
 
 void Key::CollisionMario(Mario & other)
 {
-	if (m_bOpen) return; 
+	if (m_bUsedKey) return;
 
 	if (Collision(other)) {
 		m_pGrabMario = &other;
@@ -43,11 +43,11 @@ void Key::CollisionMario(Mario & other)
 
 void Key::CollisionDoor(Door & other)
 {
-	if (m_bOpen) return;
+	if (m_bUsedKey) return;
 
 	if (Collision(other)) {
 		other.SetOpen(true);
-		m_bOpen = true;
+		m_bUsedKey = true;
 	}
 }
 

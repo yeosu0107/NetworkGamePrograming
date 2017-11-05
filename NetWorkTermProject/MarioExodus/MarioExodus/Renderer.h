@@ -22,6 +22,6 @@ private:
 	UINT m_WindowSizeX = 0;
 	UINT m_WindowSizeY = 0;
 
-	Texture** m_pTexture;
+	Texture** m_ppTexture;
 };
 

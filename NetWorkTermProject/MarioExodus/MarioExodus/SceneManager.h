@@ -6,7 +6,6 @@
 class SceneManager
 {
 private:
-	int			m_iCurrentObjectCount;
 	int			m_nStage;
 	int			m_nExitMarioCount;
 

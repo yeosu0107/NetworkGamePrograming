@@ -6,7 +6,6 @@ SceneManager::SceneManager()
 }
 
 SceneManager::SceneManager(int nStage, Renderer* pRend) :
-	m_iCurrentObjectCount(0),
 	m_nStage(nStage),
 	m_nExitMarioCount(0)
 {
@@ -64,6 +63,9 @@ void SceneManager::CheckObjectCollision(DWORD& byInput)
 		else
 			vecUnSelecMario.emplace_back(&m_pMario[i]);
 	}
+
+	for(UINT i = 0; i < vecUnSelecMario.size(); ++i)
+		(*vecUnSelecMario[i]).CollisionScreen();
 
 	/* 
 	 *	선택받은 마리오랑 안받은 마리오 우선 충돌 체크

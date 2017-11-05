@@ -12,12 +12,13 @@ Mario::Mario(int num, Vector2& vec2Pos, Renderer* pRenderer) :
 	m_iMarioNum(num),
 	m_fTimePerAction(8.0f),
 	m_bLookDirection(false),
-	m_sSpriteState(Sprite_None),
+	m_eSpriteState(Sprite_None),
 	m_eJumpState(Jump_None),
 	m_iMaxJumpDist(70),
 	m_iCurJumpDist(0),
 	m_bCollScreenWall(false),
-	m_bCollScreenBott(false)
+	m_bCollScreenBott(false),
+	m_iUnCollisionCount(0)
 {
 	SetPosition(vec2Pos);
 	SetSize(Vector2(52, 52));
@@ -34,10 +35,10 @@ Mario::~Mario()
 
 void Mario::Render()
 {
-	if (m_sSpriteState == Mario::MarioSprite::Exit) return;
+	if (m_eSpriteState == Mario::MarioSprite::Exit) return;
 
 	if(m_bSelect)
-		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_sSpriteState, m_bLookDirection), Texture::TextureNumber::Mario_Sprite);
+		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_eSpriteState, m_bLookDirection), Texture::TextureNumber::Mario_Sprite);
 	else
 		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Texture::TextureNumber::Mario_None);
 
@@ -78,6 +79,7 @@ Mario::CollSide Mario::CollisionObject(Mario & other)
 		
 	}
 
+	AfterCollision(other, CollNone);
 	return CollNone;
 }
 
@@ -99,7 +101,6 @@ void Mario::CollisionScreen()
 		m_bCollScreenBott = true;
 		SetPosition(Vector2(GetPosition().x, GetSize().y / 2));
 		SetState(Mario::MarioJumpState::Jump_None);
-
 	}
 	else if (GetPosition().y >= Screen_Height - GetSize().y / 2) {
 		m_bCollScreenBott = true;
@@ -122,8 +123,10 @@ void Mario::AfterCollision(Object & other, CollSide collside)
 		break;
 
 	case Mario::CollSide::CollUp:
-		if(!m_bCollScreenBott)
+		if (!m_bCollScreenBott) {
+			m_iUnCollisionCount++;
 			SetPosition(Vector2(GetPosition().x, vec2otherPos.y - GetSize().y));
+		}
 		else
 			other.SetPosition(Vector2(other.GetPosition().x, GetPosition().y + GetSize().y));
 		SetState(Mario::MarioJumpState::Jump_Down);
@@ -145,7 +148,10 @@ void Mario::AfterCollision(Object & other, CollSide collside)
 		break;
 
 	case Mario::CollSide::CollNone:
-
+		m_iUnCollisionCount++;
+		if (!m_bCollScreenBott && m_eJumpState == Jump_None && m_iUnCollisionCount == 5)
+			m_eJumpState = Jump_Down;
+		
 		break;
 	}
 }
@@ -155,24 +161,23 @@ void Mario::Move(const float fTimeElapsed, const DWORD byInput)
 	if (!m_bSelect)
 		return;
 	
-	Vector2 vec2Direction(0, 0);
+	int xDirection = 0;
 
-	if (byInput & DIR_LEFT)				vec2Direction += Vector2(-1, 0);
-	if (byInput & DIR_RIGHT)			vec2Direction += Vector2(+1, 0);
+	if (byInput & DIR_LEFT)				xDirection += -1;
+	if (byInput & DIR_RIGHT)			xDirection += 1;
 	if (byInput & KEY_C)				m_eJumpState = m_eJumpState == Jump_None ? Jump_Up : m_eJumpState;	// 마리오가 점프 중이 아닌 상태에서만 반응하게 변경
 
-	if (vec2Direction.x > 0)			m_bLookDirection = false; 
-	else if (vec2Direction.x < 0)		m_bLookDirection = true;
+	if (xDirection > 0)					m_bLookDirection = false;
+	else if (xDirection < 0)			m_bLookDirection = true;
 
-	if (m_eJumpState != Jump_None)		m_sSpriteState = Sprite_Jump;
-	else if (vec2Direction.x == 0)		m_sSpriteState = Sprite_None;
-	else								m_sSpriteState = (m_sSpriteState == Sprite_None ? Sprite_Run1 : m_sSpriteState);
+	if (m_eJumpState != Jump_None)		m_eSpriteState = Sprite_Jump;
+	else if (xDirection == 0)			m_eSpriteState = Sprite_None;
+	else								m_eSpriteState = (m_eSpriteState == Sprite_None ? Sprite_Run1 : m_eSpriteState);
 
 	Vector2 vec2pos = GetPosition();
-	vec2pos += (vec2Direction * m_iValocity);
+	vec2pos.x += (xDirection * m_iValocity);
 
 	SetPosition(vec2pos);
-	m_oObject.SetPosition(vec2pos + Vector2(0, 26));
 }
 
 void Mario::Jump(const float fTimeElapsed)
@@ -204,7 +209,8 @@ void Mario::Jump(const float fTimeElapsed)
 
 void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
-	if (m_sSpriteState == Exit) return;
+	if (m_eSpriteState == Exit) return;
+	m_iUnCollisionCount = 0;
 
 	Move(fTimeElapsed, dwInputKey);
 	Jump(fTimeElapsed);
@@ -213,11 +219,13 @@ void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 
 void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
 {
-	if (dwInputKey == 0 && m_sSpriteState != Sprite_Jump) m_fActionTime = 0.0f;	// 만약 아무키도 안눌려 있고 마리오가 점프 상태가 아닌 경우 프레임 시간을 초기화해준다.
-	if (m_sSpriteState == Sprite_None) return;
+	m_oObject.SetPosition(GetPosition() + Vector2(0, 26));
 
-	if (m_sSpriteState != Sprite_Jump) {
+	if (dwInputKey == 0 && m_eSpriteState != Sprite_Jump) m_fActionTime = 0.0f;	// 만약 아무키도 안눌려 있고 마리오가 점프 상태가 아닌 경우 프레임 시간을 초기화해준다.
+	if (m_eSpriteState == Sprite_None) return;
+
+	if (m_eSpriteState != Sprite_Jump) {
 		m_fActionTime += fTimeElapsed;
-		m_sSpriteState = (MarioSprite)((int)(m_fActionTime * m_fTimePerAction) % 2 + 1);
+		m_eSpriteState = (MarioSprite)((int)(m_fActionTime * m_fTimePerAction) % 2 + 1);
 	}
 }

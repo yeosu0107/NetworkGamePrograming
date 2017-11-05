@@ -27,7 +27,7 @@ private:
 	Mario*		m_pGrabMario;
 	Object		m_oDish;
 
-	bool		m_bOpen;
+	bool		m_bUsedKey;
 
 public:
 	Key();
