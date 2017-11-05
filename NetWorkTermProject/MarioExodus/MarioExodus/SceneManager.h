@@ -6,8 +6,8 @@
 class SceneManager
 {
 private:
-	int			m_nStage;
-	int			m_nExitMarioCount;
+	int			m_iStage;
+	int			m_iExitMarioCount;
 
 	BackGround	m_bBackGround;
 	Door		m_dDoor;
@@ -27,7 +27,7 @@ public:
 	void SelectMario(DWORD& bSel);
 	void Destroy();
 
-	bool IsClear() { return m_nExitMarioCount == 6; }
+	bool IsClear() { return m_iExitMarioCount == 6; }
 	//int RandomCreateObject(const int n, Renderer* rend);
 
 };
