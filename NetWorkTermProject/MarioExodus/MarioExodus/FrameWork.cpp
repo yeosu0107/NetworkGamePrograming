@@ -17,14 +17,13 @@ void FrameWork::Run()
 {
 	m_tTime.Update(60.0f);
 
-	if (m_pScene[m_nStageNum].IsClear()) m_nStageNum++;	// 스테이지 클리어 확인
+	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
 	
 	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
 
-	m_pScene[m_nStageNum].Update(fElapsedTime, m_dwInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
-	m_pScene[m_nStageNum].CheckObjectCollision(m_dwInputSpecialkey);	// 충돌체크
-
-	m_pScene[m_nStageNum].Render();	// 렌더링
+	m_pScene[m_iStageNum].Update(fElapsedTime, m_dwInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
+	m_pScene[m_iStageNum].CheckObjectCollision(m_dwInputSpecialkey);	// 충돌체크
+	m_pScene[m_iStageNum].Render();										// 렌더링
 
 	m_tTime.Tock();		// 현재시간 -> 이전 시간으로 변경
 
@@ -45,7 +44,6 @@ void FrameWork::SpecialKeyInput(int key, int x, int y)
 		break;
 	}
 
-	if (m_dwInputSpecialkey != 0) m_bIsPressKey = true;
 }
 
 void FrameWork::SpecialKeyOutput(int key, int x, int y)
@@ -60,7 +58,6 @@ void FrameWork::SpecialKeyOutput(int key, int x, int y)
 		break;
 	}
 
-	if (m_dwInputSpecialkey == 0) m_bIsPressKey = false;
 }
 
 void FrameWork::KeyInput(unsigned char key, int x, int y)
@@ -120,9 +117,8 @@ void FrameWork::InitFrameWork()
 	for(int i = 0; i < MaxStage; i++)
 		m_pScene[i] = SceneManager(i, m_pRenderer);
 	
-	m_nStageNum = 0;
+	m_iStageNum = 0;
 	m_dwInputSpecialkey = 0;
-	m_bIsPressKey = false;
 
 	m_tTime = Time();
 

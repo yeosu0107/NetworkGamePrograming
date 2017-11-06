@@ -12,7 +12,7 @@ private:
 	BackGround	m_bBackGround;
 	Door		m_dDoor;
 	Key			m_kKey;
-	Mario		m_pMario[6];
+	Mario		m_pMario[MaxMario];
 
 public:
 	SceneManager();
@@ -26,8 +26,5 @@ public:
 	void CheckObjectCollision(DWORD& byInput);
 	void SelectMario(DWORD& bSel);
 	void Destroy();
-
-	bool IsClear() { return m_iExitMarioCount == 6; }
-	//int RandomCreateObject(const int n, Renderer* rend);
-
+	bool IsClear() { return m_iExitMarioCount == MaxMario; }
 };

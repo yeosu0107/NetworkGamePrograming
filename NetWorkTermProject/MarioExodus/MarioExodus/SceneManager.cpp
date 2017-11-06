@@ -19,7 +19,7 @@ SceneManager::~SceneManager()
 
 void SceneManager::InitSceneManager(Renderer* pRend)
 {
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < MaxMario; ++i)
 		m_pMario[i] = Mario(i, Vector2((i + 1) * 80, 30), pRend);
 
 	m_bBackGround = BackGround(m_iStage, pRend);
@@ -56,7 +56,7 @@ void SceneManager::CheckObjectCollision(DWORD& byInput)
 
 	UINT i, j;
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < MaxMario; i++) {
 		
 		if(m_dDoor.CollisionMario(m_pMario[i])) m_iExitMarioCount++;
 

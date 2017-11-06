@@ -11,11 +11,9 @@ private:
 
 	DWORD			m_dwInputSpecialkey;
 
-	UINT			m_nStageNum;
+	UINT			m_iStageNum;
 	Time			m_tTime;
 	Renderer*		m_pRenderer;
-
-	bool			m_bIsPressKey;
 
 public:
 	FrameWork();

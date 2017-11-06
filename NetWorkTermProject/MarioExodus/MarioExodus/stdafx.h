@@ -22,6 +22,8 @@
 
 
 // DEFINE
+const int MaxMario = 6;
+
 const UINT Screen_Width = 962;
 const UINT Screen_Height = 690;
 const UINT MaxStage = 6;
