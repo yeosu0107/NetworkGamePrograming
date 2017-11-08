@@ -6,33 +6,36 @@ Mario::Mario()
 {
 }
 
-Mario::Mario(int num, Vector2& vec2Pos, Renderer* pRenderer) :
-	m_bSelect(false),
-	m_iValocity(5),
-	m_iMarioNum(num),
-	m_fTimePerAction(8.0f),
-	m_bLookDirection(false),
-	m_eSpriteState(Sprite_None),
-	m_eJumpState(Jump_None),
-	m_iMaxJumpDist(70),
-	m_iCurJumpDist(0),
-	m_bCollScreenWall(false),
-	m_bCollScreenBott(false),
-	m_iUnCollisionCount(0),
-	m_iMinYDistance(0),
-	m_iUnCollsiionXCount(0)
+Mario::~Mario()
 {
-	SetPosition(vec2Pos);
+}
+
+void Mario::InitMario(int nNum, Vector2& vpos, Renderer * pRenderer)
+{
+	m_bSelect = false;
+	m_iValocity = 5;
+	m_iMarioNum = nNum;
+	m_fTimePerAction = 8.0f;
+	m_bLookDirection = false;
+	m_iMarioPlayerNum = 0;
+	m_eSpriteState = Mario::MarioSprite::Sprite_None;
+	m_eJumpState = Jump_None;
+	m_iMaxJumpDist = 70;
+	m_iCurJumpDist = 0;
+	m_bCollScreenWall = false;
+	m_bCollScreenBott = false;
+	m_iUnCollisionCount = 0;
+	m_iMinYDistance = 0;
+	m_iUnCollsiionXCount = 0;
+	m_bExit = false;
+	
+	SetPosition(vpos);
 	SetSize(Vector2(52, 52));
 
-	m_oObject.SetPosition(vec2Pos + Vector2(0, 26));
+	m_oObject.SetPosition(vpos + Vector2(0, 26));
 	m_oObject.SetSize(Vector2(20, 16));
 
 	SetRenderer(pRenderer);
-}
-
-Mario::~Mario()
-{
 }
 
 void Mario::Render()
@@ -54,7 +57,14 @@ void Mario::SetSelect()
 
 Mario::CollSide Mario::CollisionObject(Mario & other)
 {
+	if (other.m_bExit) {
+		m_iUnCollisionCount++;
+		m_iUnCollsiionXCount++;
+		m_iMinYDistance = min(m_iMinYDistance, GetSize().y * 2);
+		return CollNone;
+	}
 
+	// 비교대상과 현재 오브젝트가 동일 대상임에 대한 판단.
 	bool IsSameMario = (other.m_iMarioNum == m_iMarioNum);
 
 	Vector2 vec2marioPos = GetPosition();
@@ -63,11 +73,13 @@ Mario::CollSide Mario::CollisionObject(Mario & other)
 	int nxdist = vec2otherPos.x - vec2marioPos.x;
 	int nydist = vec2otherPos.y - vec2marioPos.y;
 
-	if (nydist <= 0 && !m_bCollScreenBott && !IsSameMario) {
-		if (nxdist * nxdist <= GetSize().x * GetSize().x)
+	// 상대 마리오의 위치가 위에 있고 현재 바닥에 충돌하지 않을 경우
+	if (nydist <= 0 && !m_bCollScreenBott && !IsSameMario) {	
+		if (nxdist * nxdist <= GetSize().x * GetSize().x)	// X좌표가 겹쳐 있는 경우
 			m_iMinYDistance = min(m_iMinYDistance, -nydist);
 	}
 	
+	// 상대 마리오의 위치가 아래고 바닥에 충돌하지 않았을 경우
 	else if (nydist > 0 && !other.m_bCollScreenBott && !IsSameMario) {
 		if (nxdist * nxdist <= GetSize().x * GetSize().x)
 			other.m_iMinYDistance = min(other.m_iMinYDistance, nydist);
@@ -85,26 +97,23 @@ Mario::CollSide Mario::CollisionObject(Mario & other)
 	m_iUnCollisionCount++;	
 	other.m_iUnCollisionCount++;
 
+	// 원 충돌 체크
 	if (nxdist * nxdist + nydist * nydist < GetSize().x * GetSize().x) {
 		if (nxdist * nxdist <= nydist * nydist){
 			if (nydist > 0) {
 				AfterCollision(other, CollUp);
-				AfterCollision(other, CollNone);
 				return CollUp;
 			}
 			m_iCurJumpDist = 0;
 			AfterCollision(other, CollDown);
-			AfterCollision(other, CollNone);
 			return CollDown;
 		}
 		if (nxdist * nxdist > nydist * nydist) {
 			if (nxdist > 0) {
 				AfterCollision(other, CollRight);
-				AfterCollision(other, CollNone);
 				return CollRight;
 			}
 			AfterCollision(other, CollLeft);
-			AfterCollision(other, CollNone);
 			return CollLeft;
 		}	
 	}
@@ -122,6 +131,8 @@ Mario::CollSide Mario::CollisionObject(Mario & other)
 
 void Mario::CollisionScreen()
 {
+	int iGround = 165;
+
 	m_bCollScreenWall = false;
 	m_bCollScreenBott = false;
 
@@ -134,9 +145,9 @@ void Mario::CollisionScreen()
 		SetPosition(Vector2(Screen_Width - GetSize().x / 2, GetPosition().y));
 	}
 
-	if (GetPosition().y <= GetSize().y / 2) {
+	if (GetPosition().y <= iGround + GetSize().y / 2) {
 		m_bCollScreenBott = true;
-		SetPosition(Vector2(GetPosition().x, GetSize().y / 2));
+		SetPosition(Vector2(GetPosition().x, iGround + GetSize().y / 2));
 		SetState(Mario::MarioJumpState::Jump_None);
 	}
 	else if (GetPosition().y >= Screen_Height - GetSize().y / 2) {
@@ -159,6 +170,7 @@ void Mario::AfterCollision(Mario & other, CollSide collside)
 			other.m_bCollScreenBott = m_bCollScreenBott;
 		}
 		SetState(Mario::MarioJumpState::Jump_None);
+		AfterCollision(other, CollNone);
 		break;
 
 	case Mario::CollSide::CollUp:
@@ -173,6 +185,7 @@ void Mario::AfterCollision(Mario & other, CollSide collside)
 		}
 		
 		other.SetState(Mario::MarioJumpState::Jump_None);
+		AfterCollision(other, CollNone);
 		break;
 
 	case Mario::CollSide::CollLeft:
@@ -192,19 +205,29 @@ void Mario::AfterCollision(Mario & other, CollSide collside)
 			other.SetPosition(Vector2(GetPosition().x + GetSize().x, other.GetPosition().y));
 			other.m_bCollScreenWall = m_bCollScreenWall;
 		}
+		AfterCollision(other, CollNone);
 		break;
 
 	case Mario::CollSide::CollNone:
 		if (m_eJumpState != Jump_None || m_iUnCollisionCount < 5) break;
 		if (m_iMinYDistance > GetSize().y)
-		{
-			std::cout << m_iMinYDistance << " " << m_iMarioNum << std::endl;
 			m_eJumpState = Jump_Down;
-		}
+		
 		else if(m_iUnCollsiionXCount >= 5)  m_eJumpState = Jump_Down;
 		break;
 	}
 
+}
+
+void Mario::SetMarioRecvData(RecvMarioDataFormat & rcvData)
+{
+	m_iMarioPlayerNum = rcvData.iMarioPlayerNum;
+	m_bSelect = rcvData.bSelect;
+	m_bLookDirection = rcvData.bLookDirection;
+	m_eSpriteState = (Mario::MarioSprite)rcvData.eSpriteState;
+
+	Vector2 pos((int)rcvData.wxPos, (int)rcvData.wyPos);
+	SetPosition(pos);
 }
 
 void Mario::Move(const float fTimeElapsed, const DWORD byInput)

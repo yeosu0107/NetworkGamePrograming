@@ -6,7 +6,6 @@
 class SceneManager
 {
 private:
-	int			m_iStage;
 	int			m_iExitMarioCount;
 
 	BackGround	m_bBackGround;
@@ -16,11 +15,10 @@ private:
 
 public:
 	SceneManager();
-	SceneManager(int nStage, Renderer* pRend);
 	~SceneManager();
 
 public:
-	void InitSceneManager(Renderer* pRend);
+	void InitSceneManager(int nStage, Vector2* prcvMario, Vector2& vDoorPos, Vector2& vKeyPos, Renderer* pRend);
 	void Update(float fElapsedTime, DWORD& byInput);
 	void Render();
 	void CheckObjectCollision(DWORD& byInput);

@@ -6,19 +6,6 @@ Key::Key()
 {
 }
 
-Key::Key(int iStage, Renderer* rend)
-{
-	SetRenderer(rend);
-	SetPosition(Vector2(200, 200));
-	SetSize(Vector2(30, 30));
-	m_pGrabMario = nullptr;
-	m_bUsedKey = false;
-	m_oDish = Object();
-	m_oDish.SetRenderer(rend);
-	m_oDish.SetPosition(GetPosition() - Vector2(0, GetSize().y / 2));
-	m_oDish.SetSize(Vector2(37, 9));
-}
-
 Key::~Key()
 {
 }
@@ -29,6 +16,19 @@ void Key::Render()
 	
 	if (m_bUsedKey) return;
 	GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Texture::TextureNumber::Key);
+}
+
+void Key::InitKey(Vector2 & vPos, bool bUsedKey, Renderer * rend)
+{
+	SetRenderer(rend);
+	SetPosition(vPos);
+	SetSize(Vector2(30, 30));
+	m_pGrabMario = nullptr;
+	m_bUsedKey = bUsedKey;
+	m_oDish = Object();
+	m_oDish.SetRenderer(rend);
+	m_oDish.SetPosition(GetPosition() - Vector2(0, GetSize().y / 2));
+	m_oDish.SetSize(Vector2(37, 9));
 }
 
 void Key::CollisionMario(Mario & other)
@@ -68,14 +68,6 @@ Door::Door()
 {
 }
 
-Door::Door(int iStage, Renderer * rend)
-{
-	SetRenderer(rend);
-	SetPosition(Vector2(100, 100));
-	SetSize(Vector2(48, 48));
-	m_bOpen = iStage == 0 ? false : false;
-}
-
 Door::~Door()
 {
 
@@ -84,6 +76,14 @@ Door::~Door()
 void Door::Render()
 {
 	GetRenderer()->DrawSolidRect(GetPosition(), GetSize(),Vector2(m_bOpen,0), Texture::TextureNumber::Door);
+}
+
+void Door::InitDoor(Vector2 & vPos, bool bOpen, Renderer* rend)
+{
+	SetRenderer(rend);
+	SetPosition(vPos);
+	SetSize(Vector2(48, 48));
+	m_bOpen = bOpen;
 }
 
 bool Door::CollisionMario(Mario & other)

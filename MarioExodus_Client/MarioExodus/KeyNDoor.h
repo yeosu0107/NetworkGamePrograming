@@ -10,11 +10,11 @@ private:
 
 public:
 	Door();
-	Door(int iStage, Renderer* rend);
 	~Door();
 
 public:
 	void Render();
+	void InitDoor(Vector2& vPos, bool bOpen, Renderer* rend);
 	bool CollisionMario(Mario& other);
 	
 	void SetOpen(bool bOpen) { m_bOpen = bOpen; }
@@ -31,11 +31,11 @@ private:
 
 public:
 	Key();
-	Key(int iStage, Renderer* rend);
 	~Key();
 
 public:
 	void Render();
+	void InitKey(Vector2& vPos, bool bUsedKey, Renderer* rend);
 	void CollisionMario(Mario& other);
 	void CollisionDoor(Door& other);
 	void Update(float fTimeElapsed);

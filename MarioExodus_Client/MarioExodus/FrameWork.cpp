@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "FrameWork.h"
-#include <math.h>
+#include <fstream>
 
 FrameWork::FrameWork()
 {
@@ -15,7 +15,7 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-	m_tTime.Update(60.0f);
+	m_tTime.Update(30.0f);
 
 	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
 	
@@ -113,17 +113,35 @@ void FrameWork::KeyOutput(unsigned char key, int x, int y)
 
 void FrameWork::InitFrameWork()
 {
+	std::ifstream Input("InitialData.ini");
+	
+	Vector2 pMarioPos[MaxMario];
+	Vector2 vDoorPos, vKeyPos;
+
 	m_pRenderer = new Renderer(Screen_Width, Screen_Height);
-	for(int i = 0; i < MaxStage; i++)
-		m_pScene[i] = SceneManager(i, m_pRenderer);
+
+	for (int j = 0; j < MaxStage; ++j) {
+		for (int i = 0; i < MaxMario; ++i) {
+			Input >> pMarioPos[i].x >> pMarioPos[i].y;
+		}
+		Input >> vDoorPos.x >> vDoorPos.y;
+		Input >> vKeyPos.x >> vKeyPos.y;
+
+		m_pScene[j].InitSceneManager(j, pMarioPos, vDoorPos, vKeyPos, m_pRenderer);
+	}
+
+	Input.close();
 	
 	m_iStageNum = 0;
 	m_dwInputSpecialkey = 0;
-
-	m_tTime = Time();
-
 }
 
 void FrameWork::ReadyToNextFrame()
 {
+}
+
+bool FrameWork::IsGameEnd()
+{
+	if( m_iStageNum > MaxStage )
+		return true;
 }

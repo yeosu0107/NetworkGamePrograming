@@ -26,7 +26,7 @@ const int MaxMario = 6;
 
 const UINT Screen_Width = 962;
 const UINT Screen_Height = 690;
-const UINT MaxStage = 6;
+const UINT MaxStage = 4;
 
 const DWORD KEY_1 = 0x01;
 const DWORD KEY_2 = 0x02;
@@ -39,3 +39,18 @@ const DWORD DIR_RIGHT = 0x80;
 const DWORD KEY_C = 0x100;
 const DWORD KEY_X = 0x200;
 
+struct RecvMarioDataFormat {
+	WORD iMarioNum;
+	WORD iMarioPlayerNum;
+	WORD wxPos;
+	WORD wyPos;
+	bool bSelect;
+	bool bLookDirection;
+	WORD eSpriteState;
+};
+
+struct RecvStageDataFormat {
+	WORD wKeyXPos;
+	WORD wKeyYPos;
+	bool IsOpen;
+};

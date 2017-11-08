@@ -5,26 +5,24 @@ SceneManager::SceneManager()
 {
 }
 
-SceneManager::SceneManager(int nStage, Renderer* pRend) :
-	m_iStage(nStage),
-	m_iExitMarioCount(0)
-{
-	InitSceneManager(pRend);
-}
 
 SceneManager::~SceneManager()
 {
 	Destroy();
 }
 
-void SceneManager::InitSceneManager(Renderer* pRend)
+void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoorPos, Vector2& vKeyPos, Renderer* pRend)
 {
-	for (int i = 0; i < MaxMario; ++i)
-		m_pMario[i] = Mario(i, Vector2((i + 1) * 80, 30), pRend);
+	for (int i = 0; i < MaxMario; i++)
+		m_pMario[i].InitMario(i, pMarioPos[i], pRend);
 
-	m_bBackGround = BackGround(m_iStage, pRend);
-	m_dDoor = Door(m_iStage, pRend);
-	m_kKey = Key(m_iStage, pRend);
+	m_iExitMarioCount = 0;
+	m_bBackGround = BackGround(nStage, pRend);
+
+	bool bReadyStage = nStage == 0 ? true : false;
+
+	m_dDoor.InitDoor(vDoorPos, bReadyStage, pRend);
+	m_kKey.InitKey(vKeyPos, bReadyStage, pRend);
 }
 
 void SceneManager::Update(float fElapsedTime, DWORD& byInput)
@@ -58,8 +56,10 @@ void SceneManager::CheckObjectCollision(DWORD& byInput)
 
 	for (i = 0; i < MaxMario; i++) {
 		
-		if(m_dDoor.CollisionMario(m_pMario[i])) m_iExitMarioCount++;
-
+		if (m_dDoor.CollisionMario(m_pMario[i])) {
+			m_iExitMarioCount++;
+			m_pMario[i].SetExit(true);
+		}
 		if (m_pMario[i].IsSelected())
 			vecSelecMario.emplace_back(&m_pMario[i]);
 		else
