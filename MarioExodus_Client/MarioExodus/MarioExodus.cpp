@@ -73,7 +73,6 @@ int main(int argc, char **argv)
 	glutReshapeFunc(Reshape);
 	glutSpecialFunc(SpecialKeyInput);
 	glutSpecialUpFunc(SpecialKeyOutput);
-
 	glutMainLoop();
 
 	return 0;
