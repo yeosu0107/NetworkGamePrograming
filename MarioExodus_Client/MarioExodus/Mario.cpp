@@ -17,7 +17,7 @@ void Mario::InitMario(int nNum, Vector2& vpos, Renderer * pRenderer)
 	m_iMarioNum = nNum;
 	m_fTimePerAction = 8.0f;
 	m_bLookDirection = false;
-	m_iMarioPlayerNum = 0;
+	m_iMarioPlayerNum = m_iMarioNum % 2;
 	m_eSpriteState = Mario::MarioSprite::Sprite_None;
 	m_eJumpState = Jump_None;
 	m_iMaxJumpDist = 70;
@@ -43,7 +43,7 @@ void Mario::Render()
 	if (m_eSpriteState == Mario::MarioSprite::Exit) return;
 
 	if(m_bSelect)
-		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_eSpriteState, m_bLookDirection), Texture::TextureNumber::Mario_Sprite);
+		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(m_eSpriteState, m_bLookDirection + m_iMarioPlayerNum * 2), Texture::TextureNumber::Mario_Sprite);
 	else
 		GetRenderer()->DrawSolidRect(GetPosition(), GetSize(), Vector2(0, 0), Texture::TextureNumber::Mario_None);
 

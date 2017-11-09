@@ -21,7 +21,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_Initialized = true;
 
 	m_ppTexture = new Texture*[10];
-	m_ppTexture[Texture::TextureNumber::Mario_Sprite]	= new Texture("Resource\\Mario_52_52.bmp", 4, 2);
+	m_ppTexture[Texture::TextureNumber::Mario_Sprite]	= new Texture("Resource\\Mario_52_52.bmp", 4, 4);
 	m_ppTexture[Texture::TextureNumber::Mario_None]		= new Texture("Resource\\Mario_Null_52_52.bmp", 1, 1);
 	m_ppTexture[Texture::TextureNumber::Marios_Number]	= new Texture("Resource\\Number_120_18.bmp", 6 ,1);
 	m_ppTexture[Texture::TextureNumber::BackSky]			= new Texture("Resource\\BackGround_962_700.bmp", 1 ,1);
