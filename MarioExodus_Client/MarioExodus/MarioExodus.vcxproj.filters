@@ -87,6 +87,12 @@
     <ClInclude Include="KeyNDoor.h">
       <Filter>Object Class\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Object Class\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Object Class\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -126,6 +132,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="KeyNDoor.cpp">
+      <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
       <Filter>Object Class\Source</Filter>
     </ClCompile>
   </ItemGroup>

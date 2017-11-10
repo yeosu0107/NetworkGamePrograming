@@ -23,9 +23,11 @@
 
 // DEFINE
 const int MaxMario = 6;
+const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
+const enum PlayerNumber {Player1, Player2};
 
-const UINT Screen_Width = 962;
-const UINT Screen_Height = 690;
+const UINT Screen_Width = 1280;
+const UINT Screen_Height = 720;
 const UINT MaxStage = 4;
 
 const DWORD KEY_1 = 0x01;

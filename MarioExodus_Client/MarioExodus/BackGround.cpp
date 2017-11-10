@@ -21,15 +21,15 @@ void BackGround::InitBackGround(int stage, Renderer* pRend)
 	SetRenderer(pRend);
 	m_nStage = stage;
 
-	m_pObject[SkyNGround].SetSize(Vector2(962, 700));
-	m_pObject[SkyNGround].SetPosition(Vector2(481, 350));
+	m_pObject[SkyNGround].SetSize(Vector2(Screen_Width, Screen_Height));
+	m_pObject[SkyNGround].SetPosition(Vector2(Screen_Width / 2, Screen_Height / 2));
 
 	if (m_nStage == 0) {
 		m_pObject[Rogo].SetSize(Vector2(528, 168));
-		m_pObject[Rogo].SetPosition(Vector2(481, 500));
+		m_pObject[Rogo].SetPosition(Vector2(Screen_Width / 2, Screen_Height / 2 + 200));
 
 		m_pObject[PressButton].SetSize(Vector2(326, 78));
-		m_pObject[PressButton].SetPosition(Vector2(481, 300));
+		m_pObject[PressButton].SetPosition(Vector2(Screen_Width / 2, Screen_Height / 2));
 	}
 
 }

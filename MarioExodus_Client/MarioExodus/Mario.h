@@ -11,7 +11,6 @@ public:
 	
 	static enum MarioSprite			{ Sprite_None, Sprite_Run1 , Sprite_Run2 , Sprite_Jump, Exit};	// - 클라
 	static enum MarioJumpState		{ Jump_None, Jump_Up, Jump_Down };								// - 서버
-	static enum CollSide			{ CollNone, CollLeft, CollRight, CollDown, CollUp };			// - 서버
 
 private:
 	int				m_iMaxJumpDist;			// 점프 시 최대 높이									- 서버
@@ -54,17 +53,13 @@ public:
 	void Jump(const float fTimeElapsed);
 	void Render();
 	
-	void SetSelect() ;
+	void SetSelect(int num) ;
 	void SetExit(bool bExit) { m_bExit = bExit; }
 
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
 	void SetSpriteState(Mario::MarioSprite eSprite) { m_eSpriteState = eSprite; }
 
 	MarioSprite GetSpriteState() const { return m_eSpriteState; }
-
-	CollSide CollisionObject(Mario& other);
-	void CollisionScreen();
-	void AfterCollision(Mario& other, CollSide collside);
 
 	void SetMarioRecvData(RecvMarioDataFormat& rcvData);
 };

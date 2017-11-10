@@ -11,18 +11,26 @@ SceneManager::~SceneManager()
 	Destroy();
 }
 
-void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoorPos, Vector2& vKeyPos, Renderer* pRend)
+void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, Vector2* pBlockPos, Renderer* pRend)
 {
 	for (int i = 0; i < MaxMario; i++)
 		m_pMario[i].InitMario(i, pMarioPos[i], pRend);
 
 	m_iExitMarioCount = 0;
+	m_iBlockCount = iBlockCount;
+	m_iWallCount = iWallCount;
 	m_bBackGround = BackGround(nStage, pRend);
 
 	bool bReadyStage = nStage == 0 ? true : false;
 
 	m_dDoor.InitDoor(vDoorPos, bReadyStage, pRend);
 	m_kKey.InitKey(vKeyPos, bReadyStage, pRend);
+
+	if (m_iBlockCount > 0)	m_pBlock = new Block[m_iBlockCount]();
+	for(int i =0;i < m_iBlockCount;i++) m_pBlock[i].InitBlock(pBlockPos[i], pRend);
+
+	if (m_iWallCount > 0)	m_pWall = new Wall[m_iWallCount]();
+	for (int i = 0; i < m_iWallCount; i++) m_pWall[i].InitWall(pWallPos[i], pRend);
 }
 
 void SceneManager::Update(float fElapsedTime, DWORD& byInput)
@@ -33,6 +41,10 @@ void SceneManager::Update(float fElapsedTime, DWORD& byInput)
 		pMa.Update(fElapsedTime, byInput);
 
 	m_kKey.Update(fElapsedTime);
+	
+	if (m_pBlock != nullptr)
+		for (int i = 0; i < m_iBlockCount; i++)
+			m_pBlock[i].Update();
 }
 
 void SceneManager::Render()
@@ -40,102 +52,72 @@ void SceneManager::Render()
 	m_bBackGround.Render();
 	m_dDoor.Render();
 
+	if (m_pBlock != nullptr) 
+		for(int i = 0; i < m_iBlockCount; i++)
+			m_pBlock[i].Render();
+
 	for (Mario& pMa : m_pMario)
 		pMa.Render();
 
 	m_kKey.Render();
+
+	if (m_pWall != nullptr)
+		for (int i = 0; i < m_iWallCount; i++)
+			m_pWall[i].Render();
+
 }
 void SceneManager::CheckObjectCollision(DWORD& byInput)
 {
-	std::vector<Mario*> vecSelecMario;
-	std::vector<Mario*> vecUnSelecMario;
+	
+	for (int i = 0; i < MaxMario; i++) {
+		if (m_pMario[i].GetSpriteState() == Mario::MarioSprite::Exit) continue;	// 마리오가 나간경우 충돌 체크 X
 
-	m_kKey.CollisionDoor(m_dDoor);
+		if (byInput & KEY_X) m_kKey.CollisionMario(m_pMario[i]);				// X키가 눌린 경우 열쇠와 현재 마리오와 충돌 검사
+		else m_kKey.SetMarioPtr(nullptr);										// 아닌 경우 열쇠가 마리오를 쫓지 않게 변경 
 
-	UINT i, j;
+		if (m_dDoor.CollisionMario(m_pMario[i])) m_iExitMarioCount++;			// 마리오가 열린 문과 충돌한 경우
 
-	for (i = 0; i < MaxMario; i++) {
+		m_pMario[i].CollisionScreen();
+
+		for (int j = 0; j < m_iBlockCount; ++j) {
+			m_pBlock[j].Collision(m_pMario[i]);
+			m_pMario[i].Collision(m_pBlock[j]);
+		}
+
+		for( int j = 0; j < m_iWallCount; ++j)	
+			m_pMario[i].Collision(m_pWall[j]);
+
+		for (int j = 0; j < MaxMario; j++) 
+			if (m_pMario[j].GetSpriteState() != Mario::MarioSprite::Exit && i != j) m_pMario[i].Collision(m_pMario[j]);
 		
-		if (m_dDoor.CollisionMario(m_pMario[i])) {
-			m_iExitMarioCount++;
-			m_pMario[i].SetExit(true);
-		}
-		if (m_pMario[i].IsSelected())
-			vecSelecMario.emplace_back(&m_pMario[i]);
-		else
-			vecUnSelecMario.emplace_back(&m_pMario[i]);
+
+		m_pMario[i].AfterCollision();	// 이동 후 Box오브젝트을 밀거나 Y축에 대해서만 후처리
 	}
 
-	for(i = 0; i < vecUnSelecMario.size(); ++i)
-		(*vecUnSelecMario[i]).CollisionScreen();
+	//
+	for (int i = 0; i < m_iBlockCount; ++i) {
+		for(int j = 0; j < m_iWallCount; ++j)
+			m_pBlock[i].Collision(m_pWall[j]);
 
-	/* 
-	 *	선택받은 마리오랑 안받은 마리오 우선 충돌 체크
-	 *	기존 : 부여된 숫자에 따라 충돌 체크 하기에 선택 안된 마리오가 충돌 검사를 받고 이동 되는 경우가 많았음 
-	 */
-	for (i = 0; i < vecSelecMario.size(); ++i)
-	{
-		if (byInput & KEY_X) m_kKey.CollisionMario(*vecSelecMario[i]);
-		else m_kKey.SetMarioPtr(nullptr);
+		for (int j = 0; j < m_iBlockCount; ++j) 
+			if (i != j) m_pBlock[i].Collision(m_pBlock[j]);
+		
+		m_pBlock[i].AfterCollision();
+		m_pBlock[i].CollisionScreen();
 
-		vecSelecMario[i]->CollisionScreen();
-
-		for (j = 0; j < vecUnSelecMario.size(); ++j)
-		{
-			if (vecSelecMario[i]->GetSpriteState() == Mario::MarioSprite::Exit 
-				|| vecUnSelecMario[j]->GetSpriteState() == Mario::MarioSprite::Exit) 
-				continue;
-
-			Mario::CollSide side = vecSelecMario[i]->CollisionObject(*vecUnSelecMario[j]);
-		}
 	}
-
-	/*
-	 *	선택받은 마리오끼리 충돌 체크
-	 */
-	for (i = 0; i < vecUnSelecMario.size(); ++i)
-	{
-		for (j = i + 1; j < vecUnSelecMario.size(); ++j)
-		{
-			if (vecUnSelecMario[i]->GetSpriteState() == Mario::MarioSprite::Exit
-				|| vecUnSelecMario[j]->GetSpriteState() == Mario::MarioSprite::Exit)
-				continue;
-
-			Mario::CollSide side = vecUnSelecMario[i]->CollisionObject(*vecUnSelecMario[j]);
-		}
-	}
-
-	if (i > 0)
-		vecUnSelecMario[i - 1]->CollisionObject(*vecUnSelecMario[i - 1]);
-
-	/*
-	 *	선택 못 받은 마리오끼리 충돌 체크
-	 */
-	for (i = 0; i < vecSelecMario.size(); ++i)
-	{
-		for (j = i+1; j < vecSelecMario.size(); ++j)
-		{
-			if (vecSelecMario[i]->GetSpriteState() == Mario::MarioSprite::Exit
-				|| vecSelecMario[j]->GetSpriteState() == Mario::MarioSprite::Exit)
-				continue;
-
-			Mario::CollSide side = vecSelecMario[i]->CollisionObject(*vecSelecMario[j]);
-		}
-	}
-
-	if (i > 0) 
-		vecSelecMario[i - 1]->CollisionObject(*vecSelecMario[i - 1]);
+	m_kKey.CollisionDoor(m_dDoor);
 }
 
 void SceneManager::SelectMario(DWORD& bSel)
 {
 	if (bSel % 0x40 == 0) return;
-	if (bSel & KEY_1) { m_pMario[0].SetSelect(); };
-	if (bSel & KEY_2) { m_pMario[1].SetSelect(); };
-	if (bSel & KEY_3) { m_pMario[2].SetSelect(); };
-	if (bSel & KEY_4) { m_pMario[3].SetSelect(); };
-	if (bSel & KEY_5) { m_pMario[4].SetSelect(); };
-	if (bSel & KEY_6) { m_pMario[5].SetSelect(); };
+	if (bSel & KEY_1) { m_pMario[0].SetSelect(Player1); };
+	if (bSel & KEY_2) { m_pMario[1].SetSelect(Player1); };
+	if (bSel & KEY_3) { m_pMario[2].SetSelect(Player1); };
+	if (bSel & KEY_4) { m_pMario[3].SetSelect(Player1); };
+	if (bSel & KEY_5) { m_pMario[4].SetSelect(Player1); };
+	if (bSel & KEY_6) { m_pMario[5].SetSelect(Player1); };
 
 	bSel &= !(0x40 - 1);	// 0x63까지의 비트를 반전 시키고 입력 키값과 And 연산 = 하위 6비트 초기화
 	
@@ -143,4 +125,21 @@ void SceneManager::SelectMario(DWORD& bSel)
 
 void SceneManager::Destroy()
 {
+	if (m_pBlock != nullptr) delete[] m_pBlock;
+	if (m_pWall != nullptr) delete[] m_pWall;
+}
+
+void SceneManager::ReadyToNextFrame()
+{
+	for (int i = 0; i < MaxMario; i++) {
+		m_pMario[i].GetCollObjects().clear();	// 충돌한 객체 초기화
+		m_pMario[i].SetCollside(0);		// 충돌한 방향 초기화
+	}
+
+	for (int i = 0; i < m_iBlockCount; ++i) {
+		m_pBlock[i].SetXDir(0);
+		m_pBlock[i].SetCollside(0);
+		m_pBlock[i].GetCollObjects().clear();
+		m_pBlock[i].SetYDir(0);
+	}
 }

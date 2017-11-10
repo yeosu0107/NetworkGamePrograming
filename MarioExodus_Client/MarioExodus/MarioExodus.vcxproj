@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Block.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="KeyNDoor.h" />
     <ClInclude Include="Mario.h" />
@@ -167,9 +168,11 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="KeyNDoor.cpp" />
     <ClCompile Include="Mario.cpp" />
@@ -187,6 +190,7 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
