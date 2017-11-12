@@ -151,12 +151,19 @@ void FrameWork::InitFrameWork()
 		}
 
 		m_pScene[i].InitSceneManager(i, pMarioPos, vDoorPos, vKeyPos, iWallCount, pWallPos, iBlockCount, pBlockPos, m_pRenderer);
+
+		if (pBlockPos != nullptr)	delete[](pBlockPos);
+		pBlockPos = nullptr;
+
+		if (pWallPos != nullptr)	delete[](pWallPos);
+		pWallPos = nullptr;
 	}
 
 	Input.close();
 	
 	m_iStageNum = 0;
 	m_dwInputSpecialkey = 0;
+	
 }
 
 void FrameWork::ReadyToNextFrame()
