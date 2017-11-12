@@ -23,12 +23,6 @@ void Mario::InitMario(int nNum, Vector2& vpos, Renderer * pRenderer)
 	m_eJumpState = Jump_None;
 	m_iMaxJumpDist = 60;
 	m_iCurJumpDist = 0;
-	m_bCollScreenWall = false;
-	m_bCollScreenBott = false;
-	m_iUnCollisionCount = 0;
-	m_iMinYDistance = 0;
-	m_iUnCollsiionXCount = 0;
-	m_bExit = false;
 	SetObjectType(MARIO);
 	
 	SetPosition(vpos);
@@ -149,10 +143,6 @@ void Mario::Jump(const float fTimeElapsed)
 void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
 	if (m_eSpriteState == Exit) return;
-	m_iUnCollisionCount = 0;
-	m_iMinYDistance = Screen_Height;
-	m_iUnCollsiionXCount = 0;
-
 	Move(fTimeElapsed, dwInputKey);
 	Jump(fTimeElapsed);
 	SpriteUpdate(fTimeElapsed, dwInputKey);

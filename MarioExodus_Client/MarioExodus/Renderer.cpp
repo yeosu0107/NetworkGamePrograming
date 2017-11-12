@@ -20,7 +20,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	m_Initialized = true;
 
-	m_ppTexture = new Texture*[11];
+	m_ppTexture = new Texture*[12];
 	m_ppTexture[Texture::TextureNumber::Mario_Sprite]	= new Texture("Resource\\Mario_52_52.bmp", 4, 4);
 	m_ppTexture[Texture::TextureNumber::Mario_None]		= new Texture("Resource\\Mario_Null_52_52.bmp", 1, 1);
 	m_ppTexture[Texture::TextureNumber::Marios_Number]	= new Texture("Resource\\Number_120_18.bmp", 6 ,1);
@@ -32,6 +32,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_ppTexture[Texture::TextureNumber::Main_Rogo]		= new Texture("Resource\\Main_Rogo_528_168.bmp", 1 ,1 );
 	m_ppTexture[Texture::TextureNumber::Press_C]		= new Texture("Resource\\Press_C_Start_326_78.bmp", 1 , 1);
 	m_ppTexture[Texture::TextureNumber::Wall]			= new Texture("Resource\\Wall_52_52.bmp", 1, 1);
+	m_ppTexture[Texture::TextureNumber::GameOver]		= new Texture("Resource\\GameOver_528_168.bmp", 1, 1);
 }
 
 bool Renderer::IsInitialized()

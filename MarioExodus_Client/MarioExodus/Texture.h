@@ -7,7 +7,7 @@ class Texture
 public:
 	static enum TextureNumber {
 		Mario_Sprite, Mario_None, Marios_Number, BackSky,
-		Block, Door, Key, Key_Dish, Main_Rogo, Press_C, Wall
+		Block, Door, Key, Key_Dish, Main_Rogo, Press_C, Wall, GameOver
 	};
 private:
 	BITMAPINFO* m_pBitInfo;

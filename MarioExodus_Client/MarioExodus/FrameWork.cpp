@@ -17,7 +17,7 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-	m_tTime.Update(30.0f);
+	m_tTime.Update(60.0f);
 
 	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
 	

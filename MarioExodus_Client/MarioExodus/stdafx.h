@@ -28,7 +28,7 @@ const enum PlayerNumber {Player1, Player2};
 
 const UINT Screen_Width = 1280;
 const UINT Screen_Height = 720;
-const UINT MaxStage = 4;
+const UINT MaxStage = 5;
 
 const DWORD KEY_1 = 0x01;
 const DWORD KEY_2 = 0x02;
