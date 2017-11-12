@@ -1,36 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="오브젝트">
+      <UniqueIdentifier>{fb7f3fe0-716c-4b2a-8aaa-937bc566faeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="서버">
+      <UniqueIdentifier>{1c09f9b5-71ce-4029-b2cd-2fbdc83a5c33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="서버\소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="서버\헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="오브젝트\헤더 파일">
+      <UniqueIdentifier>{e18351e3-c407-4d1a-9bd7-14587dd8a26e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="오브젝트\소스 파일">
+      <UniqueIdentifier>{929aa0bf-c394-4c02-937e-030c68f5a265}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>서버\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Source\Server.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>서버\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>서버\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Block.cpp">
+      <Filter>오브젝트\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KeyNDoor.cpp">
+      <Filter>오브젝트\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mario.cpp">
+      <Filter>오브젝트\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>오브젝트\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>서버\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Source\Server.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>서버\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Block.h">
+      <Filter>오브젝트\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KeyNDoor.h">
+      <Filter>오브젝트\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mario.h">
+      <Filter>오브젝트\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>오브젝트\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

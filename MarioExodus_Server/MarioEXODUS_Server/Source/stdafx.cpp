@@ -1,5 +1,9 @@
 #include "stdafx.h"
 
+
+
+
+
 void err_display(char *msg)
 {
 	LPVOID lpMsgBuf;

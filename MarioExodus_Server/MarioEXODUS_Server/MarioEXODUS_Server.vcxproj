@@ -142,11 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Block.cpp" />
+    <ClCompile Include="Source\KeyNDoor.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Mario.cpp" />
+    <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Server.cpp" />
     <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Block.h" />
+    <ClInclude Include="Source\KeyNDoor.h" />
+    <ClInclude Include="Source\Mario.h" />
+    <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Server.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
