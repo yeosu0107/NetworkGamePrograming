@@ -33,7 +33,7 @@ void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoo
 	for (int i = 0; i < m_iWallCount; i++) m_pWall[i].InitWall(pWallPos[i], pRend);
 }
 
-void SceneManager::Update(float fElapsedTime, DWORD& byInput)
+void SceneManager::Update(float fElapsedTime, WORD& byInput)
 {
 	SelectMario(byInput);
 	
@@ -66,7 +66,7 @@ void SceneManager::Render()
 			m_pWall[i].Render();
 
 }
-void SceneManager::CheckObjectCollision(DWORD& byInput)
+void SceneManager::CheckObjectCollision(WORD& byInput)
 {
 	
 	for (int i = 0; i < MaxMario; i++) {
@@ -109,7 +109,7 @@ void SceneManager::CheckObjectCollision(DWORD& byInput)
 	m_kKey.CollisionDoor(m_dDoor);
 }
 
-void SceneManager::SelectMario(DWORD& bSel)
+void SceneManager::SelectMario(WORD& bSel)
 {
 	if (bSel % 0x40 == 0) return;
 	if (bSel & KEY_1) { m_pMario[0].SetSelect(Player1); };

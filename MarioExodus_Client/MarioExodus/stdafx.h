@@ -4,6 +4,8 @@
 
 #include "targetver.h"
 
+#pragma comment(lib, "ws2_32")
+#include <winsock2.h>
 #include <stdio.h>
 #include <tchar.h>
 #include <iostream>
@@ -41,6 +43,8 @@ const DWORD DIR_RIGHT = 0x80;
 const DWORD KEY_C = 0x100;
 const DWORD KEY_X = 0x200;
 
+const UINT MAX_BUF = 512;
+
 struct RecvMarioDataFormat {
 	WORD iMarioNum;
 	WORD iMarioPlayerNum;
@@ -56,3 +60,6 @@ struct RecvStageDataFormat {
 	WORD wKeyYPos;
 	bool IsOpen;
 };
+
+void error_quit(char* msg);
+void error_display(char *msg);

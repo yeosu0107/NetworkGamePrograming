@@ -13,18 +13,25 @@ FrameWork::~FrameWork()
 	delete(m_pRenderer);
 	for (int i = 0; i < MaxStage; i++)
 		m_pScene[i].Destroy();
+	closesocket(m_sockServer);
+	WSACleanup();
 }
 
 void FrameWork::Run()
 {
+	char buf[MAX_BUF];
+
 	m_tTime.Update(60.0f);
+
+	SendKeyStatus();
+	RecvObjectStatus(buf);
 
 	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
 	
 	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
 
-	m_pScene[m_iStageNum].CheckObjectCollision(m_dwInputSpecialkey);	// 충돌체크
-	m_pScene[m_iStageNum].Update(fElapsedTime, m_dwInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
+	m_pScene[m_iStageNum].CheckObjectCollision(m_wInputSpecialkey);	// 충돌체크
+	m_pScene[m_iStageNum].Update(fElapsedTime, m_wInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
 	m_pScene[m_iStageNum].Render();										// 렌더링
 
 	m_tTime.Tock();		// 현재시간 -> 이전 시간으로 변경
@@ -39,10 +46,10 @@ void FrameWork::SpecialKeyInput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_LEFT:
-		m_dwInputSpecialkey |= DIR_LEFT;
+		m_wInputSpecialkey |= DIR_LEFT;
 		break;
 	case GLUT_KEY_RIGHT:
-		m_dwInputSpecialkey |= DIR_RIGHT;
+		m_wInputSpecialkey |= DIR_RIGHT;
 		break;
 	}
 
@@ -53,10 +60,10 @@ void FrameWork::SpecialKeyOutput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_LEFT:
-		m_dwInputSpecialkey ^= DIR_LEFT;
+		m_wInputSpecialkey ^= DIR_LEFT;
 		break;
 	case GLUT_KEY_RIGHT:
-		m_dwInputSpecialkey ^= DIR_RIGHT;
+		m_wInputSpecialkey ^= DIR_RIGHT;
 		break;
 	}
 
@@ -74,17 +81,17 @@ void FrameWork::KeyInput(unsigned char key, int x, int y)
 	case '4':
 	case '5':
 	case '6':
-		m_dwInputSpecialkey |= (DWORD)pow(2, (int)key - (int)'1');
+		m_wInputSpecialkey |= (DWORD)pow(2, (int)key - (int)'1');
 		break;
 
 	case 'c':
 	case 'C':
-		m_dwInputSpecialkey |= KEY_C;
+		m_wInputSpecialkey |= KEY_C;
 		break;
 
 	case 'x':
 	case 'X':
-		m_dwInputSpecialkey |= KEY_X;
+		m_wInputSpecialkey |= KEY_X;
 		break;
 	}
 }
@@ -103,12 +110,12 @@ void FrameWork::KeyOutput(unsigned char key, int x, int y)
 
 	case 'c':
 	case 'C':
-		m_dwInputSpecialkey ^= KEY_C;
+		m_wInputSpecialkey ^= KEY_C;
 		break;
 
 	case 'x':
 	case 'X':
-		m_dwInputSpecialkey ^= KEY_X;
+		m_wInputSpecialkey ^= KEY_X;
 		break;
 	}
 }
@@ -162,16 +169,85 @@ void FrameWork::InitFrameWork()
 	Input.close();
 	
 	m_iStageNum = 0;
-	m_dwInputSpecialkey = 0;
+	m_wInputSpecialkey = 0;
 	
+	ConnectServer();
 }
 
 void FrameWork::ReadyToNextFrame()
 {
 }
 
+int FrameWork::ConnectServer()
+{
+	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
+		return 1;
+
+	SOCKADDR_IN clientAddr;
+	u_short clientPort = 0;
+
+	char IPbuf[16];
+	int retval = SOCKET_ERROR;
+	
+	m_sockServer = socket(AF_INET, SOCK_STREAM, 0);
+	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
+
+	while (retval == SOCKET_ERROR) {
+		::ZeroMemory(&IPbuf, sizeof(IPbuf));
+		::ZeroMemory(&clientAddr, sizeof(clientAddr));
+
+		std::cout << "통신할 IP주소 : ";
+		fgets(IPbuf, sizeof(IPbuf), stdin);
+		IPbuf[strlen(IPbuf) - 1] = '\0'; 
+
+		std::cout << "통신할 포트번호 : ";
+		std::cin >> clientPort;
+
+		clientAddr.sin_family = AF_INET;
+		clientAddr.sin_addr.s_addr = inet_addr(IPbuf);
+		clientAddr.sin_port = htons(clientPort);
+
+		retval = connect(m_sockServer, (SOCKADDR*)&clientAddr, sizeof(clientAddr));
+		if (retval == SOCKET_ERROR) error_quit("connect()");
+	}
+
+	return retval;
+}
+
 bool FrameWork::IsGameEnd()
 {
 	if( m_iStageNum > MaxStage )
 		return true;
+}
+
+int FrameWork::SendKeyStatus()
+{
+	int retval;
+	retval = send(m_sockServer, (char*)&m_wInputSpecialkey, sizeof(WORD), 0);
+
+	if (retval == SOCKET_ERROR) {
+		error_display("send()");
+		return SOCKET_ERROR;
+	}
+	return retval;
+}
+
+int FrameWork::RecvObjectStatus(char * buf)
+{
+	int retval;
+	retval = recv(m_sockServer, (char*)&m_iStageNum, sizeof(WORD), 0);
+
+	if (retval == SOCKET_ERROR) {
+		error_display("recv()");
+		return SOCKET_ERROR;
+	}
+
+	retval = recv(m_sockServer, (char*)&buf, MAX_BUF, 0);
+
+	if (retval == SOCKET_ERROR) {
+		error_display("recv()");
+		return SOCKET_ERROR * 2;
+	}
+
+	return retval;
 }

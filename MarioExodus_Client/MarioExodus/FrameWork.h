@@ -8,9 +8,9 @@ class FrameWork
 {
 private:
 	SceneManager	m_pScene[MaxStage];
-
-	DWORD			m_dwInputSpecialkey;
-
+	WSADATA			m_wsa;
+	WORD 			m_wInputSpecialkey;
+	SOCKET			m_sockServer;
 	UINT			m_iStageNum;
 	Time			m_tTime;
 	Renderer*		m_pRenderer;
@@ -27,6 +27,11 @@ public:
 	void KeyOutput(unsigned char key, int x, int y);
 	void InitFrameWork();
 	void ReadyToNextFrame();
+	int  ConnectServer();
 	bool IsGameEnd();
+
+public:
+	int SendKeyStatus();
+	int RecvObjectStatus(char* buf);
 };
 

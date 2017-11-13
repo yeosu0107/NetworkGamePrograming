@@ -25,10 +25,10 @@ public:
 
 public:
 	void InitSceneManager(int nStage, Vector2* prcvMario, Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, Vector2* pBlockPos, Renderer* pRend);
-	void Update(float fElapsedTime, DWORD& byInput);
+	void Update(float fElapsedTime, WORD& byInput);
 	void Render();
-	void CheckObjectCollision(DWORD& byInput);
-	void SelectMario(DWORD& bSel);
+	void CheckObjectCollision(WORD& byInput);
+	void SelectMario(WORD& bSel);
 	void Destroy();
 	void ReadyToNextFrame();
 
