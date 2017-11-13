@@ -22,13 +22,18 @@ public:
 	void ChangeSceneCheck();
 };
 
+const int SENDSIZE = 10;
+
 class ClientControl
 {
 private:
-	char* m_Buf;
+	char m_recvBuf[2];
+	char m_sendBuf[SENDSIZE];
+
 	SOCKET* m_socket;
+	int m_ClientNum;
 public:
-	ClientControl(SOCKET* socket);
+	ClientControl(SOCKET* socket, int num);
 	~ClientControl();
 
 	DWORD WINAPI ClientThread(LPVOID arg);

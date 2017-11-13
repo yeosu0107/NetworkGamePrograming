@@ -81,24 +81,40 @@ void ServerControl::ChangeSceneCheck()
 //--------------------------------------------//
 //////////////////////////////////////////////////////////////////
 
-ClientControl::ClientControl(SOCKET* socket)
+ClientControl::ClientControl(SOCKET* socket, int num)
 {
+	m_ClientNum = num;
+	m_socket = socket;
 
+	memset(m_recvBuf, 0, sizeof(m_recvBuf));
+	memset(m_sendBuf, 0, sizeof(m_sendBuf));
 }
 
 ClientControl::~ClientControl()
 {
-
+	closesocket(*m_socket);
 }
 
 DWORD WINAPI ClientControl::ClientThread(LPVOID arg)
 {
+	RecvKeyStatus();
+	SetEvent(ClientRecvEvent[m_ClientNum]);
+	WaitForSingleObject(InteractiveEvent, 400);
+	SendObjectsStatus();
 	return 0;
 }
 
 int ClientControl::RecvKeyStatus()
 {
-	return 0;
+	int retval = -1;
+	retval = recvn(*m_socket, m_recvBuf, sizeof(WORD), 0);
+	if (retval == SOCKET_ERROR) {
+		err_display("recv()");
+		memset(m_recvBuf, 0, sizeof(m_recvBuf));
+		return -1;
+	}
+	DivideKey();
+	return retval;
 }
 
 void ClientControl::DivideKey()
@@ -108,10 +124,15 @@ void ClientControl::DivideKey()
 
 void ClientControl::GetObjectsStatus()
 {
-
+	
 }
 
 int ClientControl::SendObjectsStatus()
 {
+	int retval = -1;
+	retval = send(*m_socket, m_sendBuf, sizeof(WORD), 0);
+	if (retval == SOCKET_ERROR) {
+		err_display("send()");
+	}
 	return 0;
 }
