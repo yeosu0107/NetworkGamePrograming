@@ -40,4 +40,6 @@ public:
 	void CollisionDoor(Door& other);
 	void Update(float fTimeElapsed);
 	void SetMarioPtr(Mario * pMario);
+
+	void SetKeystatus(bool bKeystatus) { m_bUsedKey = bKeystatus; }
 };

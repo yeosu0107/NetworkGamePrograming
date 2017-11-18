@@ -32,5 +32,7 @@ public:
 	void Destroy();
 	void ReadyToNextFrame();
 
+	int  ApplyObjectsStatus(char* buf);
+
 	bool IsClear() { return m_iExitMarioCount == MaxMario; }
 };

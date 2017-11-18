@@ -143,3 +143,44 @@ void SceneManager::ReadyToNextFrame()
 		m_pBlock[i].SetYDir(0);
 	}
 }
+
+int SceneManager::ApplyObjectsStatus(char* buf)
+{
+	char* tmpbuf = buf;
+	int   retval = 0;
+
+	for (int i = 0; i < MaxMario; i++) {
+		RecvMarioDataFormat mariodata = *((RecvMarioDataFormat*)&tmpbuf);
+
+		m_pMario[i].SetMarioRecvData(mariodata);
+		tmpbuf += sizeof(RecvMarioDataFormat);
+		retval += sizeof(RecvMarioDataFormat);
+	}
+
+	RecvStageDataFormat stagedata = *((RecvStageDataFormat*)&tmpbuf);
+
+	m_kKey.SetPosition(Vector2(stagedata.wKeyXPos, stagedata.wKeyYPos));
+	m_kKey.SetKeystatus(stagedata.IsOpen);
+	m_dDoor.SetOpen(stagedata.IsOpen);
+	tmpbuf += sizeof(RecvMarioDataFormat);
+	retval += sizeof(RecvMarioDataFormat);
+
+	return retval;
+}
+
+/*
+struct RecvMarioDataFormat {
+WORD iMarioNum;
+WORD iMarioPlayerNum;
+WORD wxPos;
+WORD wyPos;
+bool bSelect;
+bool bLookDirection;
+WORD eSpriteState;
+};
+
+struct RecvStageDataFormat {
+WORD wKeyXPos;
+WORD wKeyYPos;
+bool IsOpen;
+};*/
