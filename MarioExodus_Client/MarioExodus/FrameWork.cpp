@@ -25,6 +25,7 @@ void FrameWork::Run()
 
 	SendKeyStatus();
 	RecvObjectStatus(buf);
+	//ApplySceneStatus(buf);
 
 	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
 	
@@ -178,6 +179,8 @@ void FrameWork::ReadyToNextFrame()
 {
 }
 
+
+
 int FrameWork::ConnectServer()
 {
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
@@ -193,12 +196,21 @@ int FrameWork::ConnectServer()
 	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
 
 	while (retval == SOCKET_ERROR) {
+#define TEST
+#if defined TEST
+		::ZeroMemory(&IPbuf, sizeof(IPbuf));
+		::ZeroMemory(&clientAddr, sizeof(clientAddr));
+
+		clientAddr.sin_family = AF_INET;
+		clientAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+		clientAddr.sin_port = htons(9000);
+#else
 		::ZeroMemory(&IPbuf, sizeof(IPbuf));
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
 
 		std::cout << "통신할 IP주소 : ";
 		fgets(IPbuf, sizeof(IPbuf), stdin);
-		IPbuf[strlen(IPbuf) - 1] = '\0'; 
+		IPbuf[strlen(IPbuf) - 1] = '\0';
 
 		std::cout << "통신할 포트번호 : ";
 		std::cin >> clientPort;
@@ -206,6 +218,9 @@ int FrameWork::ConnectServer()
 		clientAddr.sin_family = AF_INET;
 		clientAddr.sin_addr.s_addr = inet_addr(IPbuf);
 		clientAddr.sin_port = htons(clientPort);
+#endif
+
+
 
 		retval = connect(m_sockServer, (SOCKADDR*)&clientAddr, sizeof(clientAddr));
 		if (retval == SOCKET_ERROR) error_quit("connect()");
@@ -235,19 +250,15 @@ int FrameWork::SendKeyStatus()
 int FrameWork::RecvObjectStatus(char * buf)
 {
 	int retval;
-	retval = recv(m_sockServer, (char*)&m_iStageNum, sizeof(WORD), 0);
-
-	if (retval == SOCKET_ERROR) {
-		error_display("recv()");
-		return SOCKET_ERROR;
-	}
 
 	retval = recv(m_sockServer, (char*)&buf, MAX_BUF, 0);
+	m_iStageNum = (WORD)buf;
 
-	if (retval == SOCKET_ERROR) {
-		error_display("recv()");
-		return SOCKET_ERROR * 2;
-	}
-
+	buf += sizeof(WORD);
 	return retval;
+}
+
+int FrameWork::ApplySceneStatus(char * buf)
+{
+	return m_pScene[m_iStageNum].ApplyObjectsStatus(buf);
 }
