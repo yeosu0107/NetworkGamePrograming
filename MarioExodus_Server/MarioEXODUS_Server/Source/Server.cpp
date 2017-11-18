@@ -15,7 +15,7 @@ ServerControl::ServerControl()
 	m_NumOfClient = 0;
 	m_waitEvent = false;
 
-	InteractiveEvent = CreateEvent(NULL, true, false, NULL);
+	InteractiveEvent = CreateEvent(NULL, false, false, NULL);
 	ClientRecvEvent[0] = CreateEvent(NULL, false, false, NULL);
 	ClientRecvEvent[1] = CreateEvent(NULL, false, false, NULL);
 }
@@ -27,13 +27,17 @@ ServerControl::~ServerControl()
 
 DWORD WINAPI ServerControl::GameControlThread(LPVOID arg)
 {
-	DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, m_waitEvent, 400);
+	ServerControl* thisPoint = (ServerControl*)arg;
 
-	ObjectsCollision();
-	ApplyObjectsStatus();
-	ChangeSceneCheck();
+	while (1) {
+		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, thisPoint->m_waitEvent, INFINITE);
 
-	SetEvent(InteractiveEvent);
+		thisPoint->ObjectsCollision();
+		thisPoint->ApplyObjectsStatus();
+		thisPoint->ChangeSceneCheck();
+
+		SetEvent(InteractiveEvent);
+	}
 	return 0;
 }
 
@@ -97,10 +101,13 @@ ClientControl::~ClientControl()
 
 DWORD WINAPI ClientControl::ClientThread(LPVOID arg)
 {
-	RecvKeyStatus();
-	SetEvent(ClientRecvEvent[m_ClientNum]);
-	WaitForSingleObject(InteractiveEvent, 400);
-	SendObjectsStatus();
+	ClientControl* thisPoint = (ClientControl*)arg;
+	while (1) {
+		thisPoint->RecvKeyStatus();
+		SetEvent(ClientRecvEvent[thisPoint->m_ClientNum]);
+		WaitForSingleObject(InteractiveEvent, INFINITE);
+		thisPoint->SendObjectsStatus();
+	}
 	return 0;
 }
 

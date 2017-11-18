@@ -9,7 +9,7 @@ public:
 	ServerControl();
 	~ServerControl();
 
-	DWORD WINAPI GameControlThread(LPVOID arg);
+	static DWORD WINAPI GameControlThread(LPVOID arg);
 
 	bool IsClientFull();
 
@@ -20,6 +20,8 @@ public:
 	void ObjectsCollision();
 
 	void ChangeSceneCheck();
+
+	int getNumOfClient() const { return m_NumOfClient; }
 };
 
 const int SENDSIZE = 10;
@@ -36,7 +38,7 @@ public:
 	ClientControl(SOCKET* socket, int num);
 	~ClientControl();
 
-	DWORD WINAPI ClientThread(LPVOID arg);
+	static DWORD WINAPI ClientThread(LPVOID arg);
 
 	int RecvKeyStatus();
 

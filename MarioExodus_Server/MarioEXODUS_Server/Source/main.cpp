@@ -28,6 +28,55 @@ int main(void)
 	retval = listen(listen_sock, SOMAXCONN);
 	if (retval == SOCKET_ERROR) err_display("listen()");
 	
+	//게임 컨트롤 쓰레드 생성
+	HANDLE hThread;
+	ServerControl* server=new ServerControl();
+	
+	hThread = CreateThread(NULL, 0, server->GameControlThread, server, 0, NULL);
+	if (hThread == NULL) {
+		cout << "게임컨트롤 쓰레드 생성 실패" << endl;
+		return 0;
+	}
+	else {
+		CloseHandle(hThread);
+	}
+
+	// 데이터 통신에 사용할 변수
+	SOCKET client_sock;
+	SOCKADDR_IN clientaddr;
+	int addrlen;
+	
+	while (1) {
+		addrlen = sizeof(clientaddr);
+		client_sock = accept(listen_sock, (SOCKADDR *)&clientaddr, &addrlen);
+		
+		if (!server->IsClientFull())
+			continue; //클라이언트가 꽉차면 스레드 생성 안함
+		
+		if (client_sock == INVALID_SOCKET) {
+			err_display("accept()");
+			break;
+		}
+		// 접속한 클라이언트 정보 출력
+		printf("\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
+			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+
+		//클라이언트 초기화
+		ClientControl* client=new ClientControl(&client_sock, server->getNumOfClient());
+		
+		hThread = CreateThread(NULL, 0, client->ClientThread, client, 0, NULL);
+
+		if (hThread == NULL) {
+			//closesocket(client_sock);
+			delete client;
+		}
+		else {
+			CloseHandle(hThread);
+		}
+	}
+
+	
+
 	// closesocket()
 	closesocket(listen_sock);
 
