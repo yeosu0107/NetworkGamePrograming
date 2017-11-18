@@ -30,9 +30,9 @@ int main(void)
 	
 	//게임 컨트롤 쓰레드 생성
 	HANDLE hThread;
-	ServerControl* server=new ServerControl();
+	server=new ServerControl();
 	
-	hThread = CreateThread(NULL, 0, server->GameControlThread, server, 0, NULL);
+	hThread = CreateThread(NULL, 0, GameControlThread, NULL, 0, NULL);
 	if (hThread == NULL) {
 		cout << "게임컨트롤 쓰레드 생성 실패" << endl;
 		return 0;
@@ -42,18 +42,19 @@ int main(void)
 	}
 
 	// 데이터 통신에 사용할 변수
-	SOCKET client_sock;
+	
 	SOCKADDR_IN clientaddr;
 	int addrlen;
 	
 	while (1) {
+		SOCKET* client_sock = new SOCKET();
 		addrlen = sizeof(clientaddr);
-		client_sock = accept(listen_sock, (SOCKADDR *)&clientaddr, &addrlen);
+		*client_sock = accept(listen_sock, (SOCKADDR *)&clientaddr, &addrlen);
 		
 		if (!server->IsClientFull())
 			continue; //클라이언트가 꽉차면 스레드 생성 안함
 		
-		if (client_sock == INVALID_SOCKET) {
+		if (*client_sock == INVALID_SOCKET) {
 			err_display("accept()");
 			break;
 		}
@@ -62,9 +63,9 @@ int main(void)
 			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		//클라이언트 초기화
-		ClientControl* client=new ClientControl(&client_sock, server->getNumOfClient());
+		ClientControl* client=new ClientControl(client_sock, server->getNumOfClient() - 1);
 		
-		hThread = CreateThread(NULL, 0, client->ClientThread, client, 0, NULL);
+		hThread = CreateThread(NULL, 0, ClientThread, client, 0, NULL);
 
 		if (hThread == NULL) {
 			//closesocket(client_sock);

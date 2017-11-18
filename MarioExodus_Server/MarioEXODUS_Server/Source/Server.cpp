@@ -3,10 +3,46 @@
 
 HANDLE ClientRecvEvent[2];
 HANDLE InteractiveEvent;
+ServerControl* server;
+
+//쓰레드 함수
+
+DWORD WINAPI GameControlThread(LPVOID arg)
+{
+	//ServerControl* thisPoint = (ServerControl*)arg;
+
+	while (1) {
+		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, server->getWaitEvent(), INFINITE);
+		ResetEvent(InteractiveEvent);
+
+		server->ObjectsCollision();
+		server->ApplyObjectsStatus();
+		server->ChangeSceneCheck();
+
+		SetEvent(InteractiveEvent);
+	}
+	return 0;
+}
+
+DWORD WINAPI ClientThread(LPVOID arg)
+{
+	ClientControl* thisPoint = (ClientControl*)arg;
+	while (1) {
+		if (thisPoint->RecvKeyStatus() == -1) {
+			delete thisPoint;
+			server->ClientDisconnect();
+			break;
+		}
+		SetEvent(ClientRecvEvent[thisPoint->getClientNum()]);
+		WaitForSingleObject(InteractiveEvent, INFINITE);
+		thisPoint->SendObjectsStatus();
+	}
+	return 0;
+}
 
 //////////////////////////////////////////////////////////////////
 //--------------------------------------------//
-//-----------------ServerThread----------------//
+//-----------------ServerControl----------------//
 //--------------------------------------------//
 //////////////////////////////////////////////////////////////////
 
@@ -15,7 +51,7 @@ ServerControl::ServerControl()
 	m_NumOfClient = 0;
 	m_waitEvent = false;
 
-	InteractiveEvent = CreateEvent(NULL, false, false, NULL);
+	InteractiveEvent = CreateEvent(NULL, true, false, NULL);
 	ClientRecvEvent[0] = CreateEvent(NULL, false, false, NULL);
 	ClientRecvEvent[1] = CreateEvent(NULL, false, false, NULL);
 }
@@ -25,21 +61,7 @@ ServerControl::~ServerControl()
 
 }
 
-DWORD WINAPI ServerControl::GameControlThread(LPVOID arg)
-{
-	ServerControl* thisPoint = (ServerControl*)arg;
 
-	while (1) {
-		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, thisPoint->m_waitEvent, INFINITE);
-
-		thisPoint->ObjectsCollision();
-		thisPoint->ApplyObjectsStatus();
-		thisPoint->ChangeSceneCheck();
-
-		SetEvent(InteractiveEvent);
-	}
-	return 0;
-}
 
 bool ServerControl::IsClientFull()
 {
@@ -81,7 +103,7 @@ void ServerControl::ChangeSceneCheck()
 
 //////////////////////////////////////////////////////////////////
 //--------------------------------------------//
-//-----------------ClientThread-----------------//
+//-----------------ClientControl-----------------//
 //--------------------------------------------//
 //////////////////////////////////////////////////////////////////
 
@@ -97,18 +119,6 @@ ClientControl::ClientControl(SOCKET* socket, int num)
 ClientControl::~ClientControl()
 {
 	closesocket(*m_socket);
-}
-
-DWORD WINAPI ClientControl::ClientThread(LPVOID arg)
-{
-	ClientControl* thisPoint = (ClientControl*)arg;
-	while (1) {
-		thisPoint->RecvKeyStatus();
-		SetEvent(ClientRecvEvent[thisPoint->m_ClientNum]);
-		WaitForSingleObject(InteractiveEvent, INFINITE);
-		thisPoint->SendObjectsStatus();
-	}
-	return 0;
 }
 
 int ClientControl::RecvKeyStatus()
