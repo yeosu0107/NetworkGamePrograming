@@ -25,6 +25,15 @@
     <Filter Include="오브젝트\소스 파일">
       <UniqueIdentifier>{929aa0bf-c394-4c02-937e-030c68f5a265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="프레임워크">
+      <UniqueIdentifier>{2687a71a-b8c4-48c5-9dbc-b8f4feab9f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="프레임워크\헤더">
+      <UniqueIdentifier>{e4e2de0e-dc71-4f4b-863d-e1c7927b679a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="프레임워크\소스 파일">
+      <UniqueIdentifier>{3cd41d4d-2257-4499-8caf-5febf2d6ed0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -48,6 +57,15 @@
     <ClCompile Include="Source\Object.cpp">
       <Filter>오브젝트\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Wall.cpp">
+      <Filter>오브젝트\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>프레임워크\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FrameWork.cpp">
+      <Filter>프레임워크\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -67,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="Source\Object.h">
       <Filter>오브젝트\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Wall.h">
+      <Filter>오브젝트\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>프레임워크\헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FrameWork.h">
+      <Filter>프레임워크\헤더</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

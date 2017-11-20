@@ -43,12 +43,12 @@ public:
 	void InitMario(int nNum, Vector2& vPos);
 	bool IsSelected() const { return m_bSelect; }
 
-	void Update(float fTimeElapsed, DWORD dwInputKey);
+	void Update(int iClient, float fTimeElapsed, DWORD dwInputKey);
 	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
 
-	void Move(const float fTimeElapsed, const DWORD byInput);
+	void Move(const DWORD byInput);
 
-	void Jump(const float fTimeElapsed);
+	void Jump();
 	
 	
 	void SetSelect(int num) ;

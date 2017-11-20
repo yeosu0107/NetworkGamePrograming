@@ -1,9 +1,5 @@
 #include "stdafx.h"
 
-
-
-
-
 void err_display(char *msg)
 {
 	LPVOID lpMsgBuf;
@@ -12,7 +8,7 @@ void err_display(char *msg)
 		NULL, WSAGetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	printf("[%s] %s", msg, (char *)lpMsgBuf);
+	printf("[%s] %s\n", msg, (char *)lpMsgBuf);
 	LocalFree(lpMsgBuf);
 }
 

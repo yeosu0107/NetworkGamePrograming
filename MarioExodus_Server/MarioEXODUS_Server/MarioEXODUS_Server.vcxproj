@@ -143,20 +143,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Block.cpp" />
+    <ClCompile Include="Source\FrameWork.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\KeyNDoor.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mario.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Server.cpp" />
     <ClCompile Include="Source\stdafx.cpp" />
+    <ClCompile Include="Source\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Block.h" />
+    <ClInclude Include="Source\FrameWork.h" />
+    <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\KeyNDoor.h" />
     <ClInclude Include="Source\Mario.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Server.h" />
     <ClInclude Include="Source\stdafx.h" />
+    <ClInclude Include="Source\Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

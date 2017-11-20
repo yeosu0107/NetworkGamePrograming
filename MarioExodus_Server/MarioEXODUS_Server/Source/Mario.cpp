@@ -57,7 +57,7 @@ void Mario::SetMarioRecvData(MarioDataFormat & rcvData)
 	SetPosition(pos);
 }
 
-void Mario::Move(const float fTimeElapsed, const DWORD byInput)
+void Mario::Move(const DWORD byInput)
 {	
 
 	if (!m_bSelect)
@@ -91,7 +91,7 @@ void Mario::Move(const float fTimeElapsed, const DWORD byInput)
 	SetPosition(vec2pos);
 }
 
-void Mario::Jump(const float fTimeElapsed)
+void Mario::Jump()
 {
 	WORD marioCollside = GetCollSide();
 
@@ -134,15 +134,18 @@ void Mario::Jump(const float fTimeElapsed)
 
 }
 
-void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
+void Mario::Update(int iClient, float fTimeElapsed, DWORD dwInputKey)
 {
-	if (m_eSpriteState == Exit) return;
-	m_iUnCollisionCount = 0;
-	m_iMinYDistance = Screen_Height;
-	m_iUnCollsiionXCount = 0;
+	//if (m_eSpriteState == Exit) return;
+	//m_iUnCollisionCount = 0;
+	//m_iMinYDistance = Screen_Height;
+	//m_iUnCollsiionXCount = 0;
+	Jump();
 
-	Move(fTimeElapsed, dwInputKey);
-	Jump(fTimeElapsed);
+	if (iClient != m_iMarioPlayerNum)
+		return;
+
+	Move(dwInputKey);
 	SpriteUpdate(fTimeElapsed, dwInputKey);
 }
 
