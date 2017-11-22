@@ -19,12 +19,11 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-	char* ptr;
 
 	m_tTime.Update(60.0f);
 
 	SendKeyStatus();
-	RecvObjectStatus(buf);
+	RecvObjectStatus();
 	// ApplySceneStatus(buf);
 
 	if (m_pScene[m_iStageNum].IsClear()) 
@@ -42,7 +41,6 @@ void FrameWork::Run()
 
 	glutSetWindowTitle(m_tTime.GetFrameTime().c_str());	// 타이틀 메시지 변경
 
-	delete buf;
 }
 
 void FrameWork::SpecialKeyInput(int key, int x, int y)
