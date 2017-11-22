@@ -19,15 +19,16 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-	char buf[MAX_BUF];
+	char* buf = new char[MAX_BUF];
 
 	m_tTime.Update(60.0f);
 
 	SendKeyStatus();
 	RecvObjectStatus(buf);
-	//ApplySceneStatus(buf);
+	// ApplySceneStatus(buf);
 
-	if (m_pScene[m_iStageNum].IsClear()) m_iStageNum++;	// 스테이지 클리어 확인
+	if (m_pScene[m_iStageNum].IsClear()) 
+		m_iStageNum++;	// 스테이지 클리어 확인
 	
 	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
 
@@ -40,6 +41,8 @@ void FrameWork::Run()
 	m_pScene[m_iStageNum].ReadyToNextFrame();
 
 	glutSetWindowTitle(m_tTime.GetFrameTime().c_str());	// 타이틀 메시지 변경
+
+	delete buf;
 }
 
 void FrameWork::SpecialKeyInput(int key, int x, int y)
@@ -251,9 +254,13 @@ int FrameWork::RecvObjectStatus(char * buf)
 {
 	int retval;
 
-	retval = recv(m_sockServer, (char*)&buf, MAX_BUF, 0);
-	m_iStageNum = (WORD)buf;
-
+	retval = recv(m_sockServer, buf, 79, 0);
+	if (retval == INVALID_SOCKET) {
+		error_display("recv()");
+		return 0;
+	}
+	
+	m_iStageNum = *(WORD*)buf;
 	buf += sizeof(WORD);
 	return retval;
 }
