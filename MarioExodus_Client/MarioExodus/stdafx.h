@@ -43,7 +43,7 @@ const DWORD DIR_RIGHT = 0x80;
 const DWORD KEY_C = 0x100;
 const DWORD KEY_X = 0x200;
 
-const UINT MAX_BUF = 512;
+const UINT MAX_BUF = 79;
 
 struct RecvMarioDataFormat {
 	WORD iMarioNum;

@@ -15,6 +15,9 @@ private:
 	Time			m_tTime;
 	Renderer*		m_pRenderer;
 
+	char			m_RecvBuf[MAX_BUF];
+	char*			m_pBufptr = nullptr;
+
 public:
 	FrameWork();
 	~FrameWork();
@@ -27,12 +30,12 @@ public:
 	void KeyOutput(unsigned char key, int x, int y);
 	void InitFrameWork();
 	void ReadyToNextFrame();
-	int  ApplySceneStatus(char* buf);
+	int  ApplySceneStatus();
 	int  ConnectServer();
 	bool IsGameEnd();
 
 public:
 	int SendKeyStatus();
-	int RecvObjectStatus(char* buf);
+	int RecvObjectStatus();
 };
 

@@ -19,7 +19,7 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-	char* buf = new char[MAX_BUF];
+	char* ptr;
 
 	m_tTime.Update(60.0f);
 
@@ -250,22 +250,25 @@ int FrameWork::SendKeyStatus()
 	return retval;
 }
 
-int FrameWork::RecvObjectStatus(char * buf)
+int FrameWork::RecvObjectStatus()
 {
+	::ZeroMemory(m_RecvBuf, MAX_BUF);
 	int retval;
 
-	retval = recv(m_sockServer, buf, 79, 0);
+	retval = recv(m_sockServer, m_RecvBuf, MAX_BUF, 0);
 	if (retval == INVALID_SOCKET) {
 		error_display("recv()");
 		return 0;
 	}
-	
-	m_iStageNum = *(WORD*)buf;
-	buf += sizeof(WORD);
+
+	m_pBufptr = m_RecvBuf;
+	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
+	m_pBufptr += sizeof(WORD);
+
 	return retval;
 }
 
-int FrameWork::ApplySceneStatus(char * buf)
+int FrameWork::ApplySceneStatus()
 {
-	return m_pScene[m_iStageNum].ApplyObjectsStatus(buf);
+	return m_pScene[m_iStageNum].ApplyObjectsStatus(m_pBufptr);
 }
