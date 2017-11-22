@@ -136,10 +136,6 @@ void Mario::Jump()
 
 void Mario::Update(int iClient, float fTimeElapsed, DWORD dwInputKey)
 {
-	//if (m_eSpriteState == Exit) return;
-	//m_iUnCollisionCount = 0;
-	//m_iMinYDistance = Screen_Height;
-	//m_iUnCollsiionXCount = 0;
 	Jump();
 
 	if (iClient != m_iMarioPlayerNum)

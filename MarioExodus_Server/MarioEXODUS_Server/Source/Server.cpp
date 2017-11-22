@@ -111,6 +111,9 @@ ClientControl::ClientControl(SOCKET* socket, int num)
 {
 	m_ClientNum = num;
 	m_socket = socket;
+	for (int i = 0; i < SENDSIZE; ++i) {
+		m_sendBuf[i] = 127;
+	}
 
 	memset(m_recvBuf, 0, sizeof(m_recvBuf));
 	memset(m_sendBuf, 0, sizeof(m_sendBuf));
@@ -125,6 +128,8 @@ int ClientControl::RecvKeyStatus()
 {
 	int retval = -1;
 	retval = recvn(*m_socket, m_recvBuf, sizeof(WORD), 0);
+
+	std::cout << retval << std::endl;
 	if (retval == SOCKET_ERROR) {
 		err_display("recv()");
 		memset(m_recvBuf, 0, sizeof(m_recvBuf));
