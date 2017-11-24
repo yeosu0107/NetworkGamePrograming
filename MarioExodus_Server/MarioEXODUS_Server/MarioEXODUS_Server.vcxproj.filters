@@ -63,9 +63,6 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>프레임워크\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Source\FrameWork.cpp">
-      <Filter>프레임워크\소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
@@ -90,9 +87,6 @@
       <Filter>오브젝트\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene.h">
-      <Filter>프레임워크\헤더</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FrameWork.h">
       <Filter>프레임워크\헤더</Filter>
     </ClInclude>
   </ItemGroup>

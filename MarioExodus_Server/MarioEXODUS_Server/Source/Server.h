@@ -1,4 +1,5 @@
 #pragma once
+#include "Scene.h"
 
 DWORD WINAPI ClientThread(LPVOID arg);
 DWORD WINAPI GameControlThread(LPVOID arg);
@@ -10,8 +11,14 @@ class ServerControl
 {
 private:
 	int m_NumOfClient;
-	bool m_waitEvent;
-	//클라이언트가 1개면 false, 2개면 true
+	bool m_waitEvent; //클라이언트가 1개면 false, 2개면 true
+
+	//recv데이터 저장 버퍼
+	WORD* m_RecvBufs[2];
+	
+	//게임 컨트롤
+	Scene m_pScene[MaxStage];
+	int m_iStageNum;
 public:
 	ServerControl();
 	~ServerControl();
@@ -19,6 +26,14 @@ public:
 	bool IsClientFull();
 
 	void ClientDisconnect();
+
+	void getRecvDatas(int m_iClientNum, char* m_recvData);
+
+	void ClearRecvBuf() {
+		memset(m_RecvBufs, 0, sizeof(WORD*) * 2);
+		m_RecvBufs[0] = nullptr;
+		m_RecvBufs[1] = nullptr;
+	}
 
 	void ApplyObjectsStatus();
 
@@ -36,7 +51,7 @@ const int SENDSIZE = 10;
 class ClientControl
 {
 private:
-	char m_recvBuf[2];
+	char* m_recvBuf;
 	char m_sendBuf[SENDSIZE];
 
 	SOCKET* m_socket;
@@ -54,5 +69,7 @@ public:
 	int SendObjectsStatus();
 
 	int getClientNum() const { return m_ClientNum; }
+
+	char* getRecvBuf() const { return m_recvBuf; }
 };
 

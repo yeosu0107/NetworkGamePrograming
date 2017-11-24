@@ -17,7 +17,6 @@ void Scene::InitScene(int nStage, Vector2* pMarioPos,
 	m_iExitMarioCount = 0;
 	m_iBlockCount = iBlockCount;
 	m_iwallCount = iWallCount;
-	m_iNumOfClient = 0;
 
 	m_Door.InitDoor(vDoorPos, false);
 	m_Key.InitKey(vKeyPos, false);
@@ -37,13 +36,19 @@ void Scene::InitScene(int nStage, Vector2* pMarioPos,
 	}
 }
 
-void Scene::Update(float fElapsedTime, WORD* byInput)
+void Scene::Update(float fElapsedTime, WORD* byInput1, WORD* byInput2)
 {
+	WORD* byInput[2];
+	byInput[0] = byInput1;
+	byInput[1] = byInput2;
 	//마리오
-	for (int i = 0; i < m_iNumOfClient; ++i) {
-		SelectMario(i, byInput[i]);
+	for (int i = 0; i < 2; ++i) {
+		if (byInput[i] == nullptr)
+			continue;
+
+		SelectMario(i, *byInput[i]);
 		for (Mario& pMa : m_Mario)
-			pMa.Update(i, fElapsedTime, byInput[i]);
+			pMa.Update(i, fElapsedTime, *byInput[i]);
 	}
 	//키
 	m_Key.Update(fElapsedTime);
@@ -98,4 +103,19 @@ int Scene::ApplyObjectsStatus(char* buf)
 	retval += sizeof(MarioDataFormat);
 
 	return retval;
+}
+
+void Scene::ReadyToNextFrame()
+{
+	for (int i = 0; i < MaxMario; i++) {
+		m_Mario[i].GetCollObjects().clear();	// 충돌한 객체 초기화
+		m_Mario[i].SetCollside(0);		// 충돌한 방향 초기화
+	}
+
+	for (int i = 0; i < m_iBlockCount; ++i) {
+		m_pBlock[i].SetXDir(0);
+		m_pBlock[i].SetCollside(0);
+		m_pBlock[i].GetCollObjects().clear();
+		m_pBlock[i].SetYDir(0);
+	}
 }

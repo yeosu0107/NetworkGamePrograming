@@ -10,7 +10,6 @@
 class Scene
 {
 private:
-	int			m_iNumOfClient;
 	int			m_iExitMarioCount;
 	int			m_iwallCount;
 	int			m_iBlockCount;
@@ -28,12 +27,12 @@ public:
 		Vector2& vDoorPos, Vector2& vKeyPos,
 		int iWallCount, Vector2* pWallPos,
 		int iBlockCount, Vector2* pBlockPos);
-	void Update(float fElapsedTime, WORD* byInput);
+	void Update(float fElapsedTime, WORD* byInput1, WORD* byInput2);
 	void CheckObjectsCollision();
 	void SelectMario(int iClient, WORD& bSel);
 	int ApplyObjectsStatus(char* buf);
+	void ReadyToNextFrame();
 
 	bool IsClear() const { return m_iExitMarioCount == MaxMario; }
-	void setClientNum(int num) { m_iNumOfClient = num; }
 };
 
