@@ -149,14 +149,14 @@ int SceneManager::ApplyObjectsStatus(char* buf)
 	int   retval = 0;		// 읽은 데이터량 
 
 	for (int i = 0; i < MaxMario; i++) {
-		RecvMarioDataFormat mariodata = *((RecvMarioDataFormat*)&buf);
+		RecvMarioDataFormat mariodata = *((RecvMarioDataFormat*)buf);
 
 		m_pMario[i].SetMarioRecvData(mariodata);
 		buf += sizeof(RecvMarioDataFormat);
 		retval += sizeof(RecvMarioDataFormat);
 	}
 
-	RecvStageDataFormat stagedata = *((RecvStageDataFormat*)&buf);
+	RecvStageDataFormat stagedata = *((RecvStageDataFormat*)buf);
 
 	m_kKey.SetPosition(Vector2(stagedata.wKeyXPos, stagedata.wKeyYPos));
 	m_kKey.SetKeystatus(stagedata.IsOpen);
@@ -168,16 +168,18 @@ int SceneManager::ApplyObjectsStatus(char* buf)
 }
 
 /*
-Stage Data = 2
+66
+
+char Data = 2
 struct RecvMarioDataFormat {
-WORD iMarioNum;
-WORD iMarioPlayerNum;
+char iMarioNum;
+char iMarioPlayerNum;
 WORD wxPos;
 WORD wyPos;
 bool bSelect;
 bool bLookDirection;
-WORD eSpriteState;
-}; 72
+char eSpriteState;
+}; 60
 
 struct RecvStageDataFormat {
 WORD wKeyXPos;

@@ -24,7 +24,7 @@ void FrameWork::Run()
 
 	SendKeyStatus();
 	RecvObjectStatus();
-	// ApplySceneStatus(buf);
+	//ApplySceneStatus();
 
 	if (m_pScene[m_iStageNum].IsClear()) 
 		m_iStageNum++;	// 스테이지 클리어 확인
@@ -260,6 +260,36 @@ int FrameWork::RecvObjectStatus()
 	}
 
 	m_pBufptr = m_RecvBuf;
+
+	///* Test 구간 */
+	//WORD				Stagenum = 2;
+	//RecvMarioDataFormat marioData[6];
+	//RecvStageDataFormat StageData;
+
+	//memcpy(m_pBufptr, &Stagenum, sizeof(WORD));
+	//m_pBufptr += sizeof(WORD);
+
+	//for (int i = 0; i < 6; ++i) {
+	//	marioData[i].bLookDirection		= true;
+	//	marioData[i].bSelect			= true;
+	//	marioData[i].eSpriteState		= Mario::MarioSprite::Sprite_Run1;
+	//	marioData[i].iMarioNum			= i;
+	//	marioData[i].iMarioPlayerNum	= 0;
+	//	marioData[i].wxPos				= i * 100;
+	//	marioData[i].wyPos				= i * 100;
+	//	memcpy(m_pBufptr, &marioData[i], sizeof(RecvMarioDataFormat));
+	//	m_pBufptr += sizeof(RecvMarioDataFormat);
+	//}
+
+	//StageData.IsOpen = true;
+	//StageData.wKeyXPos = 300;
+	//StageData.wKeyYPos = 400;
+
+	//memcpy(m_pBufptr, &StageData, sizeof(RecvStageDataFormat));
+	//m_pBufptr += sizeof(RecvStageDataFormat);
+	//
+	//m_pBufptr = m_RecvBuf;
+
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
 	m_pBufptr += sizeof(WORD);
 

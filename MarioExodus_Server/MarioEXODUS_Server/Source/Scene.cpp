@@ -109,13 +109,13 @@ void Scene::ReadyToNextFrame()
 {
 	for (int i = 0; i < MaxMario; i++) {
 		m_Mario[i].GetCollObjects().clear();	// 충돌한 객체 초기화
-		m_Mario[i].SetCollside(0);		// 충돌한 방향 초기화
+		m_Mario[i].SetCollside(0);				// 충돌한 방향 초기화
 	}
 
 	for (int i = 0; i < m_iBlockCount; ++i) {
-		m_pBlock[i].SetXDir(0);
-		m_pBlock[i].SetCollside(0);
-		m_pBlock[i].GetCollObjects().clear();
-		m_pBlock[i].SetYDir(0);
+		m_pBlock[i].SetXDir(0);					// 박스에게 X축으로 가해진 힘의 방향 초기화
+		m_pBlock[i].SetCollside(0);				// 박스가 충돌한 방향 초기화
+		m_pBlock[i].GetCollObjects().clear();	// 박스와 충돌한 객체 초기화
+		m_pBlock[i].SetYDir(0);					// 박스에게 Y축으로 가해진 힘의 방향 초기화
 	}
 }

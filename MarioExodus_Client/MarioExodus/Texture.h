@@ -10,9 +10,9 @@ public:
 		Block, Door, Key, Key_Dish, Main_Rogo, Press_C, Wall, GameOver
 	};
 private:
-	BITMAPINFO* m_pBitInfo;
-	GLubyte* m_pBitmap;
-	GLuint m_iTexture;
+	BITMAPINFO* m_pBitInfo;	
+	GLubyte*	m_pBitmap;
+	GLuint		m_iTexture;	
 
 	UINT m_iXMaxSpriteCount;
 	UINT m_iYMaxSpriteCount;

@@ -10,13 +10,17 @@ Texture::Texture()
 Texture::Texture(const char * filename, int iXSpriteCount, int iYSpriteCount)
 {
 	Vector2 vec2BitmapSize;
+
+	// 비트맵의 X,Y축 크기
 	vec2BitmapSize = LoadBMPImage(filename);
 
+	// 스프라이트 X, Y사이즈
 	m_iXMaxSpriteCount = iXSpriteCount;
 	m_iYMaxSpriteCount = iYSpriteCount;
 	
-	m_iSpriteXSize = vec2BitmapSize.x / m_iXMaxSpriteCount;
-	m_iSpriteYSize = vec2BitmapSize.y / m_iYMaxSpriteCount;
+	// 스프라이트 1조각 당 크기
+	m_iSpriteXSize = vec2BitmapSize.x / m_iXMaxSpriteCount;		
+	m_iSpriteYSize = vec2BitmapSize.y / m_iYMaxSpriteCount;		
 }
 
 
