@@ -31,6 +31,8 @@ extern void err_display(char *msg);
 
 extern int recvn(SOCKET s, char *buf, int len, int flags);
 
+extern void printRecvData(char *data);
+
 struct MarioDataFormat {
 	WORD	iMarioNum;				// 이 정보의 주인인 마리오 Number
 	WORD	iMarioPlayerNum;	// 마리오를 할당 받은 Player식별 번호

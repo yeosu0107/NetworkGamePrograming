@@ -28,11 +28,13 @@ public:
 		int iWallCount, Vector2* pWallPos,
 		int iBlockCount, Vector2* pBlockPos);
 	void Update(float fElapsedTime, WORD* byInput1, WORD* byInput2);
-	void CheckObjectsCollision();
-	void SelectMario(int iClient, WORD& bSel);
+	void CheckObjectsCollision(WORD* byInput1, WORD* byInput2);
+	void SelectMario(int iClient, WORD* bSel);
 	int ApplyObjectsStatus(char* buf);
 	void ReadyToNextFrame();
 
-	bool IsClear() const { return m_iExitMarioCount == MaxMario; }
+	bool IsClear() const { 
+		return m_iExitMarioCount == MaxMario; 
+	}
 };
 

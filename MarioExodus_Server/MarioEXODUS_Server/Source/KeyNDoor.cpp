@@ -73,10 +73,12 @@ void Door::InitDoor(Vector2 & vPos, bool bOpen)
 
 bool Door::CollisionMario(Mario & other)
 {
-	if (other.GetSpriteState() == Mario::MarioSprite::Exit) return false;
-	if (!Collision(other)) return false;
+	if (other.GetExit()) 
+		return false;
+	if (!Collision(other)) 
+		return false;
 	if (m_bOpen) {
-		other.SetSpriteState(Mario::MarioSprite::Exit);
+		other.SetExit(true);
 		return true;
 	}
 	return false;

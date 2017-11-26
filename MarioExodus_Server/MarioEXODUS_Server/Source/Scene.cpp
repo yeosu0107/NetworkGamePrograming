@@ -18,8 +18,10 @@ void Scene::InitScene(int nStage, Vector2* pMarioPos,
 	m_iBlockCount = iBlockCount;
 	m_iwallCount = iWallCount;
 
-	m_Door.InitDoor(vDoorPos, false);
-	m_Key.InitKey(vKeyPos, false);
+	bool bReadyStage = nStage == 0 ? true : false;
+
+	m_Door.InitDoor(vDoorPos, bReadyStage);
+	m_Key.InitKey(vKeyPos, bReadyStage);
 
 	if (m_iBlockCount > 0) {
 		m_pBlock = new Block[m_iBlockCount];
@@ -45,10 +47,14 @@ void Scene::Update(float fElapsedTime, WORD* byInput1, WORD* byInput2)
 	for (int i = 0; i < 2; ++i) {
 		if (byInput[i] == nullptr)
 			continue;
+		
+		SelectMario(i, byInput[i]);
+		for (Mario& pMa : m_Mario) {
+			if (pMa.getPlayerNum() != i)
+				continue;
 
-		SelectMario(i, *byInput[i]);
-		for (Mario& pMa : m_Mario)
 			pMa.Update(i, fElapsedTime, *byInput[i]);
+		}
 	}
 	//키
 	m_Key.Update(fElapsedTime);
@@ -58,28 +64,85 @@ void Scene::Update(float fElapsedTime, WORD* byInput1, WORD* byInput2)
 			m_pBlock[i].Update();
 }
 
-void Scene::CheckObjectsCollision()
+void Scene::CheckObjectsCollision(WORD* byInput1, WORD* byInput2)
 {
+	WORD* byInput[2];
+	byInput[0] = byInput1;
+	byInput[1] = byInput2;
 
+	for (int i = 0; i < MaxMario; i++) {
+		if (m_Mario[i].GetExit()) 
+			continue;	// 마리오가 나간경우 충돌 체크 X
+
+		m_Key.SetMarioPtr(nullptr);
+		for (int i = 0; i < 2; ++i) {
+			if (byInput[i] != nullptr) {
+				if (*byInput[i] & KEY_X)
+					m_Key.CollisionMario(m_Mario[i]);
+				else
+					m_Key.SetMarioPtr(nullptr);
+			}
+		}
+
+		if (m_Door.CollisionMario(m_Mario[i]))
+			m_iExitMarioCount++;			// 마리오가 열린 문과 충돌한 경우
+
+		m_Mario[i].CollisionScreen();
+
+		for (int j = 0; j < m_iBlockCount; ++j) {
+			m_pBlock[j].Collision(m_Mario[i]);
+			m_Mario[i].Collision(m_pBlock[j]);
+		}
+
+		for (int j = 0; j < m_iwallCount; ++j)
+			m_Mario[i].Collision(m_pWall[j]);
+
+		for (int j = 0; j < MaxMario; j++)
+			if (!m_Mario[j].GetExit() && i != j) 
+				m_Mario[i].Collision(m_Mario[j]);
+
+
+		m_Mario[i].AfterCollision();	// 이동 후 Box오브젝트을 밀거나 Y축에 대해서만 후처리
+	}
+
+	//
+	for (int i = 0; i < m_iBlockCount; ++i) {
+		for (int j = 0; j < m_iwallCount; ++j)
+			m_pBlock[i].Collision(m_pWall[j]);
+
+		for (int j = 0; j < m_iBlockCount; ++j)
+			if (i != j) m_pBlock[i].Collision(m_pBlock[j]);
+
+		m_pBlock[i].AfterCollision();
+		m_pBlock[i].CollisionScreen();
+
+	}
+	m_Key.CollisionDoor(m_Door);
 }
 
-void Scene::SelectMario(int iClient, WORD& bSel)
+void Scene::SelectMario(int iClient, WORD* bSel)
 {
 	//iClient <Player1=0, Player2=1>
 	if (iClient > 1 || iClient < 0)
 		return;
-
-	if (bSel % 0x40 == 0) return;
-	if (bSel & KEY_1) { m_Mario[0].SetSelect(iClient); };
-	if (bSel & KEY_2) { m_Mario[1].SetSelect(iClient); };
-	if (bSel & KEY_3) { m_Mario[2].SetSelect(iClient); };
-	if (bSel & KEY_4) { m_Mario[3].SetSelect(iClient); };
-	if (bSel & KEY_5) { m_Mario[4].SetSelect(iClient); };
-	if (bSel & KEY_6) { m_Mario[5].SetSelect(iClient); };
+	if (*bSel % 0x40 == 0) return;
+	if (*bSel & KEY_1) 
+		m_Mario[0].SetSelect(iClient); 
+	if (*bSel & KEY_2) 
+		m_Mario[1].SetSelect(iClient);
+	if (*bSel & KEY_3) 
+		m_Mario[2].SetSelect(iClient);
+	if (*bSel & KEY_4) 
+		m_Mario[3].SetSelect(iClient); 
+	if (*bSel & KEY_5) 
+		m_Mario[4].SetSelect(iClient); 
+	if (*bSel & KEY_6) 
+		m_Mario[5].SetSelect(iClient); 
 
 	// 0x63까지의 비트를 반전 시키고 입력 키값과 And 연산 = 하위 6비트 초기화
-	bSel &= !(0x40 - 1);	
+	*bSel &= !(0x40 - 1);
 }
+
 
 int Scene::ApplyObjectsStatus(char* buf)
 {

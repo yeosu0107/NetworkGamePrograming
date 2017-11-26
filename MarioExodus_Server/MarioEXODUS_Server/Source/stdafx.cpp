@@ -31,3 +31,14 @@ int recvn(SOCKET s, char *buf, int len, int flags)
 
 	return (len - left);
 }
+
+void printRecvData(char *data)
+{
+	for (int j = 0; j < 2; ++j) {
+		for (int i = 8; i > 0; --i) {
+			(i % 8) ? printf("") : printf(" ");
+			printf("%d", (data[j] & (1 << i - 1)) ? 1 : 0);
+		}
+	}
+	printf("\n");
+}

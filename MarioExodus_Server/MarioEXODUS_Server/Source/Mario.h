@@ -53,12 +53,14 @@ public:
 	
 	void SetSelect(int num) ;
 	void SetExit(bool bExit) { m_bExit = bExit; }
+	bool GetExit() const { return m_bExit; }
 
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
-	void SetSpriteState(Mario::MarioSprite eSprite) { m_eSpriteState = eSprite; }
 
-	MarioSprite GetSpriteState() const { return m_eSpriteState; }
+	//MarioSprite GetSpriteState() const { return m_eSpriteState; }
 
 	void SetMarioRecvData(MarioDataFormat& rcvData);
+
+	int getPlayerNum() const { return m_iMarioPlayerNum; }
 };
 

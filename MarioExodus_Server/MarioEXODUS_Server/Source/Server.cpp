@@ -6,16 +6,6 @@ HANDLE ClientRecvEvent[2];
 HANDLE InteractiveEvent;
 ServerControl* server;
 
-void printRecvData(char *data)
-{
-	for (int j = 0; j < 2; ++j) {
-		for (int i = 8; i > 0; --i) {
-			(i % 8) ? printf("") : printf(" ");
-			printf("%d", (data[j] & (1 << i - 1)) ? 1 : 0);
-		}
-	}
-	printf("\n");
-}
 
 
 //쓰레드 함수
@@ -27,7 +17,8 @@ DWORD WINAPI GameControlThread(LPVOID arg)
 	while (1) {
 		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, server->getWaitEvent(), INFINITE);
 		ResetEvent(InteractiveEvent);
-
+		
+		//server->PrintRecvBufs();
 		server->ObjectsCollision();
 		server->ApplyObjectsStatus();
 		server->ChangeSceneCheck();
@@ -152,7 +143,7 @@ void ServerControl::ClientDisconnect()
 void ServerControl::getRecvDatas(int m_iClientNum, char* m_recvData)
 {
 	m_RecvBufs[m_iClientNum] = (WORD*)m_recvData;
-	printRecvData((char*)m_RecvBufs[m_iClientNum]);
+	//printRecvData((char*)m_RecvBufs[m_iClientNum]);
 }
 
 void ServerControl::ApplyObjectsStatus()
@@ -162,7 +153,7 @@ void ServerControl::ApplyObjectsStatus()
 
 void ServerControl::ObjectsCollision()
 {
-	m_pScene[m_iStageNum].CheckObjectsCollision();
+	m_pScene[m_iStageNum].CheckObjectsCollision(m_RecvBufs[0], m_RecvBufs[1]);
 }
 
 void ServerControl::ChangeSceneCheck()

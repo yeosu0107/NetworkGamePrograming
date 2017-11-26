@@ -35,6 +35,15 @@ public:
 		m_RecvBufs[1] = nullptr;
 	}
 
+	void PrintRecvBufs() {
+		for (int i = 0; i < 2; ++i) {
+			if (m_RecvBufs[i] != nullptr) {
+				printf("%d ", i);
+				printRecvData((char*)m_RecvBufs[i]);
+			}
+		}
+	}
+
 	void ApplyObjectsStatus();
 
 	void ObjectsCollision();
