@@ -77,10 +77,12 @@ void Scene::CheckObjectsCollision(WORD* byInput1, WORD* byInput2)
 		m_Key.SetMarioPtr(nullptr);
 		for (int i = 0; i < 2; ++i) {
 			if (byInput[i] != nullptr) {
-				if (*byInput[i] & KEY_X)
-					m_Key.CollisionMario(m_Mario[i]);
-				else
-					m_Key.SetMarioPtr(nullptr);
+				for (int index = 0; index < MaxMario; ++index) {
+					if (*byInput[i] & KEY_X)
+						m_Key.CollisionMario(m_Mario[index]);
+					else
+						m_Key.SetMarioPtr(nullptr);
+				}
 			}
 		}
 
