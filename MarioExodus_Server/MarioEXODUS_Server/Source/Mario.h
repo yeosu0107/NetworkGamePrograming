@@ -57,10 +57,8 @@ public:
 
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
 
-	//MarioSprite GetSpriteState() const { return m_eSpriteState; }
-
-	void SetMarioRecvData(MarioDataFormat& rcvData);
-
 	int getPlayerNum() const { return m_iMarioPlayerNum; }
+
+	MarioDataFormat CombinationData();
 };
 

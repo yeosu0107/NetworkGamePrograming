@@ -7,14 +7,16 @@ DWORD WINAPI GameControlThread(LPVOID arg);
 class ServerControl;
 extern ServerControl* server;
 
+
 class ServerControl
 {
 private:
 	int m_NumOfClient;
 	bool m_waitEvent; //클라이언트가 1개면 false, 2개면 true
 
-	//recv데이터 저장 버퍼
-	WORD* m_RecvBufs[2];
+	//데이터 버퍼
+	WORD* m_recvBufs[2];
+	char*		m_sendBuf;
 	
 	//게임 컨트롤
 	Scene m_pScene[MaxStage];
@@ -29,17 +31,17 @@ public:
 
 	void getRecvDatas(int m_iClientNum, char* m_recvData);
 
-	void ClearRecvBuf() {
-		memset(m_RecvBufs, 0, sizeof(WORD*) * 2);
-		m_RecvBufs[0] = nullptr;
-		m_RecvBufs[1] = nullptr;
+	void ClearBufs() {
+		memset(m_recvBufs, 0, sizeof(WORD*) * 2);
+		m_recvBufs[0] = nullptr;
+		m_recvBufs[1] = nullptr;
 	}
 
-	void PrintRecvBufs() {
+	void PrintBufs() {
 		for (int i = 0; i < 2; ++i) {
-			if (m_RecvBufs[i] != nullptr) {
+			if (m_recvBufs[i] != nullptr) {
 				printf("%d ", i);
-				printRecvData((char*)m_RecvBufs[i]);
+				printRecvData((char*)m_recvBufs[i]);
 			}
 		}
 	}
@@ -49,6 +51,8 @@ public:
 	void ObjectsCollision();
 
 	void ChangeSceneCheck();
+
+	void CombinationKeys();
 
 	int getNumOfClient() const { return m_NumOfClient; }
 
@@ -70,8 +74,6 @@ public:
 	~ClientControl();
 
 	int RecvKeyStatus();
-
-	void DivideKey();
 
 	void GetObjectsStatus();
 

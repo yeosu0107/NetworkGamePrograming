@@ -22,7 +22,8 @@ DWORD WINAPI GameControlThread(LPVOID arg)
 		server->ObjectsCollision();
 		server->ApplyObjectsStatus();
 		server->ChangeSceneCheck();
-		server->ClearRecvBuf();
+		server->CombinationKeys();
+		server->ClearBufs();
 
 		SetEvent(InteractiveEvent);
 	}
@@ -56,7 +57,7 @@ ServerControl::ServerControl()
 {
 	m_NumOfClient = 0;
 	m_waitEvent = false;
-	memset(m_RecvBufs, 0, sizeof(WORD*) * 2);
+	memset(m_recvBufs, 0, sizeof(WORD*) * 2);
 
 	InteractiveEvent = CreateEvent(NULL, true, false, NULL);
 	ClientRecvEvent[0] = CreateEvent(NULL, false, false, NULL);
@@ -108,6 +109,8 @@ ServerControl::ServerControl()
 	Input.close();
 
 	m_iStageNum = 0;
+	m_sendBuf = new char[MaxSendBuf];
+	memset(m_sendBuf, 0, sizeof(char) * MaxSendBuf);
 }
 
 ServerControl::~ServerControl()
@@ -142,18 +145,18 @@ void ServerControl::ClientDisconnect()
 
 void ServerControl::getRecvDatas(int m_iClientNum, char* m_recvData)
 {
-	m_RecvBufs[m_iClientNum] = (WORD*)m_recvData;
+	m_recvBufs[m_iClientNum] = (WORD*)m_recvData;
 	//printRecvData((char*)m_RecvBufs[m_iClientNum]);
 }
 
 void ServerControl::ApplyObjectsStatus()
 {
-	m_pScene[m_iStageNum].Update(0, m_RecvBufs[0], m_RecvBufs[1]);
+	m_pScene[m_iStageNum].Update(0, m_recvBufs[0], m_recvBufs[1]);
 }
 
 void ServerControl::ObjectsCollision()
 {
-	m_pScene[m_iStageNum].CheckObjectsCollision(m_RecvBufs[0], m_RecvBufs[1]);
+	m_pScene[m_iStageNum].CheckObjectsCollision(m_recvBufs[0], m_recvBufs[1]);
 }
 
 void ServerControl::ChangeSceneCheck()
@@ -161,6 +164,26 @@ void ServerControl::ChangeSceneCheck()
 	if (m_pScene[m_iStageNum].IsClear())
 		m_iStageNum++;
 	m_pScene[m_iStageNum].ReadyToNextFrame();
+}
+
+void ServerControl::CombinationKeys()
+{
+	WORD StageNum = m_iStageNum;
+	MarioDataFormat marioData[6];
+	StageDataFormat stageData;
+	char* tmpBuf = m_sendBuf;
+
+	for (int i = 0; i < 6; ++i) {
+		marioData[i] = m_pScene->getMario()[i].CombinationData();
+	}
+	stageData = m_pScene->getKey()->CombinationData();
+
+	stageData.wStageNum = StageNum;
+
+	memcpy(tmpBuf, &stageData, sizeof(StageDataFormat));
+	tmpBuf += sizeof(StageDataFormat);
+
+	memcpy(tmpBuf, marioData, sizeof(MarioDataFormat) * 6);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -195,14 +218,10 @@ int ClientControl::RecvKeyStatus()
 		memset(m_recvBuf, 0, sizeof(m_recvBuf));
 		return -1;
 	}
-	DivideKey();
 	return retval;
 }
 
-void ClientControl::DivideKey()
-{
-	//if(m_recvBuf & KEY_X)
-}
+
 
 void ClientControl::GetObjectsStatus()
 {

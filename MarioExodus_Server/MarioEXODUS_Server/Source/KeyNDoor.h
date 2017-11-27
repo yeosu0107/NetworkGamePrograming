@@ -40,4 +40,6 @@ public:
 	void SetMarioPtr(Mario * pMario);
 
 	void SetKeystatus(bool bKeystatus) { m_bUsedKey = bKeystatus; }
+
+	StageDataFormat CombinationData();
 };

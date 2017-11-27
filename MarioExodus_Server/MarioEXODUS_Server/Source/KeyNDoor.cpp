@@ -53,6 +53,12 @@ void Key::SetMarioPtr(Mario* pMario)
 	m_pGrabMario = pMario;
 }
 
+StageDataFormat Key::CombinationData()
+{
+	StageDataFormat tmp;
+	return tmp;
+}
+
 ///////////////////////////////////////////////////////////
 
 Door::Door()

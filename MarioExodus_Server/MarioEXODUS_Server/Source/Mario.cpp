@@ -50,16 +50,6 @@ void Mario::SetSelect(int num)
 		m_iMarioPlayerNum = num;
 }
 
-void Mario::SetMarioRecvData(MarioDataFormat & rcvData)
-{
-	m_iMarioPlayerNum = rcvData.iMarioPlayerNum;
-	m_bSelect = rcvData.bSelect;
-	m_bLookDirection = rcvData.bLookDirection;
-	m_eSpriteState = (Mario::MarioSprite)rcvData.eSpriteState;
-
-	Vector2 pos((int)rcvData.wxPos, (int)rcvData.wyPos);
-	SetPosition(pos);
-}
 
 void Mario::Move(const DWORD byInput)
 {	
@@ -168,4 +158,11 @@ void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
 		m_fActionTime += fTimeElapsed;
 		m_eSpriteState = (MarioSprite)((int)(m_fActionTime * m_fTimePerAction) % 2 + 1);
 	}
+}
+
+MarioDataFormat Mario::CombinationData()
+{
+	MarioDataFormat tmp((WORD)m_iMarioNum, m_iMarioPlayerNum, 
+		GetPosition().GetX(), GetPosition().GetY(), m_bSelect, m_bLookDirection, m_bExit);
+	return tmp;
 }

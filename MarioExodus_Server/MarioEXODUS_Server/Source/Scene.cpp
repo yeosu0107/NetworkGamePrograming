@@ -146,29 +146,7 @@ void Scene::SelectMario(int iClient, WORD* bSel)
 }
 
 
-int Scene::ApplyObjectsStatus(char* buf)
-{
-	char* tmpbuf = buf;
-	int retval = 0;
 
-	for (int i = 0; i < MaxMario; i++) {
-		MarioDataFormat mariodata = *((MarioDataFormat*)&tmpbuf);
-
-		m_Mario[i].SetMarioRecvData(mariodata);
-		tmpbuf += sizeof(MarioDataFormat);
-		retval += sizeof(MarioDataFormat);
-	}
-
-	StageDataFormat stagedata = *((StageDataFormat*)&tmpbuf);
-
-	m_Key.SetPosition(Vector2(stagedata.wKeyXPos, stagedata.wKeyYPos));
-	m_Key.SetKeystatus(stagedata.IsOpen);
-	m_Door.SetOpen(stagedata.IsOpen);
-	tmpbuf += sizeof(MarioDataFormat);
-	retval += sizeof(MarioDataFormat);
-
-	return retval;
-}
 
 void Scene::ReadyToNextFrame()
 {

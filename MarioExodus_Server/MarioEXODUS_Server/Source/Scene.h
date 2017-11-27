@@ -23,18 +23,22 @@ public:
 	Scene() {}
 	~Scene();
 
-	void InitScene(int nStage, Vector2* pMarioPos, 
+	void InitScene(int nStage, Vector2* pMarioPos,
 		Vector2& vDoorPos, Vector2& vKeyPos,
 		int iWallCount, Vector2* pWallPos,
 		int iBlockCount, Vector2* pBlockPos);
 	void Update(float fElapsedTime, WORD* byInput1, WORD* byInput2);
 	void CheckObjectsCollision(WORD* byInput1, WORD* byInput2);
 	void SelectMario(int iClient, WORD* bSel);
-	int ApplyObjectsStatus(char* buf);
+
 	void ReadyToNextFrame();
+
+	Mario* getMario() { return m_Mario; }
+	Key* getKey() { return &m_Key; }
 
 	bool IsClear() const { 
 		return m_iExitMarioCount == MaxMario; 
 	}
+
 };
 

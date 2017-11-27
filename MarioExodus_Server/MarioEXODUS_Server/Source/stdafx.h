@@ -9,6 +9,7 @@ using namespace std;
 #define SERVERPORT 9000
 
 const int MaxMario = 6;
+const int MaxSendBuf = 79;
 const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
 const enum PlayerNumber { Player1, Player2 };
 
@@ -40,7 +41,17 @@ struct MarioDataFormat {
 	WORD	wyPos;					// 마리오의 Y포지션
 	bool	bSelect;						// 마리오의 선택 여부
 	bool	bLookDirection;			// 보는 방향
-	WORD 	eSpriteState;			// 마리오의 Sprite상태
+	bool isExit;							// 문으로 나갔는지 여부
+
+
+	MarioDataFormat() :
+		iMarioNum(0), iMarioPlayerNum(0), wxPos(0), wyPos(0), bSelect(false), bLookDirection(false), isExit(false)
+	{
+
+	}
+	MarioDataFormat(WORD num, WORD player, WORD x, WORD y, bool selected, bool dir, bool Exit)  :
+		iMarioNum(num), iMarioPlayerNum(player), wxPos(x), wyPos(y), bSelect(selected), bLookDirection(dir), isExit(Exit)
+	{ }
 };
 
 struct StageDataFormat {
@@ -48,11 +59,14 @@ struct StageDataFormat {
 	WORD	wKeyXPos;				// 열쇠 오브젝트의 X좌표
 	WORD	wKeyYPos;				// 열쇠 오브젝트의 Y좌표
 	bool	IsOpen;						// 문이 열렸는 지에 대한 정보
-};
 
-struct SendDataFormat {
-	MarioDataFormat m_Mario[6];	// 6개의 마리오에 대한 정보
-	StageDataFormat m_Stage;		// 현재 스테이지에 대한 정보
+	StageDataFormat() :
+		wStageNum(0), wKeyXPos(0), wKeyYPos(0), IsOpen(false)
+	{ }
+
+	StageDataFormat(UINT num, WORD x, WORD y, bool open) :
+		wStageNum(num), wKeyXPos(x), wKeyYPos(y), IsOpen(open)
+	{ }
 };
 
 class Vector2
