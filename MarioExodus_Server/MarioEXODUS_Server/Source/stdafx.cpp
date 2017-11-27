@@ -32,7 +32,7 @@ int recvn(SOCKET s, char *buf, int len, int flags)
 	return (len - left);
 }
 
-void printRecvData(char *data)
+void printData(char *data)
 {
 	for (int j = 0; j < 2; ++j) {
 		for (int i = 8; i > 0; --i) {

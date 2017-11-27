@@ -16,7 +16,7 @@ private:
 
 	//데이터 버퍼
 	WORD* m_recvBufs[2];
-	char*		m_sendBuf;
+	char		m_sendBuf[MaxSendBuf];
 	
 	//게임 컨트롤
 	Scene m_pScene[MaxStage];
@@ -30,6 +30,7 @@ public:
 	void ClientDisconnect();
 
 	void getRecvDatas(int m_iClientNum, char* m_recvData);
+	char* getSendData() { return m_sendBuf; }
 
 	void ClearBufs() {
 		memset(m_recvBufs, 0, sizeof(WORD*) * 2);
@@ -41,7 +42,7 @@ public:
 		for (int i = 0; i < 2; ++i) {
 			if (m_recvBufs[i] != nullptr) {
 				printf("%d ", i);
-				printRecvData((char*)m_recvBufs[i]);
+				printData((char*)m_recvBufs[i]);
 			}
 		}
 	}
@@ -59,13 +60,11 @@ public:
 	bool getWaitEvent() const { return m_waitEvent; }
 };
 
-const int SENDSIZE = 10;
-
 class ClientControl
 {
 private:
 	char* m_recvBuf;
-	char m_sendBuf[SENDSIZE];
+	char m_sendBuf[MaxSendBuf];
 
 	SOCKET* m_socket;
 	int m_ClientNum;

@@ -109,8 +109,7 @@ ServerControl::ServerControl()
 	Input.close();
 
 	m_iStageNum = 0;
-	m_sendBuf = new char[MaxSendBuf];
-	memset(m_sendBuf, 0, sizeof(char) * MaxSendBuf);
+	memset(m_sendBuf, 0, sizeof(char)*MaxSendBuf);
 }
 
 ServerControl::~ServerControl()
@@ -180,10 +179,17 @@ void ServerControl::CombinationKeys()
 
 	stageData.wStageNum = StageNum;
 
+	memset(m_sendBuf, 0, sizeof(char)*MaxSendBuf);
+
 	memcpy(tmpBuf, &stageData, sizeof(StageDataFormat));
+
 	tmpBuf += sizeof(StageDataFormat);
 
 	memcpy(tmpBuf, marioData, sizeof(MarioDataFormat) * 6);
+	/*for (int i = 0; i < MaxMario; ++i) {
+		memcpy(tmpBuf, &marioData[i], sizeof(MarioDataFormat));
+		tmpBuf += sizeof(MarioDataFormat);
+	}*/
 }
 
 //////////////////////////////////////////////////////////////////
@@ -231,7 +237,7 @@ void ClientControl::GetObjectsStatus()
 int ClientControl::SendObjectsStatus()
 {
 	int retval = -1;
-	retval = send(*m_socket, m_sendBuf, sizeof(WORD), 0);
+	retval = send(*m_socket, server->getSendData(), MaxSendBuf, 0);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 	}

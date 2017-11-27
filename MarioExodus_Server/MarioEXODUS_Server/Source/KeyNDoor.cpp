@@ -55,7 +55,7 @@ void Key::SetMarioPtr(Mario* pMario)
 
 StageDataFormat Key::CombinationData()
 {
-	StageDataFormat tmp;
+	StageDataFormat tmp(-1, GetPosition().GetX(), GetPosition().GetY(), m_bUsedKey);
 	return tmp;
 }
 
