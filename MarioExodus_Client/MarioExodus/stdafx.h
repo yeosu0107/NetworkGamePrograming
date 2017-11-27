@@ -43,8 +43,8 @@ const DWORD DIR_RIGHT = 0x80;
 const DWORD KEY_C = 0x100;
 const DWORD KEY_X = 0x200;
 
-const UINT MAX_BUF = 79;
-
+const UINT MAX_BUF = 73;
+#pragma pack(1)
 struct RecvMarioDataFormat {
 	WORD iMarioNum;
 	WORD iMarioPlayerNum;
@@ -52,14 +52,18 @@ struct RecvMarioDataFormat {
 	WORD wyPos;
 	bool bSelect;
 	bool bLookDirection;
-	WORD eSpriteState;
+	bool isExit;
 };
-
+#pragma pack()
+// 66
+#pragma pack(1)
 struct RecvStageDataFormat {
+	WORD wStageNum;
 	WORD wKeyXPos;
 	WORD wKeyYPos;
 	bool IsOpen;
 };
-
+#pragma pack()
+// 5.#pragma pack()
 void error_quit(char* msg);
 void error_display(char *msg);

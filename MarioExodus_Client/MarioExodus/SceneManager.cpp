@@ -70,7 +70,7 @@ void SceneManager::CheckObjectCollision(WORD& byInput)
 {
 	
 	for (int i = 0; i < MaxMario; i++) {
-		if (m_pMario[i].GetSpriteState() == Mario::MarioSprite::Exit) continue;	// 마리오가 나간경우 충돌 체크 X
+		if (m_pMario[i].IsExit()) continue;	// 마리오가 나간경우 충돌 체크 X
 
 		if (byInput & KEY_X) m_kKey.CollisionMario(m_pMario[i]);				// X키가 눌린 경우 열쇠와 현재 마리오와 충돌 검사
 		else m_kKey.SetMarioPtr(nullptr);										// 아닌 경우 열쇠가 마리오를 쫓지 않게 변경 
@@ -88,7 +88,7 @@ void SceneManager::CheckObjectCollision(WORD& byInput)
 			m_pMario[i].Collision(m_pWall[j]);
 
 		for (int j = 0; j < MaxMario; j++) 
-			if (m_pMario[j].GetSpriteState() != Mario::MarioSprite::Exit && i != j) m_pMario[i].Collision(m_pMario[j]);
+			if (!m_pMario[j].IsExit() && i != j) m_pMario[i].Collision(m_pMario[j]);
 		
 
 		m_pMario[i].AfterCollision();	// 이동 후 Box오브젝트을 밀거나 Y축에 대해서만 후처리
@@ -148,6 +148,14 @@ int SceneManager::ApplyObjectsStatus(char* buf)
 {
 	int   retval = 0;		// 읽은 데이터량 
 
+	RecvStageDataFormat stagedata = *((RecvStageDataFormat*)buf);
+	buf += sizeof(RecvStageDataFormat);
+	retval += sizeof(RecvStageDataFormat);
+
+	m_kKey.SetPosition(Vector2(stagedata.wKeyXPos, stagedata.wKeyYPos));
+	m_kKey.SetKeystatus(stagedata.IsOpen);
+	m_dDoor.SetOpen(stagedata.IsOpen);
+
 	for (int i = 0; i < MaxMario; i++) {
 		RecvMarioDataFormat mariodata = *((RecvMarioDataFormat*)buf);
 
@@ -155,31 +163,22 @@ int SceneManager::ApplyObjectsStatus(char* buf)
 		buf += sizeof(RecvMarioDataFormat);
 		retval += sizeof(RecvMarioDataFormat);
 	}
-
-	RecvStageDataFormat stagedata = *((RecvStageDataFormat*)buf);
-
-	m_kKey.SetPosition(Vector2(stagedata.wKeyXPos, stagedata.wKeyYPos));
-	m_kKey.SetKeystatus(stagedata.IsOpen);
-	m_dDoor.SetOpen(stagedata.IsOpen);
-	buf += sizeof(RecvMarioDataFormat);
-	retval += sizeof(RecvMarioDataFormat);
-
 	return retval;
 }
 
 /*
-66
+75
 
 char Data = 2
 struct RecvMarioDataFormat {
-char iMarioNum;
-char iMarioPlayerNum;
-WORD wxPos;
-WORD wyPos;
-bool bSelect;
-bool bLookDirection;
-char eSpriteState;
-}; 60
+char iMarioNum; 2
+char iMarioPlayerNum; 2
+WORD wxPos; 2
+WORD wyPos; 2
+bool bSelect;1
+bool bLookDirection;1
+bool bExit;1
+}; 66
 
 struct RecvStageDataFormat {
 WORD wKeyXPos;

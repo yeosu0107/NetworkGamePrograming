@@ -18,6 +18,11 @@ void Object::SetPosition(Vector2 & pos)
 	m_vec2Pos = pos;
 }
 
+void Object::SetPrePosition(Vector2 & pos)
+{
+	m_vec2PrePos = pos;
+}
+
 bool Object::Collision(Object & other)
 {
 	WORD wCollside = 0;

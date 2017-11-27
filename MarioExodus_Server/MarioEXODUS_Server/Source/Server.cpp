@@ -173,9 +173,9 @@ void ServerControl::CombinationKeys()
 	char* tmpBuf = m_sendBuf;
 
 	for (int i = 0; i < 6; ++i) {
-		marioData[i] = m_pScene->getMario()[i].CombinationData();
+		marioData[i] = m_pScene[m_iStageNum].getMario()[i].CombinationData();
 	}
-	stageData = m_pScene->getKey()->CombinationData();
+	stageData = m_pScene[m_iStageNum].getKey()->CombinationData();
 
 	stageData.wStageNum = StageNum;
 

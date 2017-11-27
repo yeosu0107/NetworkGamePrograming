@@ -9,7 +9,7 @@ using namespace std;
 #define SERVERPORT 9000
 
 const int MaxMario = 6;
-const int MaxSendBuf = 75;
+const int MaxSendBuf = 73;
 const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
 const enum PlayerNumber { Player1, Player2 };
 
@@ -42,7 +42,7 @@ struct MarioDataFormat {
 	WORD	wyPos;					// 마리오의 Y포지션
 	bool	bSelect;						// 마리오의 선택 여부
 	bool	bLookDirection;			// 보는 방향
-	bool isExit;							// 문으로 나갔는지 여부
+	bool	isExit;							// 문으로 나갔는지 여부
 
 
 	MarioDataFormat() :
@@ -58,7 +58,7 @@ struct MarioDataFormat {
 
 #pragma pack(1)
 struct StageDataFormat {
-	UINT	wStageNum;				// 현재 스테이지 레벨
+	WORD	wStageNum;				// 현재 스테이지 레벨
 	WORD	wKeyXPos;				// 열쇠 오브젝트의 X좌표
 	WORD	wKeyYPos;				// 열쇠 오브젝트의 Y좌표
 	bool	IsOpen;						// 문이 열렸는 지에 대한 정보
@@ -67,7 +67,7 @@ struct StageDataFormat {
 		wStageNum(0), wKeyXPos(0), wKeyYPos(0), IsOpen(false)
 	{ }
 
-	StageDataFormat(UINT num, WORD x, WORD y, bool open) :
+	StageDataFormat(WORD num, WORD x, WORD y, bool open) :
 		wStageNum(num), wKeyXPos(x), wKeyYPos(y), IsOpen(open)
 	{ }
 };

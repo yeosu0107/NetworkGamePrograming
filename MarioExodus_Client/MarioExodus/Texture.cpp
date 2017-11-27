@@ -39,28 +39,28 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 	glGenTextures(1, &m_iTexture);
 	glBindTexture(GL_TEXTURE_2D, m_iTexture);
 
-	if ((fp = fopen(filename, "rb")) == NULL)
+	if ((fp = fopen(filename, "rb")) == NULL)					// 1. 열기 실패
 	{
 		printf("Error 1\n");
 		return NULL;
 	}
-	if (fread(&header, sizeof(BITMAPFILEHEADER), 1, fp) < 1)
+	if (fread(&header, sizeof(BITMAPFILEHEADER), 1, fp) < 1)	// 2. 비트맵의 헤더 크기만큼 읽어오는데 성공해야 한다. 
 	{
 		printf("Error 2\n");
 		fclose(fp);
 		return NULL;
 	}
-
-	if (header.bfType != 'MB')
+	
+	if (header.bfType != 'MB')									// 3. bfType = MB여야 BITMAP을 사용하겠다는 뜻이 된다. 
 	{
 		printf("Error 3\n");
 		fclose(fp);
 		return NULL;
 	}
 
-	infosize = header.bfOffBits - sizeof(BITMAPFILEHEADER);
+	infosize = header.bfOffBits - sizeof(BITMAPFILEHEADER);		// 4. 이미지가 저장된곳의 시작위치 - 헤더의 크기 = 비트맵에 대한 정보가 담긴 데이터 길이
 
-	if ((m_pBitInfo = (BITMAPINFO *)malloc(infosize)) == NULL)
+	if ((m_pBitInfo = (BITMAPINFO *)malloc(infosize)) == NULL)	// 5. BITMAPINFO데이터 크기만금 메모리를 할당 
 	{
 		printf("Error 4\n");
 		fclose(fp);
@@ -68,7 +68,7 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 		return NULL;
 	}
 
-	if (fread(m_pBitInfo, 1, infosize, fp) < (unsigned int)infosize)
+	if (fread(m_pBitInfo, 1, infosize, fp) < (unsigned int)infosize) // 6. 비트맵에 대한 정보가 담겨있는 부분을 읽어온다.
 	{
 		printf("Error 5\n");
 		free(m_pBitInfo);
@@ -76,7 +76,7 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 		return NULL;
 	}
 
-	if ((bitsize = (m_pBitInfo)->bmiHeader.biSizeImage) == 0)
+	if ((bitsize = (m_pBitInfo)->bmiHeader.biSizeImage) == 0)		// 7. 비트맵의 크기를 못 읽어온 경우 직접 데이터 크기를 삽입.	
 	{
 		bitsize = ((m_pBitInfo)->bmiHeader.biWidth *
 			(m_pBitInfo)->bmiHeader.biBitCount + 7) / 8.0 *

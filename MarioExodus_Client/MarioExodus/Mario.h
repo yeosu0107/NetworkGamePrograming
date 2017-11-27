@@ -13,9 +13,9 @@ public:
 	static enum MarioJumpState		{ Jump_None, Jump_Up, Jump_Down };								// - 서버
 
 private:
+	int				m_iMarioNum;			// 마리오에게 부여된 수( 0 ~ 6 )						- 서버, 클라
 	int				m_iMaxJumpDist;			// 점프 시 최대 높이									- 서버
 	int				m_iCurJumpDist;			// 현재 점프한 높이									- 서버
-	int				m_iMarioNum;			// 마리오에게 부여된 수( 0 ~ 6 )						- 서버, 클라
 	int				m_iValocity;			// 이동 속도											- 서버
 	int				m_iMarioPlayerNum;		// 사용하는 플레이어 Num								- 서버, 클라
 
@@ -26,6 +26,7 @@ private:
 
 	bool			m_bSelect;				// 마리오 선택 여부									- 서버, 클라
 	bool			m_bLookDirection;		// 마리오 방향 true = 오른쪽, false = 왼쪽			- 서버, 클라
+	bool			m_bExit;				// 마리오가 문밖을 나간 경우
 
 	MarioJumpState	m_eJumpState;			// 마리오 점프 상태									- 서버, 클라
 	Object			m_oObject;				// 마리오 머리위에 있는 숫자 번호	오브젝트				- 클라 
@@ -48,12 +49,15 @@ public:
 	void Render();
 	
 	void SetSelect(int num) ;
-
+	
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
 	void SetSpriteState(Mario::MarioSprite eSprite) { m_eSpriteState = eSprite; }
 
+	void SetMarioRecvData(RecvMarioDataFormat& rcvData);
+
 	MarioSprite GetSpriteState() const { return m_eSpriteState; }
 
-	void SetMarioRecvData(RecvMarioDataFormat& rcvData);
+	void SetExit(bool bExit) { m_bExit = bExit; }
+	bool IsExit() const { return m_bExit; }
 };
 
