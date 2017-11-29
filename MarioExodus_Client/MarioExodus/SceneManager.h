@@ -28,7 +28,6 @@ public:
 	void Update(float fElapsedTime, WORD& byInput);
 	void Render();
 	void CheckObjectCollision(WORD& byInput);
-	void SelectMario(WORD& bSel);
 	void Destroy();
 	void ReadyToNextFrame();
 

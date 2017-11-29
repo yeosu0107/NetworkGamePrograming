@@ -34,14 +34,11 @@ void FrameWork::Run()
 
 	m_pScene[m_iStageNum].CheckObjectCollision(m_wInputSpecialkey);	// 충돌체크
 	m_pScene[m_iStageNum].Update(fElapsedTime, m_wInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
-	m_pScene[m_iStageNum].Render();										// 렌더링
-
+	m_pScene[m_iStageNum].Render();			
+	// 렌더링
+	ReadyToNextFrame();
 	m_tTime.Tock();		// 현재시간 -> 이전 시간으로 변경
-
-	m_pScene[m_iStageNum].ReadyToNextFrame();
-
 	glutSetWindowTitle(m_tTime.GetFrameTime().c_str());	// 타이틀 메시지 변경
-
 }
 
 void FrameWork::SpecialKeyInput(int key, int x, int y)
@@ -179,6 +176,10 @@ void FrameWork::InitFrameWork()
 
 void FrameWork::ReadyToNextFrame()
 {
+	m_pScene[m_iStageNum].ReadyToNextFrame();
+
+	if (m_wInputSpecialkey % 64 > 0)
+		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
 }
 
 
