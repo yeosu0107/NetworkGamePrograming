@@ -43,8 +43,11 @@ void Mario::InitMario(int nNum, Vector2& vpos)
 
 void Mario::SetSelect(int num)
 {
-	if (m_iMarioPlayerNum != -1 && m_bSelect)
-		return;
+	if (m_iMarioPlayerNum != -1) {
+		if(m_iMarioPlayerNum != num)
+			return;
+	}
+		
 
 	m_bSelect = !m_bSelect;
 	if (!m_bSelect)
