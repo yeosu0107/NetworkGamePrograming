@@ -62,41 +62,43 @@ void Mario::SetMarioRecvData(RecvMarioDataFormat & rcvData)
 	m_bExit = (Mario::MarioSprite)rcvData.isExit;
 
 	Vector2 pos((int)rcvData.wxPos, (int)rcvData.wyPos);
+
+	SetPrePosition(GetPosition());
 	SetPosition(pos);
 }
 
 void Mario::Move(const float fTimeElapsed, const DWORD byInput)
 {	
 
-	if (!m_bSelect)
-		return;
+	//if (!m_bSelect)
+	//	return;
 
-	Vector2 vec2pos = GetPosition();
-	WORD marioCollside = GetCollSide();
+	//Vector2 vec2pos = GetPosition();
+	//WORD marioCollside = GetCollSide();
 
-	int xDirection = 0;
+	//int xDirection = 0;
 
-	if (byInput & DIR_LEFT)				xDirection += -1;
-	if (byInput & DIR_RIGHT)			xDirection += +1;
-	if (byInput & KEY_C)				m_eJumpState = m_eJumpState == Jump_None ? Jump_Up : m_eJumpState;	// 마리오가 점프 중이 아닌 상태에서만 반응하게 변경
+	//if (byInput & DIR_LEFT)				xDirection += -1;
+	//if (byInput & DIR_RIGHT)			xDirection += +1;
+	//if (byInput & KEY_C)				m_eJumpState = m_eJumpState == Jump_None ? Jump_Up : m_eJumpState;	// 마리오가 점프 중이 아닌 상태에서만 반응하게 변경
 
-	if (m_eJumpState != Jump_None)		m_eSpriteState = Sprite_Jump;
-	else if (xDirection == 0)			m_eSpriteState = Sprite_None;
-	else								m_eSpriteState = (m_eSpriteState == Sprite_None ? Sprite_Run1 : m_eSpriteState);
+	//if (m_eJumpState != Jump_None)		m_eSpriteState = Sprite_Jump;
+	//else if (xDirection == 0)			m_eSpriteState = Sprite_None;
+	//else								m_eSpriteState = (m_eSpriteState == Sprite_None ? Sprite_Run1 : m_eSpriteState);
 
-	if (xDirection > 0) {
-		m_bLookDirection = false; 
-		if (marioCollside & CollRight) xDirection = 0;
-	}
-	else if (xDirection < 0) { 
-		m_bLookDirection = true; 
-		if (marioCollside & CollLeft) xDirection = 0;
-	}
+	//if (xDirection > 0) {
+	//	m_bLookDirection = false; 
+	//	if (marioCollside & CollRight) xDirection = 0;
+	//}
+	//else if (xDirection < 0) { 
+	//	m_bLookDirection = true; 
+	//	if (marioCollside & CollLeft) xDirection = 0;
+	//}
 
-	vec2pos.x += (xDirection * m_iValocity);
+	//vec2pos.x += (xDirection * m_iValocity);
 
 
-	SetPosition(vec2pos);
+	//SetPosition(vec2pos);
 }
 
 void Mario::Jump(const float fTimeElapsed)
@@ -145,7 +147,6 @@ void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
 	if (m_eSpriteState == Exit) return;
 
-	SetPrePosition(GetPosition());
 	Move(fTimeElapsed, dwInputKey);
 	Jump(fTimeElapsed);
 	SpriteUpdate(fTimeElapsed, dwInputKey);
@@ -172,7 +173,7 @@ void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
 		m_eSpriteState = Sprite_Jump;
 	}
 
-
+	
 	/*
 	
 

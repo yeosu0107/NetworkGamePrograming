@@ -301,36 +301,3 @@ int FrameWork::ApplySceneStatus()
 {
 	return m_pScene[m_iStageNum].ApplyObjectsStatus(m_pBufptr);
 }
-
-
-
-
-///* Test ±¸°£ */
-//WORD				Stagenum = 2;
-//RecvMarioDataFormat marioData[6];
-//RecvStageDataFormat StageData;
-
-//memcpy(m_pBufptr, &Stagenum, sizeof(WORD));
-//m_pBufptr += sizeof(WORD);
-
-//StageData.IsOpen = true;
-//StageData.wKeyXPos = 300;
-//StageData.wKeyYPos = 400;
-
-//memcpy(m_pBufptr, &StageData, sizeof(RecvStageDataFormat));
-//m_pBufptr += sizeof(RecvStageDataFormat);
-
-//for (int i = 0; i < 6; ++i) {
-//	marioData[i].bLookDirection		= true;
-//	marioData[i].bSelect			= true;
-//	marioData[i].eSpriteState		= Mario::MarioSprite::Sprite_Run1;
-//	marioData[i].iMarioNum			= i;
-//	marioData[i].iMarioPlayerNum	= 0;
-//	marioData[i].wxPos				= i * 100;
-//	marioData[i].wyPos				= i * 100;
-//	memcpy(m_pBufptr, &marioData[i], sizeof(RecvMarioDataFormat));
-//	m_pBufptr += sizeof(RecvMarioDataFormat);
-//}
-
-//
-//m_pBufptr = m_RecvBuf;
