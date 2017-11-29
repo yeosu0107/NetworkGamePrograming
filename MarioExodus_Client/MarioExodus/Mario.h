@@ -43,12 +43,8 @@ public:
 	void Update(float fTimeElapsed, DWORD dwInputKey);
 	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
 
-	void Move(const float fTimeElapsed, const DWORD byInput);
-
 	void Jump(const float fTimeElapsed);
 	void Render();
-	
-	void SetSelect(int num) ;
 	
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }
 	void SetSpriteState(Mario::MarioSprite eSprite) { m_eSpriteState = eSprite; }

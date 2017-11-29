@@ -35,7 +35,6 @@ void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoo
 
 void SceneManager::Update(float fElapsedTime, WORD& byInput)
 {
-	SelectMario(byInput);
 	
 	for (Mario& pMa : m_pMario)
 		pMa.Update(fElapsedTime, byInput);
@@ -72,8 +71,8 @@ void SceneManager::CheckObjectCollision(WORD& byInput)
 	for (int i = 0; i < MaxMario; i++) {
 		if (m_pMario[i].IsExit()) continue;	// 마리오가 나간경우 충돌 체크 X
 
-		if (byInput & KEY_X) m_kKey.CollisionMario(m_pMario[i]);				// X키가 눌린 경우 열쇠와 현재 마리오와 충돌 검사
-		else m_kKey.SetMarioPtr(nullptr);										// 아닌 경우 열쇠가 마리오를 쫓지 않게 변경 
+		//if (byInput & KEY_X) m_kKey.CollisionMario(m_pMario[i]);				// X키가 눌린 경우 열쇠와 현재 마리오와 충돌 검사
+		//else m_kKey.SetMarioPtr(nullptr);										// 아닌 경우 열쇠가 마리오를 쫓지 않게 변경 
 
 		if (m_dDoor.CollisionMario(m_pMario[i])) m_iExitMarioCount++;			// 마리오가 열린 문과 충돌한 경우
 
@@ -109,19 +108,6 @@ void SceneManager::CheckObjectCollision(WORD& byInput)
 	m_kKey.CollisionDoor(m_dDoor);
 }
 
-void SceneManager::SelectMario(WORD& bSel)
-{
-	if (bSel % 0x40 == 0) return;
-	if (bSel & KEY_1) { m_pMario[0].SetSelect(Player1); };
-	if (bSel & KEY_2) { m_pMario[1].SetSelect(Player1); };
-	if (bSel & KEY_3) { m_pMario[2].SetSelect(Player1); };
-	if (bSel & KEY_4) { m_pMario[3].SetSelect(Player1); };
-	if (bSel & KEY_5) { m_pMario[4].SetSelect(Player1); };
-	if (bSel & KEY_6) { m_pMario[5].SetSelect(Player1); };
-
-	bSel &= !(0x40 - 1);	// 0x63까지의 비트를 반전 시키고 입력 키값과 And 연산 = 하위 6비트 초기화
-	
-}
 
 void SceneManager::Destroy()
 {
