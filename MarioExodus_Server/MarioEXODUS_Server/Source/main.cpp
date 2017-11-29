@@ -63,7 +63,7 @@ int main(void)
 			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		//클라이언트 초기화
-		ClientControl* client=new ClientControl(client_sock, server->getNumOfClient() - 1);
+		ClientControl* client=new ClientControl(client_sock, server->getNumOfClient());
 		
 		hThread = CreateThread(NULL, 0, ClientThread, client, 0, NULL);
 

@@ -7,7 +7,6 @@ DWORD WINAPI GameControlThread(LPVOID arg);
 class ServerControl;
 extern ServerControl* server;
 
-
 class ServerControl
 {
 private:
@@ -21,13 +20,16 @@ private:
 	//게임 컨트롤
 	Scene m_pScene[MaxStage];
 	int m_iStageNum;
+
+	bool ClientNum[2];
+
 public:
 	ServerControl();
 	~ServerControl();
 
 	bool IsClientFull();
 
-	void ClientDisconnect();
+	void ClientDisconnect(int client);
 
 	void getRecvDatas(int m_iClientNum, char* m_recvData);
 	char* getSendData() { return m_sendBuf; }
@@ -55,7 +57,7 @@ public:
 
 	void CombinationKeys();
 
-	int getNumOfClient() const { return m_NumOfClient; }
+	int getNumOfClient();
 
 	bool getWaitEvent() const { return m_waitEvent; }
 };

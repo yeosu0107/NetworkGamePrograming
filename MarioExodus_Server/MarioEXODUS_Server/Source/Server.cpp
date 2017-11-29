@@ -33,10 +33,11 @@ DWORD WINAPI GameControlThread(LPVOID arg)
 DWORD WINAPI ClientThread(LPVOID arg)
 {
 	ClientControl* thisPoint = (ClientControl*)arg;
+	int ClientNum = thisPoint->getClientNum();
 	while (1) {
 		if (thisPoint->RecvKeyStatus() == -1) {
 			delete thisPoint;
-			server->ClientDisconnect();
+			server->ClientDisconnect(ClientNum);
 			break;
 		}
 		server->getRecvDatas(thisPoint->getClientNum(), thisPoint->getRecvBuf());
@@ -110,6 +111,9 @@ ServerControl::ServerControl()
 
 	m_iStageNum = 0;
 	memset(m_sendBuf, 0, sizeof(char)*MaxSendBuf);
+
+	ClientNum[0] = false;
+	ClientNum[1] = false;
 }
 
 ServerControl::~ServerControl()
@@ -132,11 +136,12 @@ bool ServerControl::IsClientFull()
 	return true;
 }
 
-void ServerControl::ClientDisconnect()
+void ServerControl::ClientDisconnect(int client)
 {
 	m_NumOfClient -= 1;
 	m_waitEvent = false;
 
+	ClientNum[client] = false;
 
 	if (m_NumOfClient < 0)
 		m_NumOfClient = 0;
@@ -145,7 +150,6 @@ void ServerControl::ClientDisconnect()
 void ServerControl::getRecvDatas(int m_iClientNum, char* m_recvData)
 {
 	m_recvBufs[m_iClientNum] = (WORD*)m_recvData;
-	//printRecvData((char*)m_RecvBufs[m_iClientNum]);
 }
 
 void ServerControl::ApplyObjectsStatus()
@@ -186,10 +190,18 @@ void ServerControl::CombinationKeys()
 	tmpBuf += sizeof(StageDataFormat);
 
 	memcpy(tmpBuf, marioData, sizeof(MarioDataFormat) * 6);
-	/*for (int i = 0; i < MaxMario; ++i) {
-		memcpy(tmpBuf, &marioData[i], sizeof(MarioDataFormat));
-		tmpBuf += sizeof(MarioDataFormat);
-	}*/
+}
+
+int ServerControl::getNumOfClient() {
+	int client = -1;
+	for (int i = 0; i < 2; ++i) {
+		if (!ClientNum[i]) {
+			ClientNum[i] = true;
+			client = i;
+			break;
+		}
+	}
+	return client;
 }
 
 //////////////////////////////////////////////////////////////////
