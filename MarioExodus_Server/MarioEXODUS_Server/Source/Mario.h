@@ -6,8 +6,6 @@
 class Mario: public Object
 {
 public:
-	
-	enum MarioSprite			{ Sprite_None, Sprite_Run1 , Sprite_Run2 , Sprite_Jump, Exit};	// - 클라
 	enum MarioJumpState		{ Jump_None, Jump_Up, Jump_Down };								// - 서버
 
 private:
@@ -33,7 +31,6 @@ private:
 
 	MarioJumpState	m_eJumpState;			// 마리오 점프 상태									- 서버, 클라
 	Object			m_oObject;				// 마리오 머리위에 있는 숫자 번호	오브젝트				- 클라 
-	MarioSprite		m_eSpriteState;			// 마리오 스프라이트 상태								- 서버,클라 
 	
 public:
 	Mario();
@@ -44,7 +41,6 @@ public:
 	bool IsSelected() const { return m_bSelect; }
 
 	void Update(int iClient, float fTimeElapsed, DWORD dwInputKey);
-	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
 
 	void Move(const DWORD byInput);
 
@@ -61,4 +57,3 @@ public:
 
 	MarioDataFormat CombinationData();
 };
-

@@ -243,5 +243,3 @@ int ClientControl::SendObjectsStatus()
 	}
 	return 0;
 }
-
-
