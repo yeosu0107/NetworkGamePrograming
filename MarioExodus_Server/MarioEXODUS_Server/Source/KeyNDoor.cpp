@@ -22,13 +22,19 @@ void Key::InitKey(Vector2 & vPos, bool bUsedKey)
 	m_oDish.SetSize(Vector2(37, 9));
 }
 
-void Key::CollisionMario(Mario & other)
+bool Key::CollisionMario(Mario & other)
 {
-	if (m_bUsedKey) return;
+	if (m_bUsedKey)
+		return false;
+
+	if (m_pGrabMario != nullptr)
+		return false;
 
 	if (Collision(other)) {
 		m_pGrabMario = &other;
+		return true;
 	}
+	return false;
 }
 
 

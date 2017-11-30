@@ -70,21 +70,28 @@ void Scene::CheckObjectsCollision(WORD* byInput1, WORD* byInput2)
 	byInput[0] = byInput1;
 	byInput[1] = byInput2;
 
+	bool isKeyGraped = false;
+
+	//m_Key.SetMarioPtr(nullptr);
+
 	for (int i = 0; i < MaxMario; i++) {
 		if (m_Mario[i].GetExit()) 
 			continue;	// 마리오가 나간경우 충돌 체크 X
 
-		m_Key.SetMarioPtr(nullptr);
-		for (int i = 0; i < 2; ++i) {
-			if (byInput[i] != nullptr) {
-				for (int index = 0; index < MaxMario; ++index) {
-					if (*byInput[i] & KEY_X)
-						m_Key.CollisionMario(m_Mario[index]);
-					else
-						m_Key.SetMarioPtr(nullptr);
+		for (int index = 0; index < 2; ++index) {
+			if(isKeyGraped)
+				break;
+			if (byInput[index] != nullptr) {
+				if (*byInput[index] & KEY_X) {
+					if (m_Key.CollisionMario(m_Mario[i]))
+						isKeyGraped = true;
+					break;
 				}
 			}
 		}
+
+		if(!isKeyGraped)
+			m_Key.SetMarioPtr(nullptr);
 
 		if (m_Door.CollisionMario(m_Mario[i]))
 			m_iExitMarioCount++;			// 마리오가 열린 문과 충돌한 경우

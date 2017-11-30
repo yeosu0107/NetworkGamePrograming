@@ -34,7 +34,7 @@ public:
 
 public:
 	void InitKey(Vector2& vPos, bool bUsedKey);
-	void CollisionMario(Mario& other);
+	bool CollisionMario(Mario& other);
 	void CollisionDoor(Door& other);
 	void Update(float fTimeElapsed);
 	void SetMarioPtr(Mario * pMario);
