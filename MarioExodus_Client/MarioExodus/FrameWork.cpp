@@ -199,7 +199,7 @@ int FrameWork::ConnectServer()
 	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
 
 	while (retval == SOCKET_ERROR) {
-#define TEST
+
 #if defined TEST
 		::ZeroMemory(&IPbuf, sizeof(IPbuf));
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
