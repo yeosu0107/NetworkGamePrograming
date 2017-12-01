@@ -9,6 +9,7 @@ using namespace std;
 #define SERVERPORT 9000
 
 const int MaxMario = 6;
+const int MaxBlock = 2;
 const int MaxSendBuf = 73;
 const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
 const enum PlayerNumber { Player1, Player2 };
@@ -70,6 +71,20 @@ struct StageDataFormat {
 	StageDataFormat(WORD num, WORD x, WORD y, bool open) :
 		wStageNum(num), wKeyXPos(x), wKeyYPos(y), IsOpen(open)
 	{ }
+};
+#pragma pack()
+
+#pragma pack(1)
+struct StageBlockFormat {
+	WORD wxPos;
+	WORD wyPos;
+
+	StageBlockFormat() :
+		wxPos(0), wyPos(0) 
+	{}
+	StageBlockFormat(WORD xPos, WORD yPos) :
+		wxPos(xPos), wyPos(yPos) 
+	{}
 };
 #pragma pack()
 

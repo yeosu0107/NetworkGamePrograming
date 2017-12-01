@@ -35,6 +35,8 @@ public:
 
 	Mario* getMario() { return m_Mario; }
 	Key* getKey() { return &m_Key; }
+	Block* getBlock() { return m_pBlock; }
+	int getBlockCount() const { return m_iBlockCount; }
 
 	bool IsClear() const { 
 		return m_iExitMarioCount == MaxMario; 

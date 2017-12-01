@@ -16,6 +16,7 @@ public:
 	void InitBlock(Vector2 & vPos);
 	void Update();
 	void Move();
+	StageBlockFormat CominationData();
 	void AddDir(const int x) { m_iXDir += x; }
 	void SetXDir(const int x) { m_iXDir = x; }
 	void SetYDir(const int y) { m_iYDir = y; }

@@ -15,7 +15,8 @@ DWORD WINAPI GameControlThread(LPVOID arg)
 	//ServerControl* thisPoint = (ServerControl*)arg;
 
 	while (1) {
-		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, server->getWaitEvent(), INFINITE);
+		DWORD retval = WaitForMultipleObjects(2, ClientRecvEvent, server->getWaitEvent(), 400);
+		//비정상적인 작동으로 이벤트가 set되지 않았을 때 멈추는 현상 방지를 위해 타임아웃 설정 (0.4초)
 		ResetEvent(InteractiveEvent);
 		
 		//server->PrintRecvBufs();
@@ -143,6 +144,12 @@ void ServerControl::ClientDisconnect(int client)
 
 	ClientNum[client] = false;
 
+	Mario* tmpMario = m_pScene[m_iStageNum].getMario();
+	for (int i = 0; i < MaxMario; ++i) {
+		if (tmpMario[i].getPlayerNum() == client)
+			tmpMario[i].SetSelect(client); //클라이언트가 연결을 해재하면 현재 소유중이던 마리오의 소유권도 모두 해재
+	}
+
 	if (m_NumOfClient < 0)
 		m_NumOfClient = 0;
 }
@@ -174,14 +181,19 @@ void ServerControl::CombinationKeys()
 	WORD StageNum = m_iStageNum;
 	MarioDataFormat marioData[6];
 	StageDataFormat stageData;
+	StageBlockFormat blockData[2];
 	char* tmpBuf = m_sendBuf;
 
-	for (int i = 0; i < 6; ++i) {
+	for (int i = 0; i < MaxMario; ++i) {
 		marioData[i] = m_pScene[m_iStageNum].getMario()[i].CombinationData();
 	}
 	stageData = m_pScene[m_iStageNum].getKey()->CombinationData();
 
 	stageData.wStageNum = StageNum;
+
+	for (int i = 0; i < m_pScene[m_iStageNum].getBlockCount(); ++i) {
+		blockData[i] = m_pScene[m_iStageNum].getBlock()[i].CominationData();
+	}
 
 	memset(m_sendBuf, 0, sizeof(char)*MaxSendBuf);
 

@@ -38,3 +38,8 @@ void Block::Move()
 
 	SetPosition(GetPosition() + Vector2(iMovePos, m_iYDir * m_iValocity));
 }
+
+StageBlockFormat Block::CominationData()
+{
+	return StageBlockFormat(GetPosition().GetX(), GetPosition().GetY());
+}
