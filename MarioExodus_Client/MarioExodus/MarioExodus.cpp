@@ -7,8 +7,6 @@
 
 FrameWork g_FrameWork;
 
-
-
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -73,6 +71,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(Reshape);
 	glutSpecialFunc(SpecialKeyInput);
 	glutSpecialUpFunc(SpecialKeyOutput);
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 	glutMainLoop();
 
 	return 0;

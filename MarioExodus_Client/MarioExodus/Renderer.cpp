@@ -9,7 +9,8 @@ Renderer::Renderer(int windowSizeX, int windowSizeY)
 
 Renderer::~Renderer()
 {
-	delete[](m_ppTexture);
+	if(m_ppTexture)
+		delete[](m_ppTexture);
 }
 
 void Renderer::Initialize(int windowSizeX, int windowSizeY)
@@ -67,19 +68,15 @@ void Renderer::DrawSolidRect(Vector2& vec2Pos, Vector2& vec2Size, Vector2& sprit
 	glBegin(GL_QUADS);
 
 		glTexCoord2f(fXStartPos, fYStartPos);
-
 		glVertex2d(vec2Pos.x - vec2Size.x / 2, vec2Pos.y - vec2Size.y / 2);
 
 		glTexCoord2f(fXStartPos, fYEndPos);
-
 		glVertex2d(vec2Pos.x - vec2Size.x / 2, vec2Pos.y + vec2Size.y / 2);
 
 		glTexCoord2f(fXEndPos, fYEndPos);
-
 		glVertex2d(vec2Pos.x + vec2Size.x / 2, vec2Pos.y + vec2Size.y / 2);
 
 		glTexCoord2f(fXEndPos, fYStartPos);
-
 		glVertex2d(vec2Pos.x + vec2Size.x / 2, vec2Pos.y - vec2Size.y / 2);
 
 	glEnd();

@@ -21,7 +21,6 @@ FrameWork::~FrameWork()
 
 void FrameWork::Run()
 {
-
 	m_tTime.Update(60.0f);
 
 	SendKeyStatus();
@@ -241,7 +240,8 @@ int FrameWork::SendKeyStatus()
 	retval = send(m_sockServer, (char*)&m_wInputSpecialkey, sizeof(WORD), 0);
 
 	if (retval == SOCKET_ERROR) {
-		error_display("send()");
+		std::cout << "서버와의 연결이 끊겼습니다." << std::endl;
+		glutLeaveMainLoop();
 		return SOCKET_ERROR;
 	}
 	return retval;
@@ -254,8 +254,9 @@ int FrameWork::RecvObjectStatus()
 
 	retval = recv(m_sockServer, m_RecvBuf, MAX_BUF, 0);
 	if (retval == INVALID_SOCKET) {
-		error_display("recv()");
-		return 0;
+		std::cout << "서버와의 연결이 끊겼습니다." << std::endl;
+		glutLeaveMainLoop();
+		return INVALID_SOCKET;
 	}
 
 #if defined APPLYTEST
@@ -293,7 +294,6 @@ int FrameWork::RecvObjectStatus()
 	m_pBufptr = m_RecvBuf;
 
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
-	//m_pBufptr += sizeof(WORD);
 
 	return retval;
 }

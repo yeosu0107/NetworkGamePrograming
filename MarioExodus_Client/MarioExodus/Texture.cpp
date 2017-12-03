@@ -41,7 +41,7 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 
 	if ((fp = fopen(filename, "rb")) == NULL)					// 1. 열기 실패
 	{
-		printf("Error 1\n");
+		printf("파일을 여는 데 실패했습니다.\n");
 		return NULL;
 	}
 	if (fread(&header, sizeof(BITMAPFILEHEADER), 1, fp) < 1)	// 2. 비트맵의 헤더 크기만큼 읽어오는데 성공해야 한다. 
@@ -114,7 +114,6 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 			m_pBitmap[x] = 255;
 		}
 	}
-	printf("Success\n");
 	fclose(fp);
 
 	return Vector2(m_pBitInfo->bmiHeader.biWidth, m_pBitInfo->bmiHeader.biHeight);

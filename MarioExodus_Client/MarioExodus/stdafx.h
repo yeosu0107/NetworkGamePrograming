@@ -64,6 +64,13 @@ struct RecvStageDataFormat {
 	bool IsOpen;
 };
 #pragma pack()
+
+#pragma pack(1)
+struct RecvStageBlockFormat {
+	WORD wxPos;
+	WORD wyPos;
+};
+#pragma pack()
 // 5.#pragma pack()
 void error_quit(char* msg);
 void error_display(char *msg);
