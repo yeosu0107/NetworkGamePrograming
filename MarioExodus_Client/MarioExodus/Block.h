@@ -16,8 +16,6 @@ public:
 public:
 	void InitBlock(Vector2 & vPos, Renderer* pRend);
 	void Render();
-	void Update();
-	void Move();
 	void AddDir(const int x) { m_iXDir += x; }
 	void SetXDir(const int x) { m_iXDir = x; }
 	void SetYDir(const int y) { m_iYDir = y; }

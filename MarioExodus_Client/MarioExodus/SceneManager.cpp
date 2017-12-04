@@ -39,11 +39,6 @@ void SceneManager::Update(float fElapsedTime, WORD& byInput)
 	for (Mario& pMa : m_pMario)
 		pMa.Update(fElapsedTime, byInput);
 
-	m_kKey.Update(fElapsedTime);
-	
-	if (m_pBlock != nullptr)
-		for (int i = 0; i < m_iBlockCount; i++)
-			m_pBlock[i].Update();
 }
 
 void SceneManager::Render()
@@ -65,69 +60,12 @@ void SceneManager::Render()
 			m_pWall[i].Render();
 
 }
-void SceneManager::CheckObjectCollision(WORD& byInput)
-{
-	
-	for (int i = 0; i < MaxMario; i++) {
-		if (m_pMario[i].IsExit()) continue;	// 마리오가 나간경우 충돌 체크 X
-
-		//if (byInput & KEY_X) m_kKey.CollisionMario(m_pMario[i]);				// X키가 눌린 경우 열쇠와 현재 마리오와 충돌 검사
-		//else m_kKey.SetMarioPtr(nullptr);										// 아닌 경우 열쇠가 마리오를 쫓지 않게 변경 
-
-		if (m_dDoor.CollisionMario(m_pMario[i])) m_iExitMarioCount++;			// 마리오가 열린 문과 충돌한 경우
-
-		m_pMario[i].CollisionScreen();
-
-		for (int j = 0; j < m_iBlockCount; ++j) {
-			m_pBlock[j].Collision(m_pMario[i]);
-			m_pMario[i].Collision(m_pBlock[j]);
-		}
-
-		for( int j = 0; j < m_iWallCount; ++j)	
-			m_pMario[i].Collision(m_pWall[j]);
-
-		for (int j = 0; j < MaxMario; j++) 
-			if (!m_pMario[j].IsExit() && i != j) m_pMario[i].Collision(m_pMario[j]);
-		
-
-		m_pMario[i].AfterCollision();	// 이동 후 Box오브젝트을 밀거나 Y축에 대해서만 후처리
-	}
-
-	//
-	for (int i = 0; i < m_iBlockCount; ++i) {
-		for(int j = 0; j < m_iWallCount; ++j)
-			m_pBlock[i].Collision(m_pWall[j]);
-
-		//for (int j = 0; j < m_iBlockCount; ++j) 
-		//	if (i != j) m_pBlock[i].Collision(m_pBlock[j]);
-		
-		m_pBlock[i].AfterCollision();
-		m_pBlock[i].CollisionScreen();
-
-	}
-	m_kKey.CollisionDoor(m_dDoor);
-}
 
 
 void SceneManager::Destroy()
 {
 	if (m_pBlock != nullptr) delete[] m_pBlock;
 	if (m_pWall != nullptr) delete[] m_pWall;
-}
-
-void SceneManager::ReadyToNextFrame()
-{
-	for (int i = 0; i < MaxMario; i++) {
-		m_pMario[i].GetCollObjects().clear();	// 충돌한 객체 초기화
-		m_pMario[i].SetCollside(0);		// 충돌한 방향 초기화
-	}
-
-	for (int i = 0; i < m_iBlockCount; ++i) {
-		m_pBlock[i].SetXDir(0);
-		m_pBlock[i].SetCollside(0);
-		m_pBlock[i].GetCollObjects().clear();
-		m_pBlock[i].SetYDir(0);
-	}
 }
 
 int SceneManager::ApplyObjectsStatus(char* buf)

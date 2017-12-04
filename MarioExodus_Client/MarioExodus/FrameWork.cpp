@@ -31,7 +31,6 @@ void FrameWork::Run()
 	
 	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
 
-	m_pScene[m_iStageNum].CheckObjectCollision(m_wInputSpecialkey);	// 충돌체크
 	m_pScene[m_iStageNum].Update(fElapsedTime, m_wInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
 	m_pScene[m_iStageNum].Render();			 // 렌더링
 
@@ -175,8 +174,6 @@ void FrameWork::InitFrameWork()
 
 void FrameWork::ReadyToNextFrame()
 {
-	m_pScene[m_iStageNum].ReadyToNextFrame();
-
 	if (m_wInputSpecialkey % 64 > 0)
 		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
 }

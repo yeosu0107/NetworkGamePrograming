@@ -43,7 +43,6 @@ public:
 	void Update(float fTimeElapsed, DWORD dwInputKey);
 	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
 
-	void Jump(const float fTimeElapsed);
 	void Render();
 	
 	void SetState(Mario::MarioJumpState eState) { m_eJumpState = eState; }

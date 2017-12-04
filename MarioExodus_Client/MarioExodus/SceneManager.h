@@ -27,10 +27,8 @@ public:
 	void InitSceneManager(int nStage, Vector2* prcvMario, Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, Vector2* pBlockPos, Renderer* pRend);
 	void Update(float fElapsedTime, WORD& byInput);
 	void Render();
-	void CheckObjectCollision(WORD& byInput);
 	void Destroy();
-	void ReadyToNextFrame();
-
+	
 	int  ApplyObjectsStatus(char* buf);
 
 	bool IsClear() { return m_iExitMarioCount == MaxMario; }

@@ -63,48 +63,6 @@ void Mario::SetMarioRecvData(RecvMarioDataFormat & rcvData)
 	SetPosition(pos);
 }
 
-void Mario::Jump(const float fTimeElapsed)
-{
-	WORD marioCollside = GetCollSide();
-
-	if (m_eJumpState == Jump_None && marioCollside & CollDown) return;
-	else if (m_eJumpState == Jump_None && !(marioCollside & CollDown))
-		m_eJumpState = Jump_Down;
-
-	int yDirection = 0;
-
-	Vector2 vec2Direction(0, 1);
-	Vector2 vec2pos = GetPosition();
-
-	if (m_eJumpState == Jump_Up) {
-		if (marioCollside & CollUp)	m_eJumpState = Jump_Down;
-		else {
-			yDirection += 1;
-			m_iCurJumpDist += yDirection * m_iValocity;
-		}
-	}
-	
-	else if (m_eJumpState == Jump_Down) {
-		if (marioCollside & CollDown)	m_eJumpState = Jump_None;
-		else						yDirection -= 1;
-	}
-
-	if (m_iCurJumpDist >= m_iMaxJumpDist)
-	{
-		m_iCurJumpDist = 0;
-		m_eJumpState = Jump_Down;
-	}
-
-	if (marioCollside & CollDown && marioCollside & CollUp) {
-		m_iCurJumpDist = 0;
-		m_eJumpState = Jump_None;
-	}
-
-	vec2pos.y += yDirection * m_iValocity;
-	SetPosition(vec2pos);
-
-}
-
 void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
 	if (m_eSpriteState == Exit) return;

@@ -31,26 +31,6 @@ void Key::InitKey(Vector2 & vPos, bool bUsedKey, Renderer * rend)
 	m_oDish.SetSize(Vector2(37, 9));
 }
 
-void Key::CollisionMario(Mario & other)
-{
-	if (m_bUsedKey) return;
-
-	if (Collision(other)) {
-		m_pGrabMario = &other;
-	}
-}
-
-
-void Key::CollisionDoor(Door & other)
-{
-	if (m_bUsedKey) return;
-
-	if (Collision(other)) {
-		other.SetOpen(true);
-		m_bUsedKey = true;
-	}
-}
-
 void Key::Update(float fTimeElapsed)
 {
 	if (m_pGrabMario != nullptr)
@@ -84,15 +64,4 @@ void Door::InitDoor(Vector2 & vPos, bool bOpen, Renderer* rend)
 	SetPosition(vPos);
 	SetSize(Vector2(48, 48));
 	m_bOpen = bOpen;
-}
-
-bool Door::CollisionMario(Mario & other)
-{
-	if (other.IsExit()) return false;
-	if (!Collision(other)) return false;
-	if (m_bOpen) {
-		other.SetSpriteState(Mario::MarioSprite::Exit);
-		return true;
-	}
-	return false;
 }

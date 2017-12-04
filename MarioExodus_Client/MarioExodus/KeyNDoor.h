@@ -15,7 +15,6 @@ public:
 public:
 	void Render();
 	void InitDoor(Vector2& vPos, bool bOpen, Renderer* rend);
-	bool CollisionMario(Mario& other);
 	
 	void SetOpen(bool bOpen) { m_bOpen = bOpen; }
 };
@@ -36,8 +35,6 @@ public:
 public:
 	void Render();
 	void InitKey(Vector2& vPos, bool bUsedKey, Renderer* rend);
-	void CollisionMario(Mario& other);
-	void CollisionDoor(Door& other);
 	void Update(float fTimeElapsed);
 	void SetMarioPtr(Mario * pMario);
 
