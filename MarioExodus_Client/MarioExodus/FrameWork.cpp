@@ -298,7 +298,7 @@ int FrameWork::RecvObjectStatus()
 	return retval;
 }
 
-int FrameWork::ApplySceneStatus()
+void FrameWork::ApplySceneStatus()
 {
-	return m_pScene[m_iStageNum].ApplyObjectsStatus(m_pBufptr);
+	m_pScene[m_iStageNum].ApplyObjectsStatus(m_pBufptr);
 }

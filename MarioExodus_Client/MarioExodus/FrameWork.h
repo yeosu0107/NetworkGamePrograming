@@ -30,7 +30,7 @@ public:
 	void KeyOutput(unsigned char key, int x, int y);
 	void InitFrameWork();
 	void ReadyToNextFrame();
-	int  ApplySceneStatus();
+	void  ApplySceneStatus();
 	int  ConnectServer();
 	bool IsGameEnd();
 
