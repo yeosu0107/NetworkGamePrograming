@@ -98,8 +98,8 @@ void SceneManager::CheckObjectCollision(WORD& byInput)
 		for(int j = 0; j < m_iWallCount; ++j)
 			m_pBlock[i].Collision(m_pWall[j]);
 
-		for (int j = 0; j < m_iBlockCount; ++j) 
-			if (i != j) m_pBlock[i].Collision(m_pBlock[j]);
+		//for (int j = 0; j < m_iBlockCount; ++j) 
+		//	if (i != j) m_pBlock[i].Collision(m_pBlock[j]);
 		
 		m_pBlock[i].AfterCollision();
 		m_pBlock[i].CollisionScreen();
@@ -148,6 +148,14 @@ int SceneManager::ApplyObjectsStatus(char* buf)
 		m_pMario[i].SetMarioRecvData(mariodata);
 		buf += sizeof(RecvMarioDataFormat);
 		retval += sizeof(RecvMarioDataFormat);
+	}
+
+	for (int i = 0; i < m_iBlockCount; ++i) {
+		RecvStageBlockFormat boxdata = *((RecvStageBlockFormat*)buf);
+		m_pBlock[i].SetPosition(Vector2(boxdata.wxPos, boxdata.wyPos));
+
+		buf += sizeof(RecvStageBlockFormat);
+		retval += sizeof(RecvStageBlockFormat);
 	}
 	return retval;
 }
