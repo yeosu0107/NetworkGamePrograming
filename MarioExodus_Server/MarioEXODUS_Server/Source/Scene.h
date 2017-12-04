@@ -19,8 +19,18 @@ private:
 	Mario		m_Mario[MaxMario];
 	Block*	m_pBlock;
 	Wall*		m_pWall;
+
+	Vector2* initMarioPos;
+	Vector2 initDoorPos;
+	Vector2 initKeyPos;
+	int initWallCount;
+	Vector2* initWallPos;
+	int initBlockCount;
+	Vector2* initBlockPos;
+
+
 public:
-	Scene() {}
+	Scene() { }
 	~Scene();
 
 	void InitScene(int nStage, Vector2* pMarioPos,

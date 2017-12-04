@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+
 Scene::~Scene()
 {
 	if(m_pBlock) delete m_pBlock;
@@ -36,6 +37,14 @@ void Scene::InitScene(int nStage, Vector2* pMarioPos,
 			m_pWall[i].InitWall(pWallPos[i]);
 		}
 	}
+
+	initMarioPos = pMarioPos;
+	initDoorPos = vDoorPos;
+	initKeyPos = vKeyPos;
+	initWallCount = iWallCount;
+	initWallPos= pWallPos;
+	initBlockCount= iBlockCount;
+	initBlockPos= pBlockPos;
 }
 
 void Scene::Update(float fElapsedTime, WORD* byInput1, WORD* byInput2)

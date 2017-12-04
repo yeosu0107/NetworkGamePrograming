@@ -35,7 +35,7 @@ DWORD WINAPI ClientThread(LPVOID arg)
 {
 	ClientControl* thisPoint = (ClientControl*)arg;
 	int ClientNum = thisPoint->getClientNum();
-	while (1) {
+	while (1) {	
 		if (thisPoint->RecvKeyStatus() == -1) {
 			delete thisPoint;
 			server->ClientDisconnect(ClientNum);
@@ -43,7 +43,7 @@ DWORD WINAPI ClientThread(LPVOID arg)
 		}
 		server->getRecvDatas(thisPoint->getClientNum(), thisPoint->getRecvBuf());
 		SetEvent(ClientRecvEvent[thisPoint->getClientNum()]);
-		WaitForSingleObject(InteractiveEvent, INFINITE);
+		WaitForSingleObject(InteractiveEvent, 400);
 		thisPoint->SendObjectsStatus();
 	}
 	return 0;
