@@ -202,6 +202,10 @@ void ServerControl::CombinationKeys()
 	tmpBuf += sizeof(StageDataFormat);
 
 	memcpy(tmpBuf, marioData, sizeof(MarioDataFormat) * 6);
+
+	tmpBuf += sizeof(MarioDataFormat) * 6;
+
+	memcpy(tmpBuf, blockData, sizeof(StageBlockFormat) * 2);
 }
 
 int ServerControl::getNumOfClient() {

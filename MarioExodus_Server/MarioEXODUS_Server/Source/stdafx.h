@@ -10,7 +10,7 @@ using namespace std;
 
 const int MaxMario = 6;
 const int MaxBlock = 2;
-const int MaxSendBuf = 73;
+const int MaxSendBuf = 81;
 const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
 const enum PlayerNumber { Player1, Player2 };
 
