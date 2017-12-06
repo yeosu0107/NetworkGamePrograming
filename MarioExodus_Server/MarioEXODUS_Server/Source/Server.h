@@ -16,6 +16,7 @@ private:
 	//데이터 버퍼
 	WORD* m_recvBufs[2];
 	char		m_sendBuf[MaxSendBuf];
+	char		m_backupBuf[MaxSendBuf];
 	
 	//게임 컨트롤
 	Scene m_pScene[MaxStage];
@@ -27,12 +28,15 @@ public:
 	ServerControl();
 	~ServerControl();
 
+	void InitGameScene();
+
 	bool IsClientFull();
 
 	void ClientDisconnect(int client);
 
 	void getRecvDatas(int m_iClientNum, char* m_recvData);
 	char* getSendData() { return m_sendBuf; }
+	char* getBackupData() { return m_backupBuf; }
 
 	void ClearBufs() {
 		memset(m_recvBufs, 0, sizeof(WORD*) * 2);
@@ -78,7 +82,7 @@ public:
 
 	void GetObjectsStatus();
 
-	int SendObjectsStatus();
+	int SendObjectsStatus(bool backup);
 
 	int getClientNum() const { return m_ClientNum; }
 

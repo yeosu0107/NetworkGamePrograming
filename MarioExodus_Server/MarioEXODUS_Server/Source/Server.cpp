@@ -35,6 +35,7 @@ DWORD WINAPI ClientThread(LPVOID arg)
 {
 	ClientControl* thisPoint = (ClientControl*)arg;
 	int ClientNum = thisPoint->getClientNum();
+	DWORD status;
 	while (1) {	
 		if (thisPoint->RecvKeyStatus() == -1) {
 			delete thisPoint;
@@ -43,8 +44,11 @@ DWORD WINAPI ClientThread(LPVOID arg)
 		}
 		server->getRecvDatas(thisPoint->getClientNum(), thisPoint->getRecvBuf());
 		SetEvent(ClientRecvEvent[thisPoint->getClientNum()]);
-		WaitForSingleObject(InteractiveEvent, 400);
-		thisPoint->SendObjectsStatus();
+		status = WaitForSingleObject(InteractiveEvent, 400);
+		if(status!=WAIT_FAILED)
+			thisPoint->SendObjectsStatus(false);
+		else
+			thisPoint->SendObjectsStatus(true);
 	}
 	return 0;
 }
@@ -65,6 +69,19 @@ ServerControl::ServerControl()
 	ClientRecvEvent[0] = CreateEvent(NULL, false, false, NULL);
 	ClientRecvEvent[1] = CreateEvent(NULL, false, false, NULL);
 
+	InitGameScene(); //게임 초기화
+
+	ClientNum[0] = false;
+	ClientNum[1] = false;
+}
+
+ServerControl::~ServerControl()
+{
+
+}
+
+void ServerControl::InitGameScene()
+{
 	//게임 초기 세팅
 	std::ifstream Input("InitialData.ini");
 
@@ -112,17 +129,7 @@ ServerControl::ServerControl()
 
 	m_iStageNum = 0;
 	memset(m_sendBuf, 0, sizeof(char)*MaxSendBuf);
-
-	ClientNum[0] = false;
-	ClientNum[1] = false;
 }
-
-ServerControl::~ServerControl()
-{
-
-}
-
-
 
 bool ServerControl::IsClientFull()
 {
@@ -206,6 +213,8 @@ void ServerControl::CombinationKeys()
 	tmpBuf += sizeof(MarioDataFormat) * 6;
 
 	memcpy(tmpBuf, blockData, sizeof(StageBlockFormat) * 2);
+
+	memcpy(m_backupBuf, m_sendBuf, MaxSendBuf);
 }
 
 int ServerControl::getNumOfClient() {
@@ -262,10 +271,13 @@ void ClientControl::GetObjectsStatus()
 	
 }
 
-int ClientControl::SendObjectsStatus()
+int ClientControl::SendObjectsStatus(bool backup)
 {
 	int retval = -1;
-	retval = send(*m_socket, server->getSendData(), MaxSendBuf, 0);
+	if(!backup)
+		retval = send(*m_socket, server->getSendData(), MaxSendBuf, 0);
+	else
+		retval = send(*m_socket, server->getBackupData(), MaxSendBuf, 0);
 	if (retval == SOCKET_ERROR) {
 		err_display("send()");
 	}
