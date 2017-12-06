@@ -258,39 +258,6 @@ int FrameWork::RecvObjectStatus()
 		glutLeaveMainLoop();
 		return INVALID_SOCKET;
 	}
-
-#if defined APPLYTEST
-	WORD				Stagenum = 2;
-	RecvMarioDataFormat marioData[6];
-	RecvStageDataFormat StageData;
-
-	m_pBufptr = m_RecvBuf;
-
-	memcpy(m_pBufptr, &Stagenum, sizeof(WORD));
-	m_pBufptr += sizeof(WORD);
-
-	StageData.IsOpen = true;
-	StageData.wKeyXPos = 300;
-	StageData.wKeyYPos = 400;
-
-	memcpy(m_pBufptr, &StageData, sizeof(RecvStageDataFormat));
-	m_pBufptr += sizeof(RecvStageDataFormat);
-
-	for (int i = 0; i < 6; ++i) {
-		marioData[i].bLookDirection		= true;
-		marioData[i].bSelect			= true;
-		marioData[i].isExit				= false;
-		marioData[i].iMarioNum			= i;
-		marioData[i].iMarioPlayerNum	= 0;
-		marioData[i].wxPos				= i * 100;
-		marioData[i].wyPos				= i * 100;
-		memcpy(m_pBufptr, &marioData[i], sizeof(RecvMarioDataFormat));
-		m_pBufptr += sizeof(RecvMarioDataFormat);
-	}
-
-	m_pBufptr = m_RecvBuf;
-#endif
-
 	m_pBufptr = m_RecvBuf;
 
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
