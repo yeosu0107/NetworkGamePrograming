@@ -3,11 +3,13 @@
 #include "SceneManager.h"
 #include "Time.h"
 #include "Renderer.h"
+#include "SoundManager.h"
 
 class FrameWork
 {
 private:
 	SceneManager	m_pScene[MaxStage];
+	SoundManager*	m_pSound;
 	WSADATA			m_wsa;
 	WORD 			m_wInputSpecialkey;
 	SOCKET			m_sockServer;

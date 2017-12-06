@@ -22,18 +22,18 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_Initialized = true;
 
 	m_ppTexture = new Texture*[12];
-	m_ppTexture[Texture::TextureNumber::Mario_Sprite]	= new Texture("Resource\\Mario_52_52.bmp", 4, 4);
-	m_ppTexture[Texture::TextureNumber::Mario_None]		= new Texture("Resource\\Mario_Null_52_52.bmp", 1, 1);
-	m_ppTexture[Texture::TextureNumber::Marios_Number]	= new Texture("Resource\\Number_120_18.bmp", 6 ,1);
-	m_ppTexture[Texture::TextureNumber::BackSky]		= new Texture("Resource\\BackGround_1280_720.bmp", 1 ,1);
-	m_ppTexture[Texture::TextureNumber::Block]			= new Texture("Resource\\Block_52_52.bmp", 1 , 1);
-	m_ppTexture[Texture::TextureNumber::Door]			= new Texture("Resource\\Door_52_52.bmp", 2 , 1);
-	m_ppTexture[Texture::TextureNumber::Key]			= new Texture("Resource\\Key_30_30.bmp", 1 ,1 );
-	m_ppTexture[Texture::TextureNumber::Key_Dish]		= new Texture("Resource\\Key_Dish_37_9.bmp", 1 , 1);
-	m_ppTexture[Texture::TextureNumber::Main_Rogo]		= new Texture("Resource\\Main_Rogo_528_168.bmp", 1 ,1 );
-	m_ppTexture[Texture::TextureNumber::Press_C]		= new Texture("Resource\\Press_C_Start_326_78.bmp", 1 , 1);
-	m_ppTexture[Texture::TextureNumber::Wall]			= new Texture("Resource\\Wall_52_52.bmp", 1, 1);
-	m_ppTexture[Texture::TextureNumber::GameOver]		= new Texture("Resource\\GameOver_528_168.bmp", 1, 1);
+	m_ppTexture[Texture::TextureNumber::Mario_Sprite]	= new Texture("Resource\\Texture\\Mario_52_52.bmp", 4, 4);
+	m_ppTexture[Texture::TextureNumber::Mario_None]		= new Texture("Resource\\Texture\\Mario_Null_52_52.bmp", 1, 1);
+	m_ppTexture[Texture::TextureNumber::Marios_Number]	= new Texture("Resource\\Texture\\Number_120_18.bmp", 6 ,1);
+	m_ppTexture[Texture::TextureNumber::BackSky]		= new Texture("Resource\\Texture\\BackGround_1280_720.bmp", 1 ,1);
+	m_ppTexture[Texture::TextureNumber::Block]			= new Texture("Resource\\Texture\\Block_52_52.bmp", 1 , 1);
+	m_ppTexture[Texture::TextureNumber::Door]			= new Texture("Resource\\Texture\\Door_52_52.bmp", 2 , 1);
+	m_ppTexture[Texture::TextureNumber::Key]			= new Texture("Resource\\Texture\\Key_30_30.bmp", 1 ,1 );
+	m_ppTexture[Texture::TextureNumber::Key_Dish]		= new Texture("Resource\\Texture\\Key_Dish_37_9.bmp", 1 , 1);
+	m_ppTexture[Texture::TextureNumber::Main_Rogo]		= new Texture("Resource\\Texture\\Main_Rogo_528_168.bmp", 1 ,1 );
+	m_ppTexture[Texture::TextureNumber::Press_C]		= new Texture("Resource\\Texture\\Press_C_Start_326_78.bmp", 1 , 1);
+	m_ppTexture[Texture::TextureNumber::Wall]			= new Texture("Resource\\Texture\\Wall_52_52.bmp", 1, 1);
+	m_ppTexture[Texture::TextureNumber::GameOver]		= new Texture("Resource\\Texture\\GameOver_528_168.bmp", 1, 1);
 }
 
 bool Renderer::IsInitialized()

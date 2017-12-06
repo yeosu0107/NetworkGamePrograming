@@ -3,6 +3,9 @@
 
 SceneManager::SceneManager()
 {
+	m_pBlock = NULL;
+	m_pWall = NULL;
+	m_pSound = NULL;
 }
 
 
@@ -11,7 +14,8 @@ SceneManager::~SceneManager()
 	Destroy();
 }
 
-void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, Vector2* pBlockPos, Renderer* pRend)
+void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, 
+	Vector2* pBlockPos, Renderer* pRend, SoundManager* pSound)
 {
 	for (int i = 0; i < MaxMario; i++)
 		m_pMario[i].InitMario(i, pMarioPos[i], pRend);
@@ -19,7 +23,9 @@ void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoo
 	m_iExitMarioCount = 0;
 	m_iBlockCount = iBlockCount;
 	m_iWallCount = iWallCount;
+	m_pSound = pSound;
 	m_bBackGround = BackGround(nStage, pRend);
+	m_iPreExitMario = 0;
 
 	bool bReadyStage = nStage == 0 ? true : false;
 
@@ -35,9 +41,16 @@ void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoo
 
 void SceneManager::Update(float fElapsedTime, WORD& byInput)
 {
-	
-	for (Mario& pMa : m_pMario)
+	for (Mario& pMa : m_pMario) {
 		pMa.Update(fElapsedTime, byInput);
+		if (pMa.IsStartJump()) {
+			m_pSound->Play(SoundType::JumpSound);
+		}
+	}
+	if (GetExitMarios() > m_iPreExitMario) {
+		m_pSound->Play(SoundType::ExitSound);
+		m_iPreExitMario = GetExitMarios();
+	}
 
 }
 
@@ -66,6 +79,15 @@ void SceneManager::Destroy()
 {
 	if (m_pBlock != nullptr) delete[] m_pBlock;
 	if (m_pWall != nullptr) delete[] m_pWall;
+}
+
+int SceneManager::GetExitMarios()
+{
+	int result = 0;
+	for (int i = 0; i < MaxMario; ++i)
+		if (m_pMario[i].IsExit())
+			result++;
+	return result;
 }
 
 int SceneManager::ApplyObjectsStatus(char* buf)

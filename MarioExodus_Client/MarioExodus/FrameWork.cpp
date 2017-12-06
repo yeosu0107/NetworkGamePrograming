@@ -13,27 +13,29 @@ FrameWork::FrameWork()
 FrameWork::~FrameWork()
 {
 	delete(m_pRenderer);
+	delete(m_pSound);
+
 	for (int i = 0; i < MaxStage; i++)
 		m_pScene[i].Destroy();
+
 	closesocket(m_sockServer);
 	WSACleanup();
 }
 
 void FrameWork::Run()
 {
-	m_tTime.Update(60.0f);
+	m_tTime.Update(40.0f);
 
 	SendKeyStatus();
 	RecvObjectStatus();
 	ApplySceneStatus();
-	if (m_pScene[m_iStageNum].IsClear()) 
-		m_iStageNum++;	// 스테이지 클리어 확인
 	
 	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
 
 	m_pScene[m_iStageNum].Update(fElapsedTime, m_wInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
 	m_pScene[m_iStageNum].Render();			 // 렌더링
 
+	m_pSound->Update();
 	ReadyToNextFrame();
 	m_tTime.Tock();		// 현재시간 -> 이전 시간으로 변경
 	glutSetWindowTitle(m_tTime.GetFrameTime().c_str());	// 타이틀 메시지 변경
@@ -131,6 +133,9 @@ void FrameWork::InitFrameWork()
 	int iWallCount;
 
 	m_pRenderer = new Renderer(Screen_Width, Screen_Height);
+	m_pSound = new SoundManager();
+
+	m_pSound->Play(SoundType::BGMSound);
 
 	for (int i = 0; i < MaxStage; ++i) {
 		for (int j = 0; j < MaxMario; ++j) {
@@ -155,7 +160,7 @@ void FrameWork::InitFrameWork()
 			Input >> pWallPos[j].x >> pWallPos[j].y;
 		}
 
-		m_pScene[i].InitSceneManager(i, pMarioPos, vDoorPos, vKeyPos, iWallCount, pWallPos, iBlockCount, pBlockPos, m_pRenderer);
+		m_pScene[i].InitSceneManager(i, pMarioPos, vDoorPos, vKeyPos, iWallCount, pWallPos, iBlockCount, pBlockPos, m_pRenderer, m_pSound);
 
 		if (pBlockPos != nullptr)	delete[](pBlockPos);
 		pBlockPos = nullptr;
@@ -176,6 +181,9 @@ void FrameWork::ReadyToNextFrame()
 {
 	if (m_wInputSpecialkey % 64 > 0)
 		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
+
+	if (!m_pSound->IsPlaying(SoundType::StageClearSound) && !m_pSound->IsPlaying(SoundType::BGMSound))
+		m_pSound->Play(SoundType::BGMSound);
 }
 
 
@@ -195,7 +203,7 @@ int FrameWork::ConnectServer()
 	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
 
 	while (retval == SOCKET_ERROR) {
-
+#define TEST
 #if defined TEST
 		::ZeroMemory(&IPbuf, sizeof(IPbuf));
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
@@ -259,6 +267,10 @@ int FrameWork::RecvObjectStatus()
 		return INVALID_SOCKET;
 	}
 	m_pBufptr = m_RecvBuf;
+
+	if (m_iStageNum != *(WORD*)m_pBufptr) 
+		m_pSound->Play(SoundType::StageClearSound);
+	
 
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
 

@@ -14,15 +14,14 @@ Mario::~Mario()
 void Mario::InitMario(int nNum, Vector2& vpos, Renderer * pRenderer)
 {
 	m_bSelect = false;
-	m_iValocity = 5;
 	m_iMarioNum = nNum;
 	m_fTimePerAction = 8.0f;
 	m_bLookDirection = false;
 	m_iMarioPlayerNum = m_iMarioNum % 2;
 	m_eSpriteState = Mario::MarioSprite::Sprite_None;
 	m_eJumpState = Jump_None;
-	m_iMaxJumpDist = 60;
-	m_iCurJumpDist = 0;
+	m_bCurJump = false;
+	m_bPreJump = false;
 	m_bExit = false;
 
 	SetObjectType(MARIO);
@@ -63,11 +62,20 @@ void Mario::SetMarioRecvData(RecvMarioDataFormat & rcvData)
 	SetPosition(pos);
 }
 
+bool Mario::IsStartJump()
+{
+	if (!m_bCurJump)	// 점프 중이 아니라면 false를 반환한다. 점프를 시작 했을 때만을 판단하기 위함
+		return false;
+	
+	bool result = !(m_bCurJump == m_bPreJump);
+	m_bPreJump = m_bCurJump;
+
+	return result;
+}
+
 void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
 {
 	if (m_eSpriteState == Exit) return;
-
-	
 	SpriteUpdate(fTimeElapsed, dwInputKey);
 }
 
@@ -85,23 +93,14 @@ void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
 
 	else {
 		m_eSpriteState = Sprite_None;
+		m_bPreJump = m_bCurJump;
+		m_bCurJump = false;
 		m_fActionTime = 0.0f;	// 만약 아무키도 안눌려 있고 마리오가 점프 상태가 아닌 경우 프레임 시간을 초기화해준다.
 	}
 
 	if (curPos.y != prePos.y) {
 		m_eSpriteState = Sprite_Jump;
+		m_bPreJump = m_bCurJump;
+		m_bCurJump = true;
 	}
-
-	
-	/*
-	
-
-	if (dwInputKey == 0 && m_eSpriteState != Sprite_Jump) m_fActionTime = 0.0f;	// 만약 아무키도 안눌려 있고 마리오가 점프 상태가 아닌 경우 프레임 시간을 초기화해준다.
-	if (m_eSpriteState == Sprite_None) return;
-
-	if (m_eSpriteState != Sprite_Jump) {
-		m_fActionTime += fTimeElapsed;
-		m_eSpriteState = (MarioSprite)((int)(m_fActionTime * m_fTimePerAction) % 2 + 1);
-	}
-	*/
 }

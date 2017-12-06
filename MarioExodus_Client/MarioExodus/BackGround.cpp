@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BackGround.h"
 
-
 BackGround::BackGround()
 {
 }
@@ -46,7 +45,6 @@ void BackGround::Render()
 
 	if (m_nStage == 0) {
 		GetRenderer()->DrawSolidRect(m_pObject[Rogo].GetPosition(), m_pObject[Rogo].GetSize(), Vector2(0, 0), Texture::TextureNumber::Main_Rogo);
-		GetRenderer()->DrawSolidRect(m_pObject[PressButton].GetPosition(), m_pObject[PressButton].GetSize(), Vector2(0, 0), Texture::TextureNumber::Press_C);
 	}
 	else if (m_nStage == MaxStage - 1) {
 		GetRenderer()->DrawSolidRect(m_pObject[Rogo].GetPosition(), m_pObject[Rogo].GetSize(), Vector2(0, 0), Texture::TextureNumber::GameOver);

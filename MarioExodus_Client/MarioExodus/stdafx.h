@@ -1,7 +1,6 @@
 #pragma once
 #pragma warning (disable : 4819)
 
-
 #include "targetver.h"
 
 #pragma comment(lib, "ws2_32")
@@ -19,14 +18,23 @@
 
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
+#include "Dependencies\fmod.h"
+#include "Dependencies\fmod.hpp"
 
 #pragma comment(lib,"Winmm.lib")
 
+#if defined (_WIN64)
+#pragma comment(lib,"Dependencies\\fmod64_vc.lib")
+#else
+#pragma comment(lib,"Dependencies\\fmod_vc.lib")
+#endif
 
 // DEFINE
 const int MaxMario = 6;
-const enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
-const enum PlayerNumber {Player1, Player2};
+const int MaxSound = 4;
+enum ObjectType { MARIO, BLOCK, WALL, KEY, DOOR };
+enum PlayerNumber {Player1, Player2};
+enum SoundType { BGMSound , JumpSound , ExitSound , StageClearSound };
 
 const UINT Screen_Width = 1280;
 const UINT Screen_Height = 720;

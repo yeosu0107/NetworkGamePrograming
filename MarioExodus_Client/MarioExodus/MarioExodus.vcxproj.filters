@@ -43,6 +43,21 @@
     <Filter Include="Time Class\Source">
       <UniqueIdentifier>{1ebbfdd6-8fe2-455c-98fb-4e310918f051}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture\Header">
+      <UniqueIdentifier>{21da51bc-8bfc-43ab-be38-74fab8eead95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture\Source">
+      <UniqueIdentifier>{9365c88f-7932-4c68-aa1e-5adc6973ee77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{b0c4a5fd-883c-4e46-9d05-03da09c8a14e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\Header">
+      <UniqueIdentifier>{56e0a48c-2755-4fd2-9fc4-d830f188f023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\Source">
+      <UniqueIdentifier>{61bc0647-9c15-4585-b4b5-5db6fae4eef8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -64,9 +79,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
@@ -93,6 +105,12 @@
     <ClInclude Include="Block.h">
       <Filter>Object Class\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Texture\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,9 +129,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
@@ -139,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Object Class\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Texture\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Sound\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
