@@ -5,7 +5,7 @@
 #include "Renderer.h"
 #include "SoundManager.h"
 
-unsigned __stdcall CommunicationServer();
+unsigned __stdcall CommunicationServer(void* arg);
 
 class FrameWork
 {
@@ -41,7 +41,6 @@ public:
 	void ApplySceneStatus();
 	void Update();
 	int  ConnectServer();
-	bool IsGameEnd();
 
 public:
 	int SendKeyStatus();

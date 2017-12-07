@@ -32,7 +32,7 @@ void BackGround::InitBackGround(int stage, Renderer* pRend)
 	}
 
 	else if (m_nStage == MaxStage - 1) {
-		m_pObject[Rogo].SetSize(Vector2(528, 168));
+		m_pObject[Rogo].SetSize(Vector2(528, 300));
 		m_pObject[Rogo].SetPosition(Vector2(Screen_Width / 2, Screen_Height / 2 + 200));
 
 	}

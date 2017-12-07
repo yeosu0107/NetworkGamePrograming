@@ -33,7 +33,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_ppTexture[Texture::TextureNumber::Main_Rogo]		= new Texture("Resource\\Texture\\Main_Rogo_528_168.bmp", 1 ,1 );
 	m_ppTexture[Texture::TextureNumber::Press_C]		= new Texture("Resource\\Texture\\Press_C_Start_326_78.bmp", 1 , 1);
 	m_ppTexture[Texture::TextureNumber::Wall]			= new Texture("Resource\\Texture\\Wall_52_52.bmp", 1, 1);
-	m_ppTexture[Texture::TextureNumber::GameOver]		= new Texture("Resource\\Texture\\GameOver_528_168.bmp", 1, 1);
+	m_ppTexture[Texture::TextureNumber::GameOver]		= new Texture("Resource\\Texture\\GameOver_528_300.bmp", 1, 1);
 }
 
 bool Renderer::IsInitialized()

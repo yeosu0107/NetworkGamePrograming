@@ -269,15 +269,6 @@ int FrameWork::ConnectServer()
 	return retval;
 }
 
-bool FrameWork::IsGameEnd()
-{
-	if (m_iStageNum > MaxStage)
-		return true;
-
-	else
-		return false;
-}
-
 int FrameWork::SendKeyStatus()
 {
 	int retval;
