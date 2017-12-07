@@ -5,6 +5,8 @@
 #include "Renderer.h"
 #include "SoundManager.h"
 
+unsigned __stdcall CommunicationServer();
+
 class FrameWork
 {
 private:
@@ -17,22 +19,27 @@ private:
 	Time			m_tTime;
 	Renderer*		m_pRenderer;
 
+	HANDLE			m_hThreadHandle;
 	char			m_RecvBuf[MAX_BUF];
 	char*			m_pBufptr = nullptr;
+
+	bool			m_bFirstFrame;
+	bool			m_bRun;
 
 public:
 	FrameWork();
 	~FrameWork();
 
 public:
-	void Run();
+	bool Run();
 	void SpecialKeyInput(int key, int x, int y);
 	void SpecialKeyOutput(int key, int x, int y);
 	void KeyInput(unsigned char key, int x, int y);
 	void KeyOutput(unsigned char key, int x, int y);
 	void InitFrameWork();
 	void ReadyToNextFrame();
-	void  ApplySceneStatus();
+	void ApplySceneStatus();
+	void Update();
 	int  ConnectServer();
 	bool IsGameEnd();
 

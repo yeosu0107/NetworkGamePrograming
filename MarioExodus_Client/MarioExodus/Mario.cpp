@@ -64,22 +64,24 @@ void Mario::SetMarioRecvData(RecvMarioDataFormat & rcvData)
 
 bool Mario::IsStartJump()
 {
-	if (!m_bCurJump)	// 점프 중이 아니라면 false를 반환한다. 점프를 시작 했을 때만을 판단하기 위함
+	if (m_bExit ||!m_bCurJump)	// 점프 중이 아니라면 false를 반환한다. 점프를 시작 했을 때만을 판단하기 위함
 		return false;
 	
-	bool result = !(m_bCurJump == m_bPreJump);
-	m_bPreJump = m_bCurJump;
+	Vector2 curPos = GetPosition();
+	Vector2 prePos = GetPrePosition();
+
+	bool result = (m_bCurJump && !(m_bCurJump == m_bPreJump));
 
 	return result;
 }
 
-void Mario::Update(float fTimeElapsed, DWORD dwInputKey)
+void Mario::Update(float fTimeElapsed)
 {
 	if (m_eSpriteState == Exit) return;
-	SpriteUpdate(fTimeElapsed, dwInputKey);
+	SpriteUpdate(fTimeElapsed);
 }
 
-void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
+void Mario::SpriteUpdate(float fTimeElapsed)
 {
 	Vector2 curPos = GetPosition();
 	Vector2 prePos = GetPrePosition();
@@ -93,14 +95,17 @@ void Mario::SpriteUpdate(float fTimeElapsed, DWORD dwInputKey)
 
 	else {
 		m_eSpriteState = Sprite_None;
-		m_bPreJump = m_bCurJump;
-		m_bCurJump = false;
 		m_fActionTime = 0.0f;	// 만약 아무키도 안눌려 있고 마리오가 점프 상태가 아닌 경우 프레임 시간을 초기화해준다.
 	}
 
 	if (curPos.y != prePos.y) {
 		m_eSpriteState = Sprite_Jump;
-		m_bPreJump = m_bCurJump;
-		m_bCurJump = true;
 	}
+
+	m_bPreJump = m_bCurJump;
+	m_bCurJump = (curPos.y > prePos.y);	
+	/*
+		점프를 시작한 조건
+			1. y축으로 이동한 거리가 <= 0에서 > 0 으로 바뀐 경우  
+	*/
 }

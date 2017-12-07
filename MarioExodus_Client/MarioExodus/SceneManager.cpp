@@ -39,10 +39,10 @@ void SceneManager::InitSceneManager(int nStage, Vector2* pMarioPos,Vector2& vDoo
 	for (int i = 0; i < m_iWallCount; i++) m_pWall[i].InitWall(pWallPos[i], pRend);
 }
 
-void SceneManager::Update(float fElapsedTime, WORD& byInput)
+void SceneManager::Update(float fElapsedTime)
 {
 	for (Mario& pMa : m_pMario) {
-		pMa.Update(fElapsedTime, byInput);
+		pMa.Update(fElapsedTime);
 		if (pMa.IsStartJump()) {
 			m_pSound->Play(SoundType::JumpSound);
 		}

@@ -15,7 +15,6 @@ public:
 public:
 	void Play(SoundType index);
 	void Stop(SoundType index);
-	void Update();
 	bool IsPlaying(SoundType index);
 };
 

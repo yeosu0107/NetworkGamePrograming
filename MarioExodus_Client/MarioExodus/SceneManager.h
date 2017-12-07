@@ -29,7 +29,7 @@ public:
 public:
 	void InitSceneManager(int nStage, Vector2* prcvMario, Vector2& vDoorPos, Vector2& vKeyPos, int iWallCount, Vector2* pWallPos, int iBlockCount, 
 		Vector2* pBlockPos, Renderer* pRend, SoundManager* pSound);
-	void Update(float fElapsedTime, WORD& byInput);
+	void Update(float fElapsedTime);
 	void Render();
 	void Destroy();
 

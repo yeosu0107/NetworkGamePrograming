@@ -3,6 +3,35 @@
 #include <fstream>
 
 //#define APPLYTEST
+CRITICAL_SECTION UpdateRenderCriticalSection;
+
+unsigned __stdcall CommunicationServer(void* arg)
+{
+	int retval = 0;
+	float fElapsedTime;	// 시간 갱신
+
+	FrameWork* pFrameWork = (FrameWork*)arg;
+	Time threadTime;
+
+	while (retval != INVALID_SOCKET) {
+		threadTime.Update(30.0f);
+
+		retval = pFrameWork->SendKeyStatus();
+		if (retval == INVALID_SOCKET)
+			break;
+
+		retval = pFrameWork->RecvObjectStatus();
+
+		EnterCriticalSection(&UpdateRenderCriticalSection);
+			pFrameWork->ApplySceneStatus();
+			pFrameWork->Update();
+			pFrameWork->ReadyToNextFrame();
+		LeaveCriticalSection(&UpdateRenderCriticalSection);
+
+		threadTime.Tock();
+	}
+	return 0;
+}
 
 FrameWork::FrameWork()
 {
@@ -18,27 +47,26 @@ FrameWork::~FrameWork()
 	for (int i = 0; i < MaxStage; i++)
 		m_pScene[i].Destroy();
 
+	if (m_hThreadHandle != NULL)
+		CloseHandle(m_hThreadHandle);
+
+	DeleteCriticalSection(&UpdateRenderCriticalSection);
 	closesocket(m_sockServer);
 	WSACleanup();
 }
 
-void FrameWork::Run()
+bool FrameWork::Run()
 {
-	m_tTime.Update(40.0f);
-
-	SendKeyStatus();
-	RecvObjectStatus();
-	ApplySceneStatus();
+	m_tTime.Update(60.0f);
 	
-	float fElapsedTime = m_tTime.Tick();	// 시간 갱신
+	EnterCriticalSection(&UpdateRenderCriticalSection);
+		m_pScene[m_iStageNum].Render();			 // 렌더링
+	LeaveCriticalSection(&UpdateRenderCriticalSection);
 
-	m_pScene[m_iStageNum].Update(fElapsedTime, m_wInputSpecialkey);	// 업데이트 , Move등이 여기서 호출
-	m_pScene[m_iStageNum].Render();			 // 렌더링
-
-	m_pSound->Update();
-	ReadyToNextFrame();
 	m_tTime.Tock();		// 현재시간 -> 이전 시간으로 변경
 	glutSetWindowTitle(m_tTime.GetFrameTime().c_str());	// 타이틀 메시지 변경
+
+	return m_bRun;
 }
 
 void FrameWork::SpecialKeyInput(int key, int x, int y)
@@ -134,8 +162,13 @@ void FrameWork::InitFrameWork()
 
 	m_pRenderer = new Renderer(Screen_Width, Screen_Height);
 	m_pSound = new SoundManager();
-
+	
+	m_bFirstFrame = true;
+	m_hThreadHandle = NULL;
 	m_pSound->Play(SoundType::BGMSound);
+	m_bRun = true;
+
+	InitializeCriticalSection(&UpdateRenderCriticalSection);
 
 	for (int i = 0; i < MaxStage; ++i) {
 		for (int j = 0; j < MaxMario; ++j) {
@@ -179,6 +212,9 @@ void FrameWork::InitFrameWork()
 
 void FrameWork::ReadyToNextFrame()
 {
+	if (m_bFirstFrame)
+		m_bFirstFrame = false;
+
 	if (m_wInputSpecialkey % 64 > 0)
 		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
 
@@ -203,7 +239,6 @@ int FrameWork::ConnectServer()
 	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
 
 	while (retval == SOCKET_ERROR) {
-#define TEST
 #if defined TEST
 		::ZeroMemory(&IPbuf, sizeof(IPbuf));
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
@@ -229,7 +264,8 @@ int FrameWork::ConnectServer()
 		retval = connect(m_sockServer, (SOCKADDR*)&clientAddr, sizeof(clientAddr));
 		if (retval == SOCKET_ERROR) error_quit("connect()");
 	}
-
+	
+	m_hThreadHandle = (HANDLE)_beginthreadex(NULL, 0, CommunicationServer, (void*)this, 0, NULL);
 	return retval;
 }
 
@@ -249,7 +285,7 @@ int FrameWork::SendKeyStatus()
 
 	if (retval == SOCKET_ERROR) {
 		std::cout << "서버와의 연결이 끊겼습니다." << std::endl;
-		glutLeaveMainLoop();
+		m_bRun = false;
 		return SOCKET_ERROR;
 	}
 	return retval;
@@ -263,14 +299,13 @@ int FrameWork::RecvObjectStatus()
 	retval = recv(m_sockServer, m_RecvBuf, MAX_BUF, 0);
 	if (retval == INVALID_SOCKET) {
 		std::cout << "서버와의 연결이 끊겼습니다." << std::endl;
-		glutLeaveMainLoop();
+		m_bRun = false;
 		return INVALID_SOCKET;
 	}
 	m_pBufptr = m_RecvBuf;
 
-	if (m_iStageNum != *(WORD*)m_pBufptr) 
+	if (!m_bFirstFrame && m_iStageNum != *(WORD*)m_pBufptr) 
 		m_pSound->Play(SoundType::StageClearSound);
-	
 
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
 
@@ -280,4 +315,10 @@ int FrameWork::RecvObjectStatus()
 void FrameWork::ApplySceneStatus()
 {
 	m_pScene[m_iStageNum].ApplyObjectsStatus(m_pBufptr);
+}
+
+void FrameWork::Update()
+{
+	float fElapsedTime = m_tTime.Tick();
+	m_pScene[m_iStageNum].Update(fElapsedTime);	// 업데이트 , Move등이 여기서 호출
 }
