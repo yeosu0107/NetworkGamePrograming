@@ -24,6 +24,8 @@ private:
 
 	bool ClientNum[2];
 
+	int resetGameTimer = 0;
+
 public:
 	ServerControl();
 	~ServerControl();

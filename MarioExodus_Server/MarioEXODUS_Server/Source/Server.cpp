@@ -180,6 +180,15 @@ void ServerControl::ChangeSceneCheck()
 {
 	if (m_pScene[m_iStageNum].IsClear())
 		m_iStageNum++;
+
+	if (m_iStageNum == MaxStage-1) {
+		resetGameTimer += 1;
+		if (resetGameTimer >= 300) {
+			resetGameTimer = 0;
+			InitGameScene();
+		}
+	}
+
 	m_pScene[m_iStageNum].ReadyToNextFrame();
 }
 
