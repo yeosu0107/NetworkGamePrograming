@@ -51,8 +51,10 @@ int main(void)
 		addrlen = sizeof(clientaddr);
 		*client_sock = accept(listen_sock, (SOCKADDR *)&clientaddr, &addrlen);
 		
-		if (!server->IsClientFull())
+		if (!server->IsClientFull()) {
+			closesocket(*client_sock);
 			continue; //클라이언트가 꽉차면 스레드 생성 안함
+		}
 		
 		if (*client_sock == INVALID_SOCKET) {
 			err_display("accept()");

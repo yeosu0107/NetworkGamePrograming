@@ -133,7 +133,7 @@ void ServerControl::InitGameScene()
 
 bool ServerControl::IsClientFull()
 {
-	if (m_NumOfClient > 2)
+	if (m_NumOfClient >= 2)
 		return false;
 
 	m_NumOfClient += 1;
