@@ -14,7 +14,7 @@ Mario::~Mario()
 void Mario::InitMario(int nNum, Vector2& vpos)
 {
 	m_bSelect = false;
-	m_iValocity = 5;
+	m_iValocity = 7;
 	m_iMarioNum = nNum;
 	m_fTimePerAction = 8.0f;
 	m_bLookDirection = false;
