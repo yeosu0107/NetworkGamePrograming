@@ -68,19 +68,6 @@ void SoundManager::Stop(SoundType index)
 	m_ppFmodChannel[index]->stop();
 }
 
-void SoundManager::Update()
-{
-	bool result;
-	for (int i = 0; i < MaxSound; ++i) {
-		if (m_ppFmodChannel[i] == NULL)
-			continue;
-
-		m_ppFmodChannel[i]->isPlaying(&result);
-		if (!result)
-			m_ppFmodChannel[i]->stop();
-	}
-
-}
 
 bool SoundManager::IsPlaying(SoundType index)
 {

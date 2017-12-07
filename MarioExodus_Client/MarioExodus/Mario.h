@@ -41,8 +41,8 @@ public:
 	bool IsJump() const { return m_bCurJump; }
 	bool IsStartJump();
 
-	void Update(float fTimeElapsed, DWORD dwInputKey);
-	void SpriteUpdate(float fTimeElapsed, DWORD dwInputKey);
+	void Update(float fTimeElapsed);
+	void SpriteUpdate(float fTimeElapsed);
 
 	void Render();
 	
