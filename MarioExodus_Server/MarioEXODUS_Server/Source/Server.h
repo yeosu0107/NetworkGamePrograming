@@ -80,8 +80,6 @@ public:
 
 	int RecvKeyStatus();
 
-	void GetObjectsStatus();
-
 	int SendObjectsStatus(bool backup);
 
 	int getClientNum() const { return m_ClientNum; }

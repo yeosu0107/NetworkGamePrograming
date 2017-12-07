@@ -266,11 +266,6 @@ int ClientControl::RecvKeyStatus()
 
 
 
-void ClientControl::GetObjectsStatus()
-{
-	
-}
-
 int ClientControl::SendObjectsStatus(bool backup)
 {
 	int retval = -1;
