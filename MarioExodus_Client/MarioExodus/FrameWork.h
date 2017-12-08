@@ -5,7 +5,7 @@
 #include "Renderer.h"
 #include "SoundManager.h"
 
-unsigned __stdcall CommunicationServer(void* arg);
+DWORD WINAPI CommunicationServer(void* arg);
 
 class FrameWork
 {

@@ -5,7 +5,7 @@
 //#define APPLYTEST
 CRITICAL_SECTION UpdateRenderCriticalSection;
 
-unsigned __stdcall CommunicationServer(void* arg)
+DWORD WINAPI CommunicationServer(void* arg)
 {
 	int retval = 0;
 	float fElapsedTime;	// 시간 갱신
@@ -262,10 +262,10 @@ int FrameWork::ConnectServer()
 		clientAddr.sin_port = htons(clientPort);
 #endif
 		retval = connect(m_sockServer, (SOCKADDR*)&clientAddr, sizeof(clientAddr));
-		if (retval == SOCKET_ERROR) error_quit("connect()");
+		if (retval == SOCKET_ERROR) std::cout << "연결에 실패했습니다. IP주소와 포트번호를 확인해주세요." << std::endl << std::endl;
 	}
 	
-	m_hThreadHandle = (HANDLE)_beginthreadex(NULL, 0, CommunicationServer, (void*)this, 0, NULL);
+	m_hThreadHandle = CreateThread(NULL, 0, CommunicationServer, (void*)this, 0, NULL);
 	return retval;
 }
 
@@ -299,7 +299,6 @@ int FrameWork::RecvObjectStatus()
 		m_pSound->Play(SoundType::StageClearSound);
 
 	m_iStageNum = *(WORD*)m_pBufptr; // 현재 스테이지 레벨을 FrameWork단계에서 읽어온다.
-
 	return retval;
 }
 
