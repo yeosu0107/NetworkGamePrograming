@@ -215,8 +215,7 @@ void FrameWork::ReadyToNextFrame()
 	if (m_bFirstFrame)
 		m_bFirstFrame = false;
 
-	if (m_wInputSpecialkey % 64 > 0)
-		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
+	
 
 	if (!m_pSound->IsPlaying(SoundType::StageClearSound) && !m_pSound->IsPlaying(SoundType::BGMSound))
 		m_pSound->Play(SoundType::BGMSound);
@@ -251,7 +250,7 @@ int FrameWork::ConnectServer()
 
 		std::cout << "통신할 IP주소 : ";
 		std::cin.get(IPbuf, sizeof(IPbuf));
-		std::cout << IPbuf << std::endl;
+		//std::cout << IPbuf << std::endl;
 		std::cout << "통신할 포트번호 : ";
 		std::cin >> clientPort;
 		std::cin.get();
@@ -278,6 +277,10 @@ int FrameWork::SendKeyStatus()
 		m_bRun = false;
 		return SOCKET_ERROR;
 	}
+
+	if (m_wInputSpecialkey % 64 > 0)
+		m_wInputSpecialkey -= m_wInputSpecialkey % 64;
+
 	return retval;
 }
 
