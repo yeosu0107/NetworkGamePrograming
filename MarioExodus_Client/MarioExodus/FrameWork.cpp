@@ -222,8 +222,6 @@ void FrameWork::ReadyToNextFrame()
 		m_pSound->Play(SoundType::BGMSound);
 }
 
-
-
 int FrameWork::ConnectServer()
 {
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
@@ -239,6 +237,7 @@ int FrameWork::ConnectServer()
 	if (m_sockServer == INVALID_SOCKET) error_quit("socket()");
 
 	while (retval == SOCKET_ERROR) {
+
 #if defined TEST
 		::ZeroMemory(&IPbuf, sizeof(IPbuf));
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
@@ -251,11 +250,11 @@ int FrameWork::ConnectServer()
 		::ZeroMemory(&clientAddr, sizeof(clientAddr));
 
 		std::cout << "통신할 IP주소 : ";
-		fgets(IPbuf, sizeof(IPbuf), stdin);
-		IPbuf[strlen(IPbuf) - 1] = '\0';
-
+		std::cin.get(IPbuf, sizeof(IPbuf));
+		std::cout << IPbuf << std::endl;
 		std::cout << "통신할 포트번호 : ";
 		std::cin >> clientPort;
+		std::cin.get();
 
 		clientAddr.sin_family = AF_INET;
 		clientAddr.sin_addr.s_addr = inet_addr(IPbuf);
