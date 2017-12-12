@@ -36,8 +36,8 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 	int bitsize, infosize;
 	BITMAPFILEHEADER header;
 
-	glGenTextures(1, &m_iTexture);
-	glBindTexture(GL_TEXTURE_2D, m_iTexture);
+	glGenTextures(1, &m_iTexture);								// 텍스쳐 이름을 정의 ( 포인터 연결 ) 
+	glBindTexture(GL_TEXTURE_2D, m_iTexture);					// 텍스쳐 이름에 정보를 바인딩 
 
 	if ((fp = fopen(filename, "rb")) == NULL)					// 1. 열기 실패
 	{
@@ -82,7 +82,7 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 			(m_pBitInfo)->bmiHeader.biBitCount + 7) / 8.0 *
 			abs((m_pBitInfo)->bmiHeader.biHeight);
 	}
-	if ((m_pBitmap = (unsigned char *)malloc(bitsize)) == NULL)
+	if ((m_pBitmap = (unsigned char *)malloc(bitsize)) == NULL)		// 8. 비트맵의 크기 만큼 m_pBitmap을 할당 시켜준다. 
 	{
 		printf("Error 6\n");
 		free(m_pBitInfo);
@@ -90,7 +90,7 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 		return NULL;
 	}
 
-	if (fread(m_pBitmap, 1, bitsize, fp) < (unsigned int)bitsize)
+	if (fread(m_pBitmap, 1, bitsize, fp) < (unsigned int)bitsize)	// 9. m_pBitmap에 bitsize만큼 데이터(색상 정보)를 저장한다. 
 	{
 		printf("Error 7\n");
 		free(m_pBitInfo);
@@ -101,6 +101,8 @@ Vector2 Texture::LoadBMPImage(const char* filename)
 
 	for (int x = 3; x < bitsize; x += 4)
 	{
+		// 빅 엔디안 : ARGB 
+		// 리틀 엔디안 : BGRA
 		bool IsChannal = m_pBitmap[x - 1] == 215 && m_pBitmap[x - 2] == 100 && m_pBitmap[x - 3] == 100;
 
 		if (!IsChannal)

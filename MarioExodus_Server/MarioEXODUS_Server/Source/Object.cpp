@@ -83,15 +83,18 @@ void Object::CollisionScreen()
 	SetCollside(wCollside);
 }
 
+// 충돌한 부위가 있는 오브젝트에 대해 후처리를 한다. ( 마리오가 다른 마리오를 파고 든 경우 등 여러 경우를 처리 )
 void Object::AfterCollision()
 {
 	WORD wCollside = GetCollSide();
+	// pair< 충돌 부위 , 오브젝트 포인터 > 
 	vector<pair<WORD, Object*>> vCollObjects = GetCollObjects();
 
 	if (wCollside & CollDown) {
 		auto p = find_if(vCollObjects.begin(), vCollObjects.end(), [](pair<WORD, Object*>& a) {
 			return a.first == (WORD)CollDown;
 		});
+		
 		if (p != vCollObjects.end()) {
 			SetPosition(Vector2(GetPosition().x, (*p).second->GetPosition().y + GetSize().y));
 		}

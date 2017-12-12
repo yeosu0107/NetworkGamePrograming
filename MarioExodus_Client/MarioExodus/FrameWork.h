@@ -23,7 +23,7 @@ private:
 	char			m_RecvBuf[MAX_BUF];
 	char*			m_pBufptr = nullptr;
 
-	bool			m_bFirstFrame;
+	bool			m_bFirstFrame;	// 게임 시작 후 첫 프레임인지에 대한 여부 : 서버로부터 받아온 데이터가 초기 정보와 다를 수 있어 예외를 주기 위한 변수
 	bool			m_bRun;
 
 public:

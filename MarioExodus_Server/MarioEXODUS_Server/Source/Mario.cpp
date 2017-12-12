@@ -54,7 +54,7 @@ void Mario::SetSelect(int num)
 		m_iMarioPlayerNum = num;
 }
 
-
+// 마리오의 충돌 부위를 보고 이동 할지 판단한다.
 void Mario::Move(const DWORD byInput)
 {	
 
@@ -85,8 +85,10 @@ void Mario::Move(const DWORD byInput)
 	SetPosition(vec2pos);
 }
 
+// 마리오의 충돌 부위를 보고 점프 할지 판단한다. 
 void Mario::Jump()
 {
+	// 마리오가 충돌하고 있는 부위 ( 상하좌우 ) 
 	WORD marioCollside = GetCollSide();
 
 	if (m_eJumpState == Jump_None && marioCollside & CollDown) 

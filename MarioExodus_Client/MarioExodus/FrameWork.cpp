@@ -14,6 +14,7 @@ DWORD WINAPI CommunicationServer(void* arg)
 	Time threadTime;
 
 	while (retval != INVALID_SOCKET) {
+		// 30프레임으로 동작
 		threadTime.Update(30.0f);
 
 		retval = pFrameWork->SendKeyStatus();
@@ -28,6 +29,7 @@ DWORD WINAPI CommunicationServer(void* arg)
 			pFrameWork->ReadyToNextFrame();
 		LeaveCriticalSection(&UpdateRenderCriticalSection);
 
+		// 현재 시각을 갱신
 		threadTime.Tock();
 	}
 	return 0;
@@ -214,8 +216,6 @@ void FrameWork::ReadyToNextFrame()
 {
 	if (m_bFirstFrame)
 		m_bFirstFrame = false;
-
-	
 
 	if (!m_pSound->IsPlaying(SoundType::StageClearSound) && !m_pSound->IsPlaying(SoundType::BGMSound))
 		m_pSound->Play(SoundType::BGMSound);

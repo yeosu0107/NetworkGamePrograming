@@ -58,6 +58,15 @@
     <Filter Include="Sound\Source">
       <UniqueIdentifier>{61bc0647-9c15-4585-b4b5-5db6fae4eef8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{3a1199e2-43ea-4eba-8cb7-91e063740e08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Header">
+      <UniqueIdentifier>{c9b63afc-26e8-47ef-87de-bd06a2d7fc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Source">
+      <UniqueIdentifier>{f9768bf7-04ce-497a-b4d5-bb9a7b2d89e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -76,9 +85,6 @@
       <Filter>Object Class\Header</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
@@ -111,6 +117,9 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Sound\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -126,9 +135,6 @@
       <Filter>Object Class\Source</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Sound\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
